@@ -1,0 +1,9 @@
+.DS_Store
+.vscode
+*.log
+build/
+
+### Xcode ###
+## User settings
+xcuserdata/
+contents.xcworkspacedata
