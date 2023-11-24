@@ -125,8 +125,8 @@ class SettingsWindow: NSWindow, NSWindowDelegate {
 class LoadingWindow: NSWindow, NSWindowDelegate {
     init(contentRect: NSRect, backing: NSWindow.BackingStoreType, defer flag: Bool) {
         super.init(contentRect: contentRect, styleMask: [ .titled, .resizable, .fullSizeContentView], backing: backing, defer: flag)
-        self.isMovable = true
-        self.isMovableByWindowBackground = true
+        self.isMovable = false
+        self.isMovableByWindowBackground = false
         self.backgroundColor = .clear
         self.isReleasedWhenClosed = false
         self.titleVisibility = .hidden
@@ -198,7 +198,7 @@ func createSettingsWindow() -> Void {
 
 func createLoadingWindow() -> LoadingWindow {
     let window = LoadingWindow(contentRect: NSRect(x: 0, y: 0, width: 0, height: 0), backing: .buffered, defer: false)
-    let contentView = LoadingView().frame(width: 200, height: 200)
+    let contentView = LoadingView().frame(width: 200, height: 120)
     window.appearance = getAppearanceFromAppStorage()
     window.contentView = NSHostingView(rootView: contentView)
     setupWindow(window)
@@ -212,9 +212,9 @@ func createAccessibilityRequestWindow() -> Void {
     setupWindow(window)
 }
 
-func createPatchErrorWindow(message: String) -> Void {
+func createPatchErrorWindow(string: String, description: String) -> Void {
     let window = NotificationWindow(contentRect: NSRect(x: 0, y: 0, width: 0, height: 0), backing: .buffered, defer: false)
-    let contentView = PatchErrorView(window: window, message: message)
+    let contentView = PatchErrorView(window: window, string: string, description: description)
     window.contentView = NSHostingView(rootView: contentView)
     setupWindow(window)
 }

@@ -41,6 +41,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         createStatusBarItem()
+        
         // GLOBAL keyboard events. We make sure to only capture them when Origami Studio is in the foreground
         KeyboardShortcuts.onKeyUp(for: .toggleAppWindow) { [self] in
             let hasRequiredPermission = checkIfUserHasGrantedAccessibilityPermission()
@@ -64,19 +65,24 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                 
                 case .failure(let error):
                     print("*** [OrigamiJavaScriptPatchHandler] Error: Failed with error: \(error)")
-                    var errorMessage = ""
-                    
+                    var errorString = ""
+                    var errorDescription = ""
+                 
                     switch error {
                     case .couldNotPostCommandCopyDownEvent:
-                        errorMessage = "Couldn't do copy action."
+                        errorString = "POST_COPY_ERR"
+                        errorDescription = "Couldn't do copy action."
                     case .timeout, .invalidPatchType:
-                        errorMessage = "Did you select a JavaScript patch?"
+                        errorString = "INVALID_PATCH_TYPE"
+                        errorDescription = "Did you select a JavaScript patch?"
                     case .couldNotConvertBinaryDataToPropertyList:
-                        errorMessage = "Couldn't convert Pasteboard data."
+                        errorString = "BPLIST_ERR"
+                        errorDescription = "Couldn't convert Pasteboard data."
                     case .couldNotFindPathPropertyInOrigamiPropertyList, .couldNotFindJavaScriptFileInsideFileDirectory:
-                        errorMessage = "Couldn't find associated JavaScript file."
+                        errorString = "INVALID_FILE_PATH"
+                        errorDescription = "Couldn't find associated JavaScript file."
                     }
-                    createPatchErrorWindow(message: errorMessage)
+                    createPatchErrorWindow(string: errorString, description: errorDescription)
                     NSApp.activate(ignoringOtherApps: true)
                     loadingWindow.close()
                 }

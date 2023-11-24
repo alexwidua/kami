@@ -1,9 +1,10 @@
-
+// Custom Error dialog shown when a patch couldn't be parsed from the pasteboard.
 import SwiftUI
 
 struct PatchErrorView: View {
     var window: NotificationWindow?
-    var message: String
+    var string: String
+    var description: String
     
     var body: some View {
         VStack(spacing: 8.0) {
@@ -14,10 +15,14 @@ struct PatchErrorView: View {
                 VStack(alignment: .leading, spacing: 4.0) {
                     Text("Couldn't open JavaScript Patch.")
                         .bold()
-                    Text(message)
+                    Text(description)
                 }
             }
             HStack {
+                Text(string)
+                    .monospaced()
+                    .font(.subheadline)
+                    .foregroundColor(.secondary.opacity(0.25))
                 Spacer()
                 Button("Dismiss") {
                     if let window = window {
@@ -27,12 +32,13 @@ struct PatchErrorView: View {
                 .keyboardShortcut(.defaultAction)
             }
         }
-        .padding()
+        .padding(.horizontal, 16.0)
+        .padding(.bottom, 14.0)
         .fixedSize(horizontal: true, vertical: true)
         .navigationTitle("Open Patch Error")
     }
 }
 
 #Preview {
-    PatchErrorView(window: nil, message: "ERROR_MSG")
+    PatchErrorView(window: nil, string: "INVALID_PATCH_TYPE", description: "Oopsie")
 }

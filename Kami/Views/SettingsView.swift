@@ -130,6 +130,11 @@ struct TabViewController: NSViewControllerRepresentable {
 
 let SETTINGS_LABEL_WIDTH: CGFloat = 100
 
+//
+//  ┌──────────────────┐
+//  │ General Tab      |
+//  └──────────────────┘
+//
 struct GeneralTabView: View {
     @Environment(\.colorScheme) var colorScheme
     
@@ -372,7 +377,11 @@ struct GeneralTabView: View {
     }
 }
 
-
+//
+//  ┌──────────────────┐
+//  │ API Tab          |
+//  └──────────────────┘
+//
 struct ApiTabView: View {
     private let debouncer = Debouncer()
     
@@ -555,6 +564,11 @@ struct ApiTabView: View {
     }
 }
 
+//
+//  ┌──────────────────┐
+//  │ About Tab        |
+//  └──────────────────┘
+//
 struct AboutTabView: View {
     var body: some View {
         

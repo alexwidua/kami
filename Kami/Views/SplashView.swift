@@ -1,9 +1,5 @@
-//
-//  SplashView.swift
-//  Kami
-//
-//  Created by Alex Widua on 24.11.23.
-//
+// Splash screen that gets shown on initial startup
+// Shows either 'Enter API Key' prompt or a hint how to use the app...
 
 import SwiftUI
 import KeyboardShortcuts
@@ -39,7 +35,7 @@ struct SplashView: View {
                     }
                 }
                 VStack(alignment: .leading) {
-                    Text("Open a selected JavaScript patch via the Right Click > Open with... context menu or the \(shortcutName) shortcut.")
+                    Text("Open a JavaScript patch via the Right Click > Open with... context menu or the \(shortcutName) shortcut after selecting it.")
                         .bold()
                     HStack(spacing: 4.0) {
                         Text("You can configure the shortcut in the settings.")
@@ -55,7 +51,8 @@ struct SplashView: View {
                 }
                 
             }
-            .padding()
+            .padding(.horizontal, 16.0)
+            .padding(.bottom, 14.0)
             .navigationTitle(APP_NAME)
         }
        

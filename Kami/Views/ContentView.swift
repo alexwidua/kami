@@ -1,6 +1,5 @@
 //
 //  The app's main content window
-//
 //  ┌──────────────────────────────┐
 //  │ Prompt Input                 •─── Resizeable prompt Input with [Enter] button
 //  ├──────────────────────────────┤
@@ -315,7 +314,7 @@ struct ContentView: View {
                 //
                 ZStack {
                     CustomJavascriptEditor(text: $fileContent)
-                        .frame(minHeight: 0)
+                        .frame(minHeight: 32)
                         .disabled(inputDisabled)
                         .onChange(of: fileContent) { oldValue, newValue in
                             if(oldValue != newValue) {
@@ -338,6 +337,7 @@ struct ContentView: View {
                 }
                 .background(.windowBackground)
             }
+            Rectangle().fill(Color("Gutter")).frame(height: 1)
             //
             //  ┌──────────────────┐
             //  │ Toolbar          |
@@ -412,6 +412,7 @@ struct ContentView: View {
                 window.appearance = getPreferredAppearance(pref: appStorage_appearance)
             }
         }
+        // Respond to Window Style changes made in the app's settings window
         .onChange(of: appStorage_windowStyle) {
             if let window = window {
                 switch appStorage_windowStyle {
