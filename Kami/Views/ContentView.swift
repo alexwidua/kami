@@ -16,15 +16,14 @@ import SwiftUI
 import OpenAI
 
 #Preview {
-    ContentView(windowRef: nil)
+    ContentView(window: nil, url: URL(string: "/")!)
 }
 
 struct ContentView: View {
     @Environment(\.colorScheme) var colorScheme
     @StateObject var appState = AppState.shared
-    let windowRef: AppWindow?
     
-    /* AppStorage */
+    /* AppStorage States */
     @AppStorage(appearancePreferenceStorageKey) var appStorage_appearance: AppearancePreference = .system
     @AppStorage(apiKeyStorageKey) var appStorage_apiKey: String = ""
     @AppStorage(instructionStorageKey) var appStorage_instructionText: String = DEFAULT_INSTRUCTION
@@ -33,6 +32,11 @@ struct ContentView: View {
     @AppStorage(showOpenWithPreferenceStorageKey) var appStorage_showOpenWithBtn: Bool = DEFAULT_SHOW_OPEN_WITH_BTN
     @AppStorage(showFileNamePreferenceStorageKey) var appStorage_showFileName: Bool = DEFAULT_SHOW_FILE_NAME
     
+    /* Props */
+    let window: AppWindow?
+    var url: URL
+    @State private var fileContent: String = ""
+
     /* API Call Stuff */
     @State private var streamResponseTask: Task<Void, Never>?
     @State private var isLoadingResponse: Bool = false
@@ -44,16 +48,16 @@ struct ContentView: View {
     @State private var promptInputHeight: CGFloat = 200
     @State private var promptInputText: String = ""
     
-    /* Misc UI Thingz */
+    /* Misc UI*/
     @State private var showNotificationBanner: Bool = false
     @State private var notificationBannerMsg: String = ""
-    
+    @State private var isSavingFile = false
+    @State private var hasSavedFile = false
     @State private var animateCodeEditorLoadingState: Bool = false
-    let bottomBarHeight: CGFloat = 36
     
     /* Computed */
     var currentFileName: String {
-        return getFileNameFromPathString(appState.filePathString)
+        return getFileNameFromPathString(url.absoluteString)
     }
     
     var selectedModel: String {
@@ -65,26 +69,21 @@ struct ContentView: View {
         }
     }
     
-    
     var inputForegroundColor: Color {
         if(!appStorage_hasCompletedOnboarding || isLoadingResponse || promptInputText.isEmpty) { return .secondary }
         else { return .primary }
     }
     
     var inputDisabled: Bool {
-        return (!appStorage_hasCompletedOnboarding || isLoadingResponse || appState.isParsingPasteboardFile)
+        return (!appStorage_hasCompletedOnboarding || isLoadingResponse)
     }
     
     var submitPromptButtonDisabled: Bool {
-        return !appStorage_hasCompletedOnboarding || promptInputText.isEmpty || appState.isParsingPasteboardFile
+        return !appStorage_hasCompletedOnboarding || promptInputText.isEmpty
     }
     
-    var saveButtonDisabled: Bool {
-        return (!appStorage_hasCompletedOnboarding || appState.hasSavedFile || appState.isSavingFile || appState.filePathString.isEmpty || appState.fileContent.isEmpty) || appState.isParsingPasteboardFile
-    }
-    
-    var openWithButtonDisabled: Bool {
-        return (!appStorage_hasCompletedOnboarding || appState.hasSavedFile || appState.isSavingFile || appState.filePathString.isEmpty || appState.fileContent.isEmpty) || appState.isParsingPasteboardFile
+    var toolbarButtonDisabled: Bool {
+        return (!appStorage_hasCompletedOnboarding || hasSavedFile || isSavingFile)
     }
     
     /* Onboarding specific stuff */
@@ -181,18 +180,9 @@ struct ContentView: View {
             //  Input is resizeable on the Y-axis (although the resize constrained to 100dp ...
             //  TODO: Increase resize constraints?
             //
-            VStack(spacing: 0) {
                 ZStack {
                     /* Title bar */
                     VStack(spacing: 0) {
-                        HStack {
-                            Text(APP_NAME.uppercased())
-                                .font(.system(size: 10, weight: .medium))
-                                .foregroundColor(.primary.opacity(0.2))
-                            Spacer()
-                        }
-                        .padding(.top, 10.0)
-                        .padding(.horizontal, 12.0)
                         /* Prompt Editor */
                         HStack(alignment: .top) {
                             ZStack {
@@ -214,9 +204,6 @@ struct ContentView: View {
                                             promptInputText.removeLast()
                                             handleCompletion()
                                         }
-                                    }
-                                    .onChange(of: appState.filePathString) { _, _ in
-                                        promptInputText = ""
                                     }
                             }
                             .padding(.horizontal, 0.0)
@@ -274,7 +261,7 @@ struct ContentView: View {
                         )
                         .onHover(perform: { hovering in
                             DispatchQueue.main.async {
-                                if let window = windowRef {
+                                if let window = window {
                                     if (hovering) {
                                         window.isMovable = false
                                         
@@ -308,15 +295,14 @@ struct ContentView: View {
                 //  line numbers and auto-indent/auto-brackets.
                 //
                 ZStack {
-                    CustomJavascriptEditor(text: $appState.fileContent)
+                    CustomJavascriptEditor(text: $fileContent)
                         .frame(minHeight: 0)
                         .disabled(inputDisabled)
-                        .onChange(of: appState.fileContent) { oldValue, newValue in
+                        .onChange(of: fileContent) { oldValue, newValue in
                             if(oldValue != newValue) {
-                                appState.hasSavedFile = false
+                                hasSavedFile = false
                             }
                         }
-                        .id(appState.filePathString)
                         .blur(radius: animateCodeEditorLoadingState ? 16 : 0)
                         .opacity(animateCodeEditorLoadingState ? 0 : 1)
                         .opacity(inputDisabled ? 0.125 : 1)
@@ -340,14 +326,7 @@ struct ContentView: View {
                     }
                 }
                 .background(.windowBackground)
-            }
-            if(appState.isParsingPasteboardFile) {
-                ZStack {
-                    Color(.black.opacity(0.5))
-                    ProgressView()
-                        .controlSize(.small)
-                }
-            }
+        
             //
             //  ┌──────────────────┐
             //  │ Toolbar          |
@@ -374,22 +353,22 @@ struct ContentView: View {
                 // it doesn't seem possible to adjust the Button/Label size of menu buttons on macOS – hacky workaround using scaleEffect and manual offsetting
                 .scaleEffect(1.5)
                 .offset(x: -2 ,y: 0)
-                if(appStorage_showFileName && !appState.filePathString.isEmpty) {
+                if(appStorage_showFileName) {
                     Text(currentFileName)
                         .font(.system(size: 12, weight: .regular, design: .monospaced))
                         .foregroundColor(.secondary.opacity(0.5))
                 }
                 Spacer()
-                if(appStorage_showOpenWithBtn) {
-                    OpenWithMenuView()
+                if(appStorage_showOpenWithBtn && window != nil) {
+                    OpenWithMenuView(url: url, window: window!)
                         .frame(width: 100)
-                        .disabled(openWithButtonDisabled)
+                        .disabled(toolbarButtonDisabled)
                         .buttonStyle(CustomButtonStyle(buttonType: .regular, py: 2.0, px: 8.0))
                 }
-                Button(appState.isSavingFile ? "Saving..." : appState.hasSavedFile ? "Saved" : "Save") {
+                Button(isSavingFile ? "Saving..." : hasSavedFile ? "Saved" : "Save") {
                     handleSaveFile()
                 }
-                .disabled(saveButtonDisabled)
+                .disabled(toolbarButtonDisabled)
                 .buttonStyle(CustomButtonStyle(buttonType: .primary, py: 2.0, px: 8.0))
                 
             }
@@ -411,22 +390,28 @@ struct ContentView: View {
                 }
             }
             .padding(.horizontal, 8.0)
-            .frame(height: bottomBarHeight)
+            .frame(height: 36)
             .background(.windowBackground)
             
         }
-        // If the user opens another patch while the API call is still running, cancel...
-        // TODO: This might be redundant as we already safeguard against that inside the fetchStreamCompletion() fn
-        .onChange(of: appState.filePathString) {
-            if(isLoadingResponse) {
-                handleCancelCurrentCompletionTask()
-            }
-        }
         // Respond to Appearance Preference changes made in the app's settings window
         .onChange(of: appStorage_appearance) {
-            if let window = windowRef {
+            if let window = window {
                 window.appearance = getPreferredAppearance(pref: appStorage_appearance)
             }
+        }
+        .onAppear {
+                 readFileContent()
+             }
+        .onAppear {
+            NotificationCenter.default.addObserver(forName: .saveFileFromShortcut, object: nil, queue: .main) { _ in
+                if let window = window {
+                    if window.isKeyWindow {
+                        saveFileContent()
+                    }
+                }
+            }
+            
         }
     }
     
@@ -443,18 +428,16 @@ struct ContentView: View {
     // Fetch and stream the code completion.
     // We prepend the Prompt and Patch's Script ID.
     func fetchStreamCompletion() {
-        let ogFileContent = appState.fileContent
-        let documentHead = fileDocumentHead(fileContent: appState.fileContent)
-        appState.fileContent = documentHead
-        
+        let ogFileContent  = fileContent
+        let documentHead = fileDocumentHead(fileContent: fileContent)
+        fileContent = documentHead
         animateCodeEditorLoadingState = true
+        
         Task {
-            let queryFileName = currentFileName
             var hasApiError = false
             
             for await streamResult in streamCompletion(task: $streamResponseTask, apiKey: appStorage_apiKey, instructionText: appStorage_instructionText, inputText: promptInputText, model: selectedModel) {
-                
-                
+                  
                 switch streamResult {
                 case .completion(let completion):
                     
@@ -463,26 +446,18 @@ struct ContentView: View {
                             animateCodeEditorLoadingState = false
                         }
                     }
+                    fileContent += completion.token
                     
-                    appState.fileContent += completion.token
                 case .error(let error):
                     showNotificationBanner = true
                     notificationBannerMsg = error.message
                     hasApiError = true
-                    
                 }
             }
             isLoadingResponse = false
             
-            // Catch if new files was opened while generating
-            if(queryFileName != currentFileName) {
-                appState.fileContent = ogFileContent
-                showNotificationBanner = true
-                notificationBannerMsg = "JavaScript Patch changed while generating. Previous file was restored."
-            }
-            
             if(hasApiError) {
-                appState.fileContent = ogFileContent
+                fileContent = ogFileContent
             }
             else {
                 handleSaveFile()
@@ -513,7 +488,8 @@ struct ContentView: View {
             print("*** [handleSaveFile] Cancelled task, skipped saving")
             return
         }
-        saveFile(filePathString: $appState.filePathString, isSavingFile: $appState.isSavingFile, hasSavedFile: $appState.hasSavedFile, fileContent: $appState.fileContent)
+
+        saveFileContent()
     }
     
     func handleQuitApp() {
@@ -521,7 +497,34 @@ struct ContentView: View {
     }
     
     func handleOpenSettingsWindow() {
-        let _ = setupSettingsWindow(openAppWindowAfterClose: true)
+        let _ = createSettingsWindow()
+    }
+    
+    // refactor
+    private func readFileContent() {
+        guard url.isFileURL else { return }
+        do {
+            fileContent = try String(contentsOf: url, encoding: .utf8)
+        } catch {
+            print("Error reading file: \(error)")
+        fileContent = "Failed to read file"
+        }
+    }
+    
+    private func saveFileContent() {
+        isSavingFile = true
+        DispatchQueue.main.async {
+            do {
+                try fileContent.write(to: url, atomically: true, encoding: .utf8)
+                print("*** [handleSaveFile] File saved successfully")
+                isSavingFile = false
+                hasSavedFile = true
+            } catch {
+                print("*** [handleSaveFile] Error saving file: \(error)")
+                isSavingFile = false
+                hasSavedFile = false
+            }
+        }
     }
 }
 

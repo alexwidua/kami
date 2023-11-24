@@ -1,7 +1,5 @@
 //
-// The app's state, consisting of
-// • Persistent AppStorage store
-// • 'Transient' local state that manages the current file or other UI states...
+// Shared App State
 //
 
 import SwiftUI
@@ -26,10 +24,18 @@ let showFileNamePreferenceStorageKey = "show-file-name-\(APP_VERSION)"
 /* Running App State */
 class AppState: ObservableObject {
     static let shared = AppState()
-    @Published var filePathString: String = ""
-    @Published var fileContent: String = ""
-    @Published var isSavingFile: Bool = false
-    @Published var hasSavedFile: Bool = false
-    @Published var isParsingPasteboardFile: Bool = false
+    @Published var windowReferences: [URL: NSWindow] = [:] // Dictionary to store window references
+    
+    func addWindowReference(for url: URL, window: NSWindow) {
+        windowReferences[url] = window
+    }
+
+    func removeWindowReference(for url: URL) {
+        windowReferences.removeValue(forKey: url)
+    }
+
+    func getWindowReference(for url: URL) -> NSWindow? {
+        return windowReferences[url]
+    }
 }
 

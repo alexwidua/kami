@@ -8,10 +8,13 @@ import CoreServices
 
 struct OpenWithMenuView: View {
     @StateObject var appState = AppState.shared
+    
+    var url: URL
+    var window: AppWindow
 
     var body: some View {
         Menu {
-            ForEach(getAppsThatCanEditJsFiles(), id: \.self) { appURL in
+            ForEach(getAppsThatCanEditJsFiles(url: url), id: \.self) { appURL in
                 Button(action: {
                     openFileInSelectedApp(appURL: appURL)
                 }) {
@@ -26,10 +29,7 @@ struct OpenWithMenuView: View {
     }
     
     // Returns all apps that announce themselves as .js editors
-    func getAppsThatCanEditJsFiles() -> [URL] {
-        guard let url = URL(string: appState.filePathString) else {
-            return []
-        }
+    func getAppsThatCanEditJsFiles(url: URL) -> [URL] {
         let getAllEditors = LSCopyApplicationURLsForURL(url as CFURL, .editor)?.takeRetainedValue() as? [URL] ?? []
         // get the this app's bundle identifier and filter it from the list
         let currentAppBundleIdentifier = Bundle.main.bundleIdentifier
@@ -49,34 +49,38 @@ struct OpenWithMenuView: View {
     }
     
     func openFileInSelectedApp(appURL: URL) {
-        guard let url = URL(string: appState.filePathString) else {
-            print("[OpenWithView] Invalid URL from filePath.")
-            return
-        }
+        guard url.isFileURL else { return }
         
-        // 1. Save file
+        // 1. Save current file content
+        var fileContent = ""
         do {
-            try appState.fileContent.write(to: url, atomically: true, encoding: .utf8)
-            print("[OpenWithView] File saved successfully")
+            fileContent = try String(contentsOf: url, encoding: .utf8)
         } catch {
-            print("[OpenWithView] Error saving file: \(error)")
+            print("*** [OpenWithView] Error reading file: \(error)")
+           return
         }
         
+        do {
+            try fileContent.write(to: url, atomically: true, encoding: .utf8)
+            print("*** [OpenWithView] File saved successfully")
+        } catch {
+            print("*** [OpenWithView] Error saving file: \(error)")
+        }
         
         // 2. Open file in selected app
         if appURL.startAccessingSecurityScopedResource() {
             let configuration = NSWorkspace.OpenConfiguration()
             NSWorkspace.shared.open([url], withApplicationAt: appURL, configuration: configuration) { (response, error) in
                 if let error = error {
-                    print("[OpenWithView] Error opening file: \(error.localizedDescription)")
+                    print("*** [OpenWithView] Error opening file: \(error.localizedDescription)")
                 }
             }
             appURL.stopAccessingSecurityScopedResource()
         }
         
-        // 3. Wipe file from own app state
-        appState.fileContent = ""
-        appState.filePathString = ""
+        // 3. Close window
+        appState.removeWindowReference(for: url)
+        window.close()
     }
     
 }

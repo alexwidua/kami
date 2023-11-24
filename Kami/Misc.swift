@@ -62,32 +62,6 @@ func getFileNameFromPathString(_ string: String) -> String {
     return URL(fileURLWithPath: string).lastPathComponent
 }
 
-func saveFile(filePathString: Binding<String>, isSavingFile: Binding<Bool>, hasSavedFile: Binding<Bool>, fileContent: Binding<String>) {
-    if(filePathString.wrappedValue.isEmpty) {
-        print("*** [handleSaveFile] No filed opened, skipped saving")
-        return
-    }
-    isSavingFile.wrappedValue = true
-    guard let url = URL(string: filePathString.wrappedValue) else {
-        print("*** [handleSaveFile] Invalid URL from filePath.")
-        isSavingFile.wrappedValue = false
-        return
-    }
-    print("*** [handleSaveFile] Trying to Save")
-    DispatchQueue.main.async {
-        do {
-            try fileContent.wrappedValue.write(to: url, atomically: true, encoding: .utf8)
-            print("*** [handleSaveFile] File saved successfully")
-            isSavingFile.wrappedValue = false
-            hasSavedFile.wrappedValue = true
-        } catch {
-            print("*** [handleSaveFile] Error saving file: \(error)")
-            isSavingFile.wrappedValue = false
-            hasSavedFile.wrappedValue = false
-        }
-    }
-}
-
 func getPreferredAppearance(pref: AppearancePreference) -> NSAppearance {
     switch pref {
         case .light:

@@ -8,7 +8,7 @@ extension KeyboardShortcuts.Name {
 extension Notification.Name {
     static let openAppWindow = Notification.Name("openMainWindowNotification")
     static let toggleTrayIcon = Notification.Name("toggleTrayIconNotification")
-    static let bannerNotification = Notification.Name("bannerNotification")
+    static let saveFileFromShortcut = Notification.Name("saveFileFromShortcut")
 }
 
 @main
@@ -24,93 +24,86 @@ struct JavascriptEditorApp: App {
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
-    private let targetBundleID = ORIGAMI_TARGET_BUNDLE_ID
     @ObservedObject var appState = AppState.shared
-    var statusBarItem: NSStatusItem!
-    var window: AppWindow!
     
+    var statusBarItem: NSStatusItem!
     var keyUpEventMonitor: Any?
-    var hasFinishedLaunching = false
     
     override init() {
         super.init()
-        /* Observe app-window-open events called from other classes/views */
-        NotificationCenter.default.addObserver(self, selector: #selector(handleOpenAppWindow), name: .openAppWindow, object: nil)
-        /* Used by Settings Window */
-        NotificationCenter.default.addObserver(self, selector: #selector(handleTrayIconVisibility), name: .toggleTrayIcon, object: nil)
+        /* Used by Settings Window to hide/show tray icon on preference change */
+        NotificationCenter.default.addObserver(self, selector: #selector(toggleTrayIconVisibility), name: .toggleTrayIcon, object: nil)
         /* Observe app focus changes. We do this to check if Origami is the active app and either enable/disable the app's shortcuts. If we don't do this, the shortcuts are blocked across other apps. */
         NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(handleKeyAppChanged), name: NSWorkspace.didActivateApplicationNotification, object: nil)
     }
     
     func applicationDidFinishLaunching(_ notification: Notification) {
-        let window = setupAppWindow()
-        self.window = window
-        
-        setupStatusBarItem()
-        
+        createStatusBarItem()
         // GLOBAL keyboard events. We make sure to only capture them when Origami Studio is in the foreground
         KeyboardShortcuts.onKeyUp(for: .toggleAppWindow) { [self] in
-            openAppWindow(sender: nil, activate: false)
-    
             let hasRequiredPermission = checkIfUserHasGrantedAccessibilityPermission()
             if(!hasRequiredPermission) {
-                NotificationCenter.default.post(name: .bannerNotification, object: nil, userInfo: ["msg": "Accessibility permission is required to open JavaScript Patches via the Shortcut."])
+                createAccessibilityRequestWindow()
+                NSApp.activate(ignoringOtherApps: true)
                 return
             }
-            appState.isParsingPasteboardFile = true
+            
+            let loadingWindow = createLoadingWindow()
+            
             Task {
                 let origamiJavaScriptPatchHandler = OrigamiJavaScriptPatchHandler()
                 let result = await origamiJavaScriptPatchHandler.tryToCopyOrigamiJavaScriptPatchAndReadFilePathFromPasteboard()
                 switch result {
                 case .success(let filePathString):
-                    handleOpenFile(filePath: filePathString) { (canOpenFile) -> () in
-                        if(canOpenFile) {
-                            NSApp.activate(ignoringOtherApps: true)
-                            appState.isParsingPasteboardFile = false
-                        }
+                    if let url = URL(string: filePathString) {
+                        openAppWindow(with: url)
+                        loadingWindow.close()
                     }
+                
                 case .failure(let error):
                     print("*** [OrigamiJavaScriptPatchHandler] Error: Failed with error: \(error)")
-                    NotificationCenter.default.post(name: .bannerNotification, object: nil, userInfo: ["msg": "Couldn't open JavaScript Patch. Did you select a JavaScript Patch?"])
-                    appState.isParsingPasteboardFile = false
+                    var errorMessage = ""
+                    
+                    switch error {
+                    case .couldNotPostCommandCopyDownEvent:
+                        errorMessage = "Couldn't do copy action."
+                    case .timeout, .invalidPatchType:
+                        errorMessage = "Did you select a JavaScript patch?"
+                    case .couldNotConvertBinaryDataToPropertyList:
+                        errorMessage = "Couldn't convert Pasteboard data."
+                    case .couldNotFindPathPropertyInOrigamiPropertyList, .couldNotFindJavaScriptFileInsideFileDirectory:
+                        errorMessage = "Couldn't find associated JavaScript file."
+                    }
+                    createPatchErrorWindow(message: errorMessage)
+                    NSApp.activate(ignoringOtherApps: true)
+                    loadingWindow.close()
                 }
             }
         }
         
-        
         // Keyboard events that only trigger if the app window is key
         keyUpEventMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { [self] event in
             if event.keyCode == 53 { // 53 === escape key
-                self.closeAppWindow(nil)
+//                self.closeAppWindow(nil) TODO: ?
                 return nil
             }
             
             if event.modifierFlags.contains(.command) && event.keyCode == 1 { // command + s
-                saveFile(filePathString: self.$appState.filePathString, isSavingFile: self.$appState.isSavingFile, hasSavedFile: $appState.hasSavedFile, fileContent: self.$appState.fileContent)
+                NotificationCenter.default.post(name: .saveFileFromShortcut, object: nil)
                 return nil
             }
             return event
         }
-        
-        openAppWindow(sender: nil)
-        hasFinishedLaunching = true
     }
     
     /* Handle files opened from Origami via the 'Open with...' ctx menu */
     func application(_ application: NSApplication, open urls: [URL]) {
         if let firstURL = urls.first {
-            let filePathString = firstURL.absoluteString
-            handleOpenFile(filePath: filePathString) { (canOpenFile) -> () in
-                if(canOpenFile) {
-                    if(hasFinishedLaunching) {
-                        openAppWindow(sender: nil)
-                    }
-                }
-            }
+            openAppWindow(with: firstURL)
         }
     }
     
-    func setupStatusBarItem() {
+    func createStatusBarItem() {
         self.statusBarItem = NSStatusBar.system.statusItem(withLength: CGFloat(NSStatusItem.variableLength))
         
         if let button = self.statusBarItem.button {
@@ -120,7 +113,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         }
         
         var showTrayIcon = UserDefaults.standard.bool(forKey: showTrayIconWithPreferenceStorageKey)
-        // if user hasn't made any preference change, show icon by default
+        // If user hasn't made any preference change, show icon by default
         if(UserDefaults.standard.object(forKey: showTrayIconWithPreferenceStorageKey) == nil ) {
             showTrayIcon = true
         }
@@ -130,20 +123,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     @objc func handleStatusBarItemAction(_ sender: AnyObject?) {
         if let button = self.statusBarItem.button {
             
-            let openAppItem = NSMenuItem()
-            openAppItem.title = "Open \(APP_NAME)"
-            openAppItem.action = #selector(handleOpenAppWindow)
-            
             let settingsItem = NSMenuItem()
             settingsItem.title = "Settings..."
-            settingsItem.action = #selector(handleOpenSettingsWindow)
+            settingsItem.action = #selector(openSettingsWindow)
             
             let quitItem = NSMenuItem()
             quitItem.title = "Quit"
-            quitItem.action = #selector(handleQuitApp)
+            quitItem.action = #selector(terminateApp)
             
             let menu = NSMenu()
-            menu.addItem(openAppItem)
             menu.addItem(settingsItem)
             menu.addItem(.separator())
             menu.addItem(quitItem)
@@ -152,45 +140,25 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             button.menu?.popUp(positioning: nil, at: CGPoint(x: 0, y: button.bounds.maxY + 8.0), in: button)
         }
     }
+
+    func openAppWindow(with url: URL) -> Void {
+        if let existingWindow = appState.getWindowReference(for: url) {
+            existingWindow.makeKeyAndOrderFront(nil)
+        } else {
+            let window = createAppWindow(url: url)
+            appState.addWindowReference(for: url, window: window)
+        }
+        NSApp.activate(ignoringOtherApps: true)
+    }
     
-    func openAppWindow(sender: AnyObject?, activate: Bool = true) {
+    @objc func openSettingsWindow(_ sender: AnyObject?) {
+        let window = createSettingsWindow()
         setWindowFrameOriginToCurrentScreen(window: window)
         window.makeKeyAndOrderFront(sender)
-        if(activate) {
-            NSApp.activate(ignoringOtherApps: true)
-        }
+        NSApp.activate(ignoringOtherApps: true)
     }
     
-    func closeAppWindow(_ sender: AnyObject?) {
-        window.orderOut(sender)
-    }
-    
-    /* Handlers */
-    func handleOpenFile(filePath: String, completion: (Bool)->()) -> Void {
-        if let url = URL(string: filePath) {
-            do {
-                let fileContents = try String(contentsOf: url, encoding: .utf8)
-                AppState.shared.fileContent = fileContents
-                AppState.shared.filePathString = url.absoluteString
-                completion(true)
-            } catch {
-                print("Error reading file contents: \(error)")
-                completion(false)
-                // TODO: This error should be reflected in the UI somehow
-            }
-            
-        }
-    }
-    
-    @objc func handleOpenAppWindow(_ sender: AnyObject?) {
-        openAppWindow(sender: sender)
-    }
-    
-    @objc func handleQuitApp(_ sender: AnyObject?) {
-        NSApplication.shared.terminate(nil)
-    }
-    
-    @objc func handleTrayIconVisibility(_ notification: NSNotification) {
+    @objc func toggleTrayIconVisibility(_ notification: NSNotification) {
         if let visibility = notification.userInfo?["visibility"] as? Bool {
             if let item = statusBarItem {
                 item.isVisible = visibility
@@ -198,19 +166,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         }
     }
     
-    @objc func handleOpenSettingsWindow(_ sender: AnyObject?) {
-        let window = setupSettingsWindow(openAppWindowAfterClose: false)
-        setWindowFrameOriginToCurrentScreen(window: window)
-        window.makeKeyAndOrderFront(sender)
-        NSApp.activate(ignoringOtherApps: true)
-    }
+
     
     /* Disable global keyboard shortcuts if Origami isn't key */
     @objc func handleKeyAppChanged(notification: NSNotification) {
         if let info = notification.userInfo,
            let app = info[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
            let id = app.bundleIdentifier {
-            if(id == targetBundleID) {
+            if(id == ORIGAMI_TARGET_BUNDLE_ID) {
                 print("*** [handleKeyAppChanged] Key app is Origami Studio")
                 KeyboardShortcuts.isEnabled = true
             }
@@ -218,6 +181,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                 KeyboardShortcuts.isEnabled = false
             }
         }
+    }
+    
+    @objc func terminateApp(_ sender: AnyObject?) {
+        NSApplication.shared.terminate(nil)
     }
     
     deinit {

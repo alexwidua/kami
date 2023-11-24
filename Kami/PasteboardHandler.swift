@@ -28,7 +28,7 @@ class OrigamiJavaScriptPatchHandler {
         // 0. Clear Pasteboard
         NSPasteboard.general.clearContents()
         
-        // 1. Trigger the copy action by emulating ⌘ + C.
+        // 1. Trigger copy action by emulating ⌘ + C.
         guard postCommandCopyDownEvent() else {
             return .failure(.couldNotPostCommandCopyDownEvent)
         }
