@@ -11,6 +11,7 @@
 		2251A1162B10834600513552 /* AccessibilityRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251A1152B10834600513552 /* AccessibilityRequestView.swift */; };
 		2251A1182B109F7000513552 /* PatchErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251A1172B109F7000513552 /* PatchErrorView.swift */; };
 		2251A11A2B10AD3300513552 /* NotificationBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251A1192B10AD3300513552 /* NotificationBannerView.swift */; };
+		2251A11E2B10B64700513552 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251A11D2B10B64700513552 /* OnboardingView.swift */; };
 		226A6AA62AE685C100110798 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226A6AA52AE685C100110798 /* API.swift */; };
 		226A6AA82AE8F22500110798 /* Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226A6AA72AE8F22500110798 /* Misc.swift */; };
 		226A6AAC2AE927DB00110798 /* OpenWithMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226A6AAB2AE927DB00110798 /* OpenWithMenuView.swift */; };
@@ -38,6 +39,7 @@
 		2251A1152B10834600513552 /* AccessibilityRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityRequestView.swift; sourceTree = "<group>"; };
 		2251A1172B109F7000513552 /* PatchErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatchErrorView.swift; sourceTree = "<group>"; };
 		2251A1192B10AD3300513552 /* NotificationBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationBannerView.swift; path = ../../../../../.Trash/NotificationBannerView.swift; sourceTree = "<group>"; };
+		2251A11D2B10B64700513552 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		226A6AA52AE685C100110798 /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		226A6AA72AE8F22500110798 /* Misc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Misc.swift; sourceTree = "<group>"; };
 		226A6AAB2AE927DB00110798 /* OpenWithMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenWithMenuView.swift; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 		227CB6EC2B0D1A1500D2F594 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				2251A11D2B10B64700513552 /* OnboardingView.swift */,
 				2251A1192B10AD3300513552 /* NotificationBannerView.swift */,
 				226E59E82AEBC40C005FCD6D /* ValidateKeyView.swift */,
 				226A6AAB2AE927DB00110798 /* OpenWithMenuView.swift */,
@@ -136,8 +139,8 @@
 		22A7D5EE2ADFCA6500878F0B /* Kami */ = {
 			isa = PBXGroup;
 			children = (
-				227CB6E92B0CCAD100D2F594 /* Constants.swift */,
 				22A7D5EF2ADFCA6500878F0B /* KamiApp.swift */,
+				227CB6E92B0CCAD100D2F594 /* Constants.swift */,
 				227CB6EB2B0D19F600D2F594 /* Views */,
 				227CB6EC2B0D1A1500D2F594 /* Components */,
 				2276F24F2B0F458500E556C8 /* Styles */,
@@ -246,6 +249,7 @@
 				226E59F22AEE8700005FCD6D /* ButtonStyle.swift in Sources */,
 				2251A1142B100AA100513552 /* LoadingView.swift in Sources */,
 				2251A11A2B10AD3300513552 /* NotificationBannerView.swift in Sources */,
+				2251A11E2B10B64700513552 /* OnboardingView.swift in Sources */,
 				227CB6E42B037ECD00D2F594 /* PasteboardHandler.swift in Sources */,
 				22A7D5F02ADFCA6500878F0B /* KamiApp.swift in Sources */,
 				227CB6EA2B0CCAD100D2F594 /* Constants.swift in Sources */,

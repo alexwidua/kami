@@ -2,7 +2,7 @@
 //  The app's main content window
 //
 //  ┌──────────────────────────────┐
-//  │ Onboarding                   •─── Displayed until API key is set for the first time
+//  │ Onboarding                   •─── Set API key. Displayed until API key is set for the first time
 //  ├──────────────────────────────┤
 //  │ Prompt Input                 •─── Resizeable prompt Input with [Enter] button
 //  ├──────────────────────────────┤
@@ -70,52 +70,17 @@ struct ContentView: View {
     }
     
     var inputForegroundColor: Color {
-        if(!appStorage_hasCompletedOnboarding || isLoadingResponse || promptInputText.isEmpty) { return .secondary }
+        if(!appStorage_finishedOnboarding || isLoadingResponse || promptInputText.isEmpty) { return .secondary }
         else { return .primary }
     }
-    
-    var inputDisabled: Bool {
-        return (!appStorage_hasCompletedOnboarding || isLoadingResponse)
-    }
-    
-    var submitPromptButtonDisabled: Bool {
-        return !appStorage_hasCompletedOnboarding || promptInputText.isEmpty
-    }
-    
-    var toolbarButtonDisabled: Bool {
-        return (!appStorage_hasCompletedOnboarding || hasSavedFile || isSavingFile)
-    }
+    var inputDisabled: Bool { return (!appStorage_finishedOnboarding || isLoadingResponse) }
+    var submitPromptButtonDisabled: Bool { return !appStorage_finishedOnboarding || promptInputText.isEmpty }
+    var toolbarButtonDisabled: Bool { return (!appStorage_finishedOnboarding || hasSavedFile || isSavingFile) }
     
     /* Onboarding specific stuff */
-    //        @AppStorage(hasCompletedOnboardingStorageKey) var appStorage_hasCompletedOnboarding: Bool = false
+    //        @AppStorage(hasCompletedOnboardingStorageKey) var appStorage_finishedOnboarding: Bool = false
     // TODO:
-    @State var appStorage_hasCompletedOnboarding: Bool = true
-    @State private var onboardingValidationState: ValidationState = .pending
-    @State private var onboardingErrorMessage: String = ""
-    @State private var onboardingHasInteractedWithDismissButton: Bool = false
-    
-    var onboardingSubtitleText: AttributedString {
-        let urlWithoutHttps = "platform.openai.com/account/api-keys"
-        var result = AttributedString("Enter your OpenAI API Key. You can find your API key at \(urlWithoutHttps).\nYour API key is only stored locally on your machine.")
-        let linkRange = result.range(of: urlWithoutHttps)!
-        result[linkRange].link = URL(string: "https://\(urlWithoutHttps)")
-        result[linkRange].underlineStyle = Text.LineStyle(pattern: .solid)
-        result[linkRange].foregroundColor = .white
-        return result
-    }
-    
-    private var onboardingBackground: Color {
-        switch onboardingValidationState {
-        case .pending:
-            return .blue
-        case .validating:
-            return .blue
-        case .invalid:
-            return .red
-        case .valid:
-            return .green
-        }
-    }
+    @State var appStorage_finishedOnboarding: Bool = true
     
     var body: some View {
         VStack(spacing:0) {
@@ -125,50 +90,11 @@ struct ContentView: View {
             //  └──────────────────┘
             //
             //  Onboarding flow that is displayed until user has entered a valid API key for the first time.
-            //  Consecutive API key changes are done via the settings menu, which can be invoked via the toolbar icon
-            //  or the tray icon at the top.
+            //  Consecutive API key changes are done via the settings menu,
+            //  which can be invoked via the toolbar icon or the tray icon at the top.
             //
-            if(!appStorage_hasCompletedOnboarding) {
-                VStack(spacing:0) {
-                    ZStack {
-                        ValidateApiKeyView(apiKey: $appStorage_apiKey, validationState:  $onboardingValidationState, errorMessage: $onboardingErrorMessage, canDismiss: true, hasDismissed: $onboardingHasInteractedWithDismissButton, validationInputStyle: .onboarding)
-                            .onChange(of: onboardingHasInteractedWithDismissButton) { _, hasDismissed in
-                                if(hasDismissed) {
-                                    appStorage_hasCompletedOnboarding = true
-                                }
-                            }
-                    }
-                    .padding(0.0)
-                    ZStack {
-                        switch onboardingValidationState {
-                        case .pending, .validating:
-                            HStack {
-                                Text(onboardingSubtitleText)
-                                    .font(.subheadline)
-                                    .foregroundColor(.white)
-                                Spacer()
-                            }
-                        case .invalid:
-                            HStack {
-                                Text(onboardingErrorMessage)
-                                    .font(.subheadline)
-                                    .foregroundColor(.white)
-                                Spacer()
-                            }
-                        case .valid:
-                            HStack {
-                                Text("Your API Key has been saved. You can change it in the settings anytime.")
-                                    .font(.subheadline)
-                                    .foregroundColor(.white)
-                                Spacer()
-                            }
-                        }
-                    }
-                    .padding([.leading, .bottom, .trailing], 8.0)
-                    
-                }
-                .padding(0.0)
-                .background(onboardingBackground)
+            if(!appStorage_finishedOnboarding) {
+                OnboardingView(apiKey: $appStorage_apiKey, finishedOnboarding: $appStorage_finishedOnboarding)
             }
             //
             //  ┌──────────────────┐
@@ -309,14 +235,6 @@ struct ContentView: View {
                     VStack {
                         Spacer()
                         NotificationBannerView(isShowing: $showNotificationBanner, message: notificationBannerMsg, notifStyle: .warning)
-                    }
-                    .onAppear {
-                        NotificationCenter.default.addObserver(forName: .bannerNotification, object: nil, queue: .main) { notification in
-                            if let msg = notification.userInfo?["msg"] as? String {
-                                showNotificationBanner = true
-                                notificationBannerMsg = msg
-                            }
-                        }
                     }
                     if(isLoadingResponse) {
                         ZStack {
