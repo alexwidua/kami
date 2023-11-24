@@ -255,3 +255,7 @@ let DEFAULT_APPEARANCE_PREFERENCE: AppearancePreference = .system
 let DEFAULT_WINDOW_STYLE_PREFERENCE: WindowStylePreference = .transient
 
 let ORIGAMI_TARGET_BUNDLE_ID =  "com.facebook.Origami-Studio"
+
+/* About */
+let URL_GITHUB = "https://github.com/alexwidua/Kami"
+let URL_ORIGAMI_COMMUNITY = "https://www.facebook.com/groups/origami.community"

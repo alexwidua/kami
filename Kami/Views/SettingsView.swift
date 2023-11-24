@@ -17,7 +17,7 @@ import ServiceManagement
 import KeyboardShortcuts
 
 #Preview {
-    SettingsWindowView(windowRef: nil).frame(height: 364)
+    SettingsWindowView(windowRef: nil).frame(height: 1000)
 }
 
 enum SettingsTab {
@@ -40,7 +40,7 @@ struct SettingsWindowView: View {
     let windowRef: SettingsWindow?
     
     @State private var selectedTab: SettingsTab = .general
-    let generalTabSize: CGFloat = 584
+    let generalTabSize: CGFloat = 624
     let apiTabSize: CGFloat = 556
     let aboutTabSize: CGFloat = 364
     
@@ -130,6 +130,14 @@ struct TabViewController: NSViewControllerRepresentable {
 
 let SETTINGS_LABEL_WIDTH: CGFloat = 100
 
+struct Divider: View {
+    var body: some View {
+        ZStack {
+            Rectangle().fill(.separator).frame(height: 1)
+        }
+    }
+}
+
 //
 //  ┌──────────────────┐
 //  │ General Tab      |
@@ -192,6 +200,8 @@ struct GeneralTabView: View {
                 }
                 Spacer()
             }
+            
+            Divider()
             
             /* Window Style */
             HStack(alignment: .top) {
@@ -267,6 +277,8 @@ struct GeneralTabView: View {
                 }
             }
             
+            Divider()
+            
             /* Launch Preference */
             HStack(alignment: .top) {
                 HStack {
@@ -284,10 +296,7 @@ struct GeneralTabView: View {
                 Spacer()
             }
             
-            /* Divider */
-            ZStack {
-                Rectangle().fill(.separator).frame(height: 1)
-            }
+            Divider()
             
             VStack(spacing: 24.0) {
                 /* Shortcut Preference */
@@ -485,6 +494,9 @@ struct ApiTabView: View {
                     }
                 }
             }
+            
+            Divider()
+            
             /* Model Preference */
             HStack(alignment: .top) {
                 HStack {
@@ -518,6 +530,9 @@ struct ApiTabView: View {
                     }
                 }
             }
+            
+            Divider()
+            
             /* Instruction Text */
             HStack(alignment: .top) {
                 HStack {
@@ -530,6 +545,7 @@ struct ApiTabView: View {
                     CustomTextEditor(text: $tempInstructionText)
                         .textStyle(.sansBody)
                         .textColor(.primary)
+                        .padding(EdgeInsets(top: 8, leading: 4, bottom: 0, trailing: 4))
                         .settingsInputBackground()
                         .onChange(of: tempInstructionText) { _, newValue in
                             debouncer.callback = {
@@ -607,14 +623,14 @@ struct AboutTabView: View {
                 HStack {
                     Button("View Project on GitHub") {
                         // TODO: Insert URL
-                        if let url = URL(string: "https://www.example.com") {
+                        if let url = URL(string: URL_GITHUB) {
                             NSWorkspace.shared.open(url)
                         }
                     }
                     .buttonStyle(CustomButtonStyle(buttonType: .primary, py: 2.0, px: 8.0))
                     Button("Origami Community") {
                         // TODO: Insert URL
-                        if let url = URL(string: "https://www.example.com") {
+                        if let url = URL(string: URL_ORIGAMI_COMMUNITY) {
                             NSWorkspace.shared.open(url)
                         }
                     }
