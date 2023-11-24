@@ -17,7 +17,7 @@ import ServiceManagement
 import KeyboardShortcuts
 
 #Preview {
-    SettingsWindowView(windowRef: nil).frame(height: 1000)
+    SettingsWindowView(windowRef: nil).frame(height: 364)
 }
 
 enum SettingsTab {
@@ -253,7 +253,7 @@ struct GeneralTabView: View {
                                 .foregroundColor(.secondary)
                         }
                         else {
-                            Text("Traditional window with red and green lights that has to be manually closed. \n")
+                            Text("Traditional window with traffic lights that has to be manually closed. \n")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -273,7 +273,7 @@ struct GeneralTabView: View {
                 .frame(width: SETTINGS_LABEL_WIDTH)
                 VStack(alignment: .leading) {
                     Toggle(isOn: startupIsChecked) {
-                        Text("Launch app at Login")
+                        Text("Launch app on startup")
                     }
                 }
                 Spacer()
@@ -560,31 +560,32 @@ struct AboutTabView: View {
         
         HStack(alignment: .top, spacing: 32.0) {
             Image(nsImage: NSImage(named: "AppIcon") ?? NSImage())
+                .offset(y: -12)
             VStack(alignment: .leading, spacing: 20.0) {
                 HStack(alignment: .top) {
-                    VStack(alignment: .leading, spacing: 4.0) {
+                    VStack(alignment: .leading, spacing: 2.0) {
                         Text("Kami")
-                            .font(.system(size: 18, weight: .bold))
+                            .font(.system(size: 14, weight: .bold))
                             .foregroundColor(.primary)
                         Spacer().frame(height: 8)
                         Text("Author")
-                            .font(.system(size: 12, weight: .regular))
+                            .font(.system(size: 11, weight: .regular))
                             .foregroundColor(.secondary.opacity(0.5))
                         Text("Acknowledgements")
-                            .font(.system(size: 12, weight: .regular))
+                            .font(.system(size: 11, weight: .regular))
                             .foregroundColor(.secondary.opacity(0.5))
                     }
                     Spacer()
-                    VStack(alignment: .leading, spacing: 4.0) {
+                    VStack(alignment: .leading, spacing: 2.0) {
                         Text("\(APP_VERSION)")
-                            .font(.system(size: 18, weight: .light))
-                            .foregroundColor(.primary)
+                            .font(.system(size: 14, weight: .light))
+                            .foregroundColor(.primary.opacity(0.5))
                         Spacer().frame(height: 8)
                         Text("Alex Widua")
-                            .font(.system(size: 12, weight: .regular))
+                            .font(.system(size: 11, weight: .regular))
                             .foregroundColor(.secondary)
                         Text("Luke Haddock, George Kedenburg III for their Origami-GPT-4 experiments and instruction texts, Matthew Mang for their GPT-4 Origami Patch.")
-                            .font(.system(size: 12, weight: .regular))
+                            .font(.system(size: 11, weight: .regular))
                             .foregroundColor(.secondary)
                     }
                 }
@@ -606,8 +607,8 @@ struct AboutTabView: View {
                     .buttonStyle(CustomButtonStyle(buttonType: .regular, py: 2.0, px: 8.0))
                 }
             }
-            
         }
+        .offset(x: -16)
     }
 }
 

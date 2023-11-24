@@ -92,7 +92,6 @@ struct ContentView: View {
         }
     }
     
-    
     var inputDisabled: Bool { return (!appStorage_finishedOnboarding || isLoadingResponse) }
     var submitPromptButtonDisabled: Bool { return !appStorage_finishedOnboarding || promptInputText.isEmpty }
     var toolbarButtonDisabled: Bool { return (!appStorage_finishedOnboarding || hasSavedFile || isSavingFile) }
@@ -366,6 +365,7 @@ struct ContentView: View {
                 .scaleEffect(1.5)
                 .offset(x: -2 ,y: 0)
                 if(appStorage_showFileName) {
+                    Spacer().frame(width: 8.0)
                     Text(currentFileName)
                         .font(.system(size: 12, weight: .regular, design: .monospaced))
                         .foregroundColor(.secondary.opacity(0.5))
