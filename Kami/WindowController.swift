@@ -39,8 +39,8 @@ class AppWindow: NSWindow, NSWindowDelegate {
         self.isMovable = true
         self.isMovableByWindowBackground = true
 
-        if (getWindowStyleFromAppStorage() == .transient) {
-            applyTransientWindowStyle()
+        if (getWindowStyleFromAppStorage() == .pinnable) {
+            applyPinnableWindowStyle()
         }
        
         self.delegate = self
@@ -61,7 +61,7 @@ class AppWindow: NSWindow, NSWindowDelegate {
         return true
     }
     
-    /* Close transient window on click outside (aka. when window loses focus) */
+    /* Close pinnable window on click outside (aka. when window loses focus) */
     func windowDidResignKey(_ notification: Notification) {
         if(isPinned) { return }
         if(getWindowStyleFromAppStorage() == .windowed) {return}
@@ -82,7 +82,7 @@ class AppWindow: NSWindow, NSWindowDelegate {
         self.isPinned = true
     }
     
-    func applyTransientWindowStyle() -> Void {
+    func applyPinnableWindowStyle() -> Void {
         self.titleVisibility = .hidden
         self.standardWindowButton(.closeButton)?.isHidden = true
         self.standardWindowButton(.miniaturizeButton)?.isHidden = true
@@ -106,8 +106,8 @@ class AppWindow: NSWindow, NSWindowDelegate {
     @objc func handleWindowStyleChange() -> Void {
         let windowStyle = getWindowStyleFromAppStorage()
         switch windowStyle {
-        case .transient:
-            applyTransientWindowStyle()
+        case .pinnable:
+            applyPinnableWindowStyle()
         case .windowed:
             applyWindowedWindowStyle()
         }

@@ -75,7 +75,7 @@ struct ContentView: View {
     
     var promptInputEdgeInset: EdgeInsets {
         switch appStorage_windowStyle {
-        case .transient:
+        case .pinnable:
             return EdgeInsets(top: 14, leading: 4, bottom: 0, trailing: 4)
         case .windowed:
             return EdgeInsets(top: 10, leading: 4, bottom: 0, trailing: 4)
@@ -84,7 +84,7 @@ struct ContentView: View {
     
     var promptSubmitBtnYPadding: CGFloat {
         switch appStorage_windowStyle {
-        case .transient:
+        case .pinnable:
             return 12.0
         case .windowed:
             return 8.0
@@ -95,7 +95,7 @@ struct ContentView: View {
     var submitPromptButtonDisabled: Bool { return !appStorage_finishedOnboarding || promptInputText.isEmpty }
     var toolbarButtonDisabled: Bool { return (!appStorage_finishedOnboarding || hasSavedFile || isSavingFile) }
     
-    /* Transient Window Titlebar Stuff */
+    /* Pinnable Window Titlebar Stuff */
     @State private var windowHovered: Bool = false
     @State private var isPinned: Bool = false
     @State private var titlebarButtonPressed: Bool = false
@@ -137,7 +137,7 @@ struct ContentView: View {
                 ZStack {
                     /* Title bar */
                     VStack(spacing: 0) {
-                        if(appStorage_windowStyle == .transient) {
+                        if(appStorage_windowStyle == .pinnable) {
                             HStack {
                                 Rectangle()
                                     .fill(.primary.opacity(titlebarButtonHover ? 0.1 : 0.0))
@@ -423,7 +423,7 @@ struct ContentView: View {
         .onHover(perform: { hovering in
             windowHovered = hovering
         })
-        .if(appStorage_windowStyle == .transient) { view in
+        .if(appStorage_windowStyle == .pinnable) { view in
             view.edgesIgnoringSafeArea(.top)
         }
         

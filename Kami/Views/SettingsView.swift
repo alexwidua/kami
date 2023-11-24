@@ -37,7 +37,7 @@ enum AppearancePreference: String, CaseIterable {
 }
 
 enum WindowStylePreference: String, CaseIterable {
-    case transient
+    case pinnable
     case windowed
 }
 
@@ -177,8 +177,8 @@ struct GeneralTabView: View {
     @AppStorage(AppStorageKey.appearancePref) var appStorage_appearance: AppearancePreference = DEFAULT_APPEARANCE_PREFERENCE
     @AppStorage(AppStorageKey.windowStylePref) var appStorage_windowStyle: WindowStylePreference = DEFAULT_WINDOW_STYLE_PREFERENCE
     
-    var isTransient: Bool {
-        return appStorage_windowStyle == .transient
+    var isPinnable: Bool {
+        return appStorage_windowStyle == .pinnable
     }
     var isWindowed: Bool {
         return appStorage_windowStyle == .windowed
@@ -229,7 +229,7 @@ struct GeneralTabView: View {
                     HStack {
                         HStack(spacing: 16.0) {
                             VStack {
-                                Image("SettingsTransientIcon")
+                                Image("SettingsPinnableIcon")
                                     .resizable()
                                     .frame(width:100, height: 66)
                                     .mask {
@@ -239,15 +239,15 @@ struct GeneralTabView: View {
                                 
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 8)
-                                            .stroke(isTransient ? .blue : .white.opacity(0.15), lineWidth: isTransient ? 4.0 : 0.5)
+                                            .stroke(isPinnable ? .blue : .white.opacity(0.15), lineWidth: isPinnable ? 4.0 : 0.5)
                                     )
                                 Text("Pinnable")
-                                    .font(.system(size: 11, weight: isTransient ? .bold : .regular))
-                                    .foregroundStyle(isTransient ? .primary : .secondary)
+                                    .font(.system(size: 11, weight: isPinnable ? .bold : .regular))
+                                    .foregroundStyle(isPinnable ? .primary : .secondary)
                                 
                             }
                             .onTapGesture {
-                                appStorage_windowStyle = .transient
+                                appStorage_windowStyle = .pinnable
                                 NotificationCenter.default.post(name: .windowStyleChanged, object: nil)
                             }
                             VStack {
@@ -276,7 +276,7 @@ struct GeneralTabView: View {
                         Spacer()
                     }
                     HStack {
-                        if(isTransient) {
+                        if(isPinnable) {
                             Text("Transient window disappears when clicked outside of it. Can be pinned by clicking the Pin icon or dragging the window.")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)

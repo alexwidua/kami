@@ -9,7 +9,7 @@ struct AppStorageKey {
     static let appearancePref = "appearance-\(APP_VERSION)"
     static let windowStylePref = "window-preference-\(APP_VERSION)"
     static let showOpenWithBtnPref = "show-open-with-button-\(APP_VERSION)"
-    static let showFileName = "show-file-name-\(APP_VERSION)"
+    static let showFileNamePref = "show-file-name-\(APP_VERSION)"
 }
 
 
