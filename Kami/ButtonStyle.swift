@@ -7,14 +7,16 @@ enum ButtonType {
 }
 
 struct CustomButtonStyle: ButtonStyle {
+    @Environment(\.controlActiveState) var controlActiveState
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.isEnabled) var isEnabled
     
     var buttonType: ButtonType = .regular
     var py: CGFloat = 4.0
     var px: CGFloat = 8.0
+    @State var parentIsKey: Bool = false
     
-    var isLight: Bool {
+    var isLightTheme: Bool {
         return colorScheme == .light
     }
     
@@ -38,15 +40,21 @@ struct CustomButtonStyle: ButtonStyle {
         }
     }
     
-    var getBtnBgColor: Color {
+    var getBtnBgActiveColor: Color {
         switch buttonType {
-        case .regular:
-            return isLight ?
-                .white : (isEnabled ? .white.opacity(0.25) : .white.opacity(0.25))
-        case .primary, .success:
-            return isLight ?
-            (isEnabled ? specialColor : .white) :
-            (isEnabled ? specialColor : .white.opacity(0.25))
+            case .regular:
+                return isLightTheme ? .white : .white.opacity(0.25)
+            case .primary, .success:
+                return specialColor
+        }
+    }
+    
+    var getBtnBgDisabledColor: Color {
+        switch buttonType {
+            case .regular:
+                return isLightTheme ? .white : .white.opacity(0.25)
+            case .primary, .success:
+                return isLightTheme ? .white : .white.opacity(0.25)
         }
     }
     
@@ -57,7 +65,7 @@ struct CustomButtonStyle: ButtonStyle {
             .padding(.horizontal, px)
             .background(RoundedRectangle(cornerRadius: 4)
                 .foregroundStyle(
-                    getBtnBgColor
+                    (isEnabled && parentIsKey ? getBtnBgActiveColor : getBtnBgDisabledColor)
                         .shadow(
                             .inner(color: .white.opacity(0.25), radius: 0, x: 0, y: 1)
                         )
@@ -67,5 +75,13 @@ struct CustomButtonStyle: ButtonStyle {
                 )
             )
             .opacity(isEnabled ? 1 : 0.35)
+            .onChange(of: controlActiveState) { _, newValue in
+                if (newValue == .key || newValue == .active) {
+                    parentIsKey = true
+                }
+                else {
+                    parentIsKey = false
+                }
+            }
     }
 }

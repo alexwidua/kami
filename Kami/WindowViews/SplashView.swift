@@ -22,7 +22,7 @@ struct SplashView: View {
                 .navigationTitle("Enter your API Key")
         }
         else {
-            HStack {
+            HStack(spacing: 0) {
                 ZStack{
                     Image("SplashIconPatch")
                     if let shortcut = KeyboardShortcuts.getShortcut(for: .toggleAppWindow) {
@@ -34,6 +34,9 @@ struct SplashView: View {
                             .offset(x: 34, y: 14)
                     }
                 }
+                .padding(.bottom, 24.0)
+                .background(.thinMaterial)
+                Spacer()
                 VStack(alignment: .leading) {
                     Text("Open a JavaScript patch via the Right Click > Open with... context menu or the \(shortcutName) shortcut after selecting it.")
                         .bold()
@@ -49,10 +52,11 @@ struct SplashView: View {
                         .font(.subheadline)
                     }
                 }
-                
+                .padding(.top, 8.0)
+                .padding(.horizontal, 16.0)
+                .padding(.bottom, 24.0)
             }
-            .padding(.horizontal, 16.0)
-            .padding(.bottom, 14.0)
+            .background(.regularMaterial)
             .navigationTitle(APP_NAME)
         }
        

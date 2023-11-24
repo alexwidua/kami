@@ -10,6 +10,7 @@ class SplashWindow: NSWindow, NSWindowDelegate {
         self.isReleasedWhenClosed = false
         self.titlebarSeparatorStyle = .none
         self.titlebarAppearsTransparent = true
+        self.backgroundColor = .clear
         self.delegate = self
     }
     

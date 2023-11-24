@@ -15,7 +15,7 @@ extension Notification.Name {
 }
 
 @main
-struct JavascriptEditorApp: App {
+struct KamiApp: App {
     @NSApplicationDelegateAdaptor private var appDelegate : AppDelegate
     @StateObject var appState = AppState.shared
     
