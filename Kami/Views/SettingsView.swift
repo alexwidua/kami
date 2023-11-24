@@ -17,7 +17,7 @@ import ServiceManagement
 import KeyboardShortcuts
 
 #Preview {
-    SettingsWindowView(windowRef: nil)
+    SettingsWindowView(windowRef: nil).frame(height: 1000)
 }
 
 enum SettingsTab {
@@ -30,12 +30,17 @@ struct ApiModelPickerOption {
     var value: String
 }
 
+enum WindowStylePreference: String, CaseIterable {
+    case transient
+    case windowed
+}
+
 struct SettingsWindowView: View {
-    @AppStorage(appearancePreferenceStorageKey) var appStorage_appearance: AppearancePreference = .system
+    @AppStorage(appearancePreferenceStorageKey) var appStorage_appearance: AppearancePreference = DEFAULT_APPEARANCE_PREFERENCE
     let windowRef: SettingsWindow?
     
     @State private var selectedTab: SettingsTab = .general
-    let generalTabSize: CGFloat = 486
+    let generalTabSize: CGFloat = 584
     let apiTabSize: CGFloat = 556
     let aboutTabSize: CGFloat = 364
     
@@ -53,8 +58,6 @@ struct SettingsWindowView: View {
         // auto-resize the tab view to the children content height.
         // https://gist.github.com/mminer/caec00d2165362ff65e9f1f728cecae2 indicates that setting
         // the frame size seems to be a valid approach...
-        // Anyway, TODO: ... maybe
-        //
             .onChange(of: selectedTab) { _, _ in
                 var contentSize: CGFloat = 0
                 switch selectedTab {
@@ -150,7 +153,15 @@ struct GeneralTabView: View {
         )
     }
     
-    @AppStorage(appearancePreferenceStorageKey) var appStorage_appearance: AppearancePreference = .system
+    @AppStorage(appearancePreferenceStorageKey) var appStorage_appearance: AppearancePreference = DEFAULT_APPEARANCE_PREFERENCE
+    @AppStorage(windowStylePreferenceStorageKey) var appStorage_windowStyle: WindowStylePreference = DEFAULT_WINDOW_STYLE_PREFERENCE
+    
+    var isTransient: Bool {
+        return appStorage_windowStyle == .transient
+    }
+    var isWindowed: Bool {
+        return appStorage_windowStyle == .windowed
+    }
     
     @State private var userHasGrantedAccessibilityPermission = false
     @State private var pollAccessibilityAccessTimer = Timer.publish(every: 1.0, on: .current, in: .common).autoconnect()
@@ -177,6 +188,80 @@ struct GeneralTabView: View {
                 Spacer()
             }
             
+            /* Window Style */
+            HStack(alignment: .top) {
+                HStack {
+                    Spacer()
+                    Text("Window Style")
+                        .font(.headline)
+                    
+                }
+                .frame(width: SETTINGS_LABEL_WIDTH)
+                VStack(spacing: 6.0) {
+                    
+                    HStack {
+                        HStack(spacing: 16.0) {
+                            VStack {
+                                Image("SettingsTransientIcon")
+                                    .resizable()
+                                    .frame(width:100, height: 66)
+                                    .mask {
+                                        RoundedRectangle(cornerRadius: 8)
+                                    }
+                                    .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
+                                
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .stroke(isTransient ? .blue : .white.opacity(0.15), lineWidth: isTransient ? 4.0 : 0.5)
+                                    )
+                                Text("Pinnable")
+                                    .font(.system(size: 11, weight: isTransient ? .bold : .regular))
+                                    .foregroundStyle(isTransient ? .primary : .secondary)
+                                
+                            }
+                            .onTapGesture {
+                                appStorage_windowStyle = .transient
+                            }
+                            VStack {
+                                Image("SettingsWindowedIcon")
+                                    .resizable()
+                                    .frame(width:100, height: 66)
+                                    .mask {
+                                        RoundedRectangle(cornerRadius: 8)
+                                    }
+                                    .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
+                                
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .stroke(isWindowed ? .blue : .white.opacity(0.15), lineWidth: isWindowed ? 4.0 : 0.5)
+                                    )
+                                Text("Traditional")
+                                    .font(.system(size: 11, weight: appStorage_windowStyle == .windowed ? .bold : .regular))
+                                    .foregroundStyle(appStorage_windowStyle == .windowed ? .primary : .secondary)
+                                
+                            }
+                            .onTapGesture {
+                                appStorage_windowStyle = .windowed
+                            }
+                        }
+                        Spacer()
+                    }
+                    HStack {
+                        if(isTransient) {
+                            Text("Transient window disappears when clicked outside of it. Can be pinned by clicking the Pin icon or dragging the window.")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                        else {
+                            Text("Traditional window with red and green lights that has to be manually closed. \n")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                        Spacer()
+                    }
+                }
+            }
+            
             /* Launch Preference */
             HStack(alignment: .top) {
                 HStack {
@@ -193,7 +278,7 @@ struct GeneralTabView: View {
                 }
                 Spacer()
             }
-        
+            
             /* Divider */
             ZStack {
                 Rectangle().fill(.separator).frame(height: 1)

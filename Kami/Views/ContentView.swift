@@ -23,7 +23,8 @@ struct ContentView: View {
     
     /* AppStorage States */
     @AppStorage(finishedOnboardingStorageKey) var appStorage_finishedOnboarding: Bool = false
-    @AppStorage(appearancePreferenceStorageKey) var appStorage_appearance: AppearancePreference = .system
+    @AppStorage(appearancePreferenceStorageKey) var appStorage_appearance: AppearancePreference = DEFAULT_APPEARANCE_PREFERENCE
+    @AppStorage(windowStylePreferenceStorageKey) var appStorage_windowStyle: WindowStylePreference = DEFAULT_WINDOW_STYLE_PREFERENCE
     @AppStorage(apiKeyStorageKey) var appStorage_apiKey: String = ""
     @AppStorage(instructionStorageKey) var appStorage_instructionText: String = DEFAULT_INSTRUCTION
     @AppStorage(modelPreferenceStorageKey) var appStorage_modelPreference: String = DEFAULT_MODEL
@@ -35,7 +36,7 @@ struct ContentView: View {
     let window: AppWindow?
     var url: URL
     @State private var fileContent: String = ""
-
+    
     /* API Call Stuff */
     @State private var streamResponseTask: Task<Void, Never>?
     @State private var isLoadingResponse: Bool = false
@@ -68,35 +69,54 @@ struct ContentView: View {
         }
     }
     
-    var inputForegroundColor: Color {
+    var promptInputFgColor: Color {
         if(!appStorage_finishedOnboarding || isLoadingResponse || promptInputText.isEmpty) { return .secondary }
         else { return .primary }
     }
+    
+    var promptInputEdgeInset: EdgeInsets {
+        switch appStorage_windowStyle {
+        case .transient:
+            return EdgeInsets(top: 12, leading: 4, bottom: 0, trailing: 4)
+        case .windowed:
+            return EdgeInsets(top: 10, leading: 4, bottom: 0, trailing: 4)
+        }
+    }
+    
+    var promptSubmitBtnYPadding: CGFloat {
+        switch appStorage_windowStyle {
+        case .transient:
+            return 10.0
+        case .windowed:
+            return 8.0
+        }
+    }
+    
+    
     var inputDisabled: Bool { return (!appStorage_finishedOnboarding || isLoadingResponse) }
     var submitPromptButtonDisabled: Bool { return !appStorage_finishedOnboarding || promptInputText.isEmpty }
     var toolbarButtonDisabled: Bool { return (!appStorage_finishedOnboarding || hasSavedFile || isSavingFile) }
     
+    /* Transient Window Titlebar Stuff */
+    @State private var windowHovered: Bool = false
+    @State private var isPinned: Bool = false
+    @State private var titlebarButtonPressed: Bool = false
+    @State private var titlebarButtonHover: Bool = false
+    
     var body: some View {
         VStack(spacing:0) {
-            //
             //  ┌──────────────────┐
-            //  │ Onboarding Flow  |
+            //  │ Onboarding Hint  |
             //  └──────────────────┘
-            //
-            //  Onboarding flow that is displayed until user has entered a valid API key for the first time.
-            //  Consecutive API key changes are done via the settings menu,
-            //  which can be invoked via the toolbar icon or the tray icon at the top.
-            //
             if(!appStorage_finishedOnboarding) {
                 HStack {
-               
                     Text("Please enter a valid API key.")
                         .font(.subheadline)
                     if splashWindow == nil {
                         
                     }
                     Button("Enter API Key") {
-                       createSplashWindow()
+                        createSplashWindow()
                     }
                     .font(.subheadline)
                     Spacer()
@@ -115,9 +135,73 @@ struct ContentView: View {
             //  Input is resizeable on the Y-axis (although the resize constrained to 100dp ...
             //  TODO: Increase resize constraints?
             //
+            VStack(spacing: 0) {
                 ZStack {
                     /* Title bar */
                     VStack(spacing: 0) {
+                        if(appStorage_windowStyle == .transient) {
+                            HStack {
+                                Rectangle()
+                                    .fill(.primary.opacity(titlebarButtonHover ? 0.1 : 0.0))
+                                    .cornerRadius(6.0)
+                                    .overlay {
+                                        ZStack {
+                                            Image(systemName: "pin.fill")
+                                                .font(.system(size: 12))
+                                                .foregroundColor(.primary.opacity(0.5))
+                                                .rotationEffect(Angle(degrees: isPinned ? 0 : -45))
+                                                .opacity(isPinned ? 0 : 1)
+                                                .scaleEffect(isPinned ? 0 : 1)
+                                            Image(systemName: "xmark")
+                                                .font(.system(size: 12, weight: .medium))
+                                                .foregroundColor(.primary.opacity(0.5))
+                                                .rotationEffect(Angle(degrees: isPinned ? 0 : -45))
+                                                .opacity(isPinned ? 1 : 0)
+                                                .scaleEffect(isPinned ? 1 : 0)
+                                        }
+                                    }
+                                    .scaleEffect(titlebarButtonPressed ? 0.9 : 1)
+                                    .animation(.spring(duration: 0.4, bounce: 0.25), value: isPinned)
+                                    .onHover(perform: { hovering in
+                                        titlebarButtonHover = hovering
+                                    })
+                                    .modifier(MouseEvt(
+                                        onMouseDown: {
+                                            titlebarButtonPressed = true
+                                        },
+                                        onMouseUp: {
+                                            titlebarButtonPressed = false
+                                            if(!isPinned) {
+                                                if let window = window {
+                                                    window.pinWindow()
+                                                    isPinned = true
+                                                }
+                                            }
+                                            else {
+                                                if let window = window {
+                                                    window.close()
+                                                }
+                                            }
+                                            
+                                        }
+                                    ))
+                                    .offset(x: 6, y: 6)
+                                    .frame(width: 24, height: 24)
+                                Spacer()
+                            }
+                            .opacity(windowHovered ? 1 : 0)
+                            .animation(.spring(duration: 0.2), value: windowHovered)
+                            /* If window is dragged, automatically pin window */
+                            .onAppear {
+                                NotificationCenter.default.addObserver(forName: .windowDragged, object: nil, queue: .main) { _ in
+                                    if let window = window {
+                                        if window.isKeyWindow {
+                                            isPinned = true
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         /* Prompt Editor */
                         HStack(alignment: .top) {
                             ZStack {
@@ -125,14 +209,14 @@ struct ContentView: View {
                                     CustomTextEditor(text:.constant("Prompt..."))
                                         .disabled(true)
                                         .textStyle(.sansLarge)
-                                        .textColor(inputForegroundColor)
-                                        .padding(EdgeInsets(top: 2, leading: 4, bottom: 0, trailing: 4))
+                                        .textColor(promptInputFgColor)
+                                        .padding(promptInputEdgeInset)
                                 }
                                 CustomTextEditor(text: isLoadingResponse ? .constant(promptInputText) : $promptInputText)
                                     .disabled(inputDisabled)
                                     .textStyle(.sansLarge)
-                                    .textColor(inputForegroundColor)
-                                    .padding(EdgeInsets(top: 2, leading: 4, bottom: 0, trailing: 4))
+                                    .textColor(promptInputFgColor)
+                                    .padding(promptInputEdgeInset)
                                     .onChange(of: promptInputText) { oldValue, newValue in
                                         // intercept enter/line break and use as shortcut, bc regular shortuts do not work while text editor is focussed
                                         if let lastChar = newValue.last, lastChar == "\n", oldValue != newValue {
@@ -164,7 +248,8 @@ struct ContentView: View {
                                 .disabled(submitPromptButtonDisabled)
                                 .buttonStyle(CustomButtonStyle(buttonType: isLoadingResponse ? .regular : .primary))
                             }
-                            .padding(8.0)
+                            .padding(.horizontal, 8.0)
+                            .padding(.vertical, promptSubmitBtnYPadding)
                         }
                         Spacer()
                     }
@@ -253,7 +338,7 @@ struct ContentView: View {
                     }
                 }
                 .background(.windowBackground)
-        
+            }
             //
             //  ┌──────────────────┐
             //  │ Toolbar          |
@@ -327,9 +412,19 @@ struct ContentView: View {
                 window.appearance = getPreferredAppearance(pref: appStorage_appearance)
             }
         }
+        .onChange(of: appStorage_windowStyle) {
+            if let window = window {
+                switch appStorage_windowStyle {
+                case .transient:
+                    window.applyTransientWindowStyle()
+                case .windowed:
+                    window.applyWindowedWindowStyle()
+                }
+            }
+        }
         .onAppear {
-                 readFileContent()
-             }
+            readFileContent()
+        }
         .onAppear {
             NotificationCenter.default.addObserver(forName: .saveFileFromShortcut, object: nil, queue: .main) { _ in
                 if let window = window {
@@ -340,6 +435,13 @@ struct ContentView: View {
             }
             
         }
+        .onHover(perform: { hovering in
+            windowHovered = hovering
+        })
+        .if(appStorage_windowStyle == .transient) { view in
+            view.edgesIgnoringSafeArea(.top)
+        }
+        
     }
     
     func handleCompletion() {
@@ -364,7 +466,7 @@ struct ContentView: View {
             var hasApiError = false
             
             for await streamResult in streamCompletion(task: $streamResponseTask, apiKey: appStorage_apiKey, instructionText: appStorage_instructionText, inputText: promptInputText, model: selectedModel) {
-                  
+                
                 switch streamResult {
                 case .completion(let completion):
                     
@@ -382,7 +484,6 @@ struct ContentView: View {
                 }
             }
             isLoadingResponse = false
-            
             if(hasApiError) {
                 fileContent = ogFileContent
             }
@@ -415,7 +516,7 @@ struct ContentView: View {
             print("*** [handleSaveFile] Cancelled task, skipped saving")
             return
         }
-
+        
         saveFileContent()
     }
     
@@ -434,7 +535,7 @@ struct ContentView: View {
             fileContent = try String(contentsOf: url, encoding: .utf8)
         } catch {
             print("Error reading file: \(error)")
-        fileContent = "Failed to read file"
+            fileContent = "Failed to read file"
         }
     }
     
@@ -454,5 +555,4 @@ struct ContentView: View {
         }
     }
 }
-
 

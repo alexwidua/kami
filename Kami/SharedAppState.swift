@@ -13,6 +13,7 @@ enum AppearancePreference: String, CaseIterable {
 /* @AppStoprage Keys */
 let finishedOnboardingStorageKey = "completed-onboarding-\(APP_VERSION)"
 let appearancePreferenceStorageKey = "appearance-\(APP_VERSION)"
+let windowStylePreferenceStorageKey = "window-preference-\(APP_VERSION)"
 let apiKeyStorageKey = "api-secret-key-\(APP_VERSION)"
 let modelPreferenceStorageKey = "model-preference-\(APP_VERSION)"
 let customModelPreferenceStorageKey = "custom-model-string-\(APP_VERSION)"

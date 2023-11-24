@@ -13,6 +13,7 @@
 		2251A11A2B10AD3300513552 /* NotificationBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251A1192B10AD3300513552 /* NotificationBannerView.swift */; };
 		2251A11E2B10B64700513552 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251A11D2B10B64700513552 /* OnboardingView.swift */; };
 		2251A1202B10B79600513552 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251A11F2B10B79600513552 /* SplashView.swift */; };
+		2251A1242B1107E200513552 /* Extensions+Modifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251A1232B1107E200513552 /* Extensions+Modifier.swift */; };
 		226A6AA62AE685C100110798 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226A6AA52AE685C100110798 /* API.swift */; };
 		226A6AA82AE8F22500110798 /* Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226A6AA72AE8F22500110798 /* Misc.swift */; };
 		226A6AAC2AE927DB00110798 /* OpenWithMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226A6AAB2AE927DB00110798 /* OpenWithMenuView.swift */; };
@@ -42,6 +43,7 @@
 		2251A1192B10AD3300513552 /* NotificationBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationBannerView.swift; path = ../../../../../.Trash/NotificationBannerView.swift; sourceTree = "<group>"; };
 		2251A11D2B10B64700513552 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		2251A11F2B10B79600513552 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		2251A1232B1107E200513552 /* Extensions+Modifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extensions+Modifier.swift"; sourceTree = "<group>"; };
 		226A6AA52AE685C100110798 /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		226A6AA72AE8F22500110798 /* Misc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Misc.swift; sourceTree = "<group>"; };
 		226A6AAB2AE927DB00110798 /* OpenWithMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenWithMenuView.swift; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 				227CB6DC2B02169500D2F594 /* WindowController.swift */,
 				226A6AA52AE685C100110798 /* API.swift */,
 				226A6AA72AE8F22500110798 /* Misc.swift */,
+				2251A1232B1107E200513552 /* Extensions+Modifier.swift */,
 				22A7D5F52ADFCA6600878F0B /* Assets.xcassets */,
 				22A7D5FA2ADFCA6600878F0B /* Info.plist */,
 				22A7D5FB2ADFCA6600878F0B /* Kami.entitlements */,
@@ -266,6 +269,7 @@
 				2251A1182B109F7000513552 /* PatchErrorView.swift in Sources */,
 				226A6AA62AE685C100110798 /* API.swift in Sources */,
 				2251A1162B10834600513552 /* AccessibilityRequestView.swift in Sources */,
+				2251A1242B1107E200513552 /* Extensions+Modifier.swift in Sources */,
 				2251A1202B10B79600513552 /* SplashView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

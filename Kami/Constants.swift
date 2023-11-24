@@ -251,5 +251,7 @@ let DEFAULT_SHOW_FILE_NAME = false
 let DEFAULT_SHOW_OPEN_WITH_BTN = true
 let DEFAULT_SHOW_TRAY_ICON = true
 
+let DEFAULT_APPEARANCE_PREFERENCE: AppearancePreference = .system
+let DEFAULT_WINDOW_STYLE_PREFERENCE: WindowStylePreference = .transient
 
 let ORIGAMI_TARGET_BUNDLE_ID =  "com.facebook.Origami-Studio"

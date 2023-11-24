@@ -29,12 +29,20 @@ class SplashWindow: NSWindow, NSWindowDelegate {
 class AppWindow: NSWindow, NSWindowDelegate {
     @ObservedObject  var appState = AppState.shared
     var url: URL?
+    var isPinned: Bool = false
     
     init(contentRect: NSRect, backing: NSWindow.BackingStoreType, defer flag: Bool, url: URL) {
-        super.init(contentRect: contentRect, styleMask: [.titled, .closable, .fullSizeContentView], backing: backing, defer: flag)
+        super.init(contentRect: contentRect, styleMask: [.titled, .closable, .resizable, .fullSizeContentView], backing: backing, defer: flag)
         self.isReleasedWhenClosed = true
         self.titlebarSeparatorStyle = .none
         self.titlebarAppearsTransparent = true
+        self.isMovable = true
+        self.isMovableByWindowBackground = true
+
+        if (getWindowStyleFromAppStorage() == .transient) {
+            applyTransientWindowStyle()
+        }
+       
         self.delegate = self
         self.url = url
     }
@@ -48,6 +56,41 @@ class AppWindow: NSWindow, NSWindowDelegate {
     func windowShouldClose(_ sender: NSWindow) -> Bool {
         NSApp.removeWindowsItem(sender)
         return true
+    }
+    
+    /* Close transient window on click outside (aka. when window loses focus) */
+    func windowDidResignKey(_ notification: Notification) {
+        if(isPinned) { return }
+        if(getWindowStyleFromAppStorage() == .windowed) {return}
+        self.close()
+    }
+    
+    /* Pin window when dragged */
+    override func mouseDragged(with event: NSEvent) {
+           super.mouseDragged(with: event)
+        if(!isPinned) {
+            NotificationCenter.default.post(name: .windowDragged, object: nil)
+            self.pinWindow()
+            self.isPinned = true
+        }
+       }
+    
+    func pinWindow() -> Void {
+        self.isPinned = true
+    }
+    
+    func applyTransientWindowStyle() -> Void {
+        self.titleVisibility = .hidden
+        self.standardWindowButton(.closeButton)?.isHidden = true
+        self.standardWindowButton(.miniaturizeButton)?.isHidden = true
+        self.standardWindowButton(.zoomButton)?.isHidden = true
+    }
+    
+    func applyWindowedWindowStyle() -> Void {
+        self.titleVisibility = .visible
+        self.standardWindowButton(.closeButton)?.isHidden = false
+        self.standardWindowButton(.miniaturizeButton)?.isHidden = false
+        self.standardWindowButton(.zoomButton)?.isHidden = false
     }
 }
 
@@ -181,5 +224,10 @@ func getAppearanceFromAppStorage() -> NSAppearance {
     let rawValue = UserDefaults.standard.string(forKey: appearancePreferenceStorageKey) ?? AppearancePreference.system.rawValue
     let value = AppearancePreference(rawValue: rawValue)!
     return getPreferredAppearance(pref: value)
-    
+}
+
+func getWindowStyleFromAppStorage() -> WindowStylePreference {
+    let rawValue = UserDefaults.standard.string(forKey: windowStylePreferenceStorageKey) ?? DEFAULT_WINDOW_STYLE_PREFERENCE.rawValue
+    let value = WindowStylePreference(rawValue: rawValue)!
+    return value
 }

@@ -32,7 +32,7 @@ struct CustomTextEditor: NSViewRepresentable {
         textView.allowsUndo = true
         
         // padding
-        textView.textContainerInset = NSSize(width: 0, height: 8)
+        textView.textContainerInset = NSSize(width: 0, height: 0)
         textView.textContainer?.lineFragmentPadding = 8
         
         textView.backgroundColor = .clear
