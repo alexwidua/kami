@@ -91,9 +91,10 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		227CB6EB2B0D19F600D2F594 /* Views */ = {
+		227CB6EB2B0D19F600D2F594 /* WindowViews */ = {
 			isa = PBXGroup;
 			children = (
+				227CB6DC2B02169500D2F594 /* WindowController.swift */,
 				2251A11F2B10B79600513552 /* SplashView.swift */,
 				22A7D5F32ADFCA6500878F0B /* ContentView.swift */,
 				226CBCC72AE2752100FEB3E5 /* SettingsView.swift */,
@@ -101,7 +102,7 @@
 				2251A1152B10834600513552 /* AccessibilityRequestView.swift */,
 				2251A1172B109F7000513552 /* PatchErrorView.swift */,
 			);
-			path = Views;
+			path = WindowViews;
 			sourceTree = "<group>";
 		};
 		227CB6EC2B0D1A1500D2F594 /* Components */ = {
@@ -140,12 +141,11 @@
 			children = (
 				22A7D5EF2ADFCA6500878F0B /* KamiApp.swift */,
 				227CB6E92B0CCAD100D2F594 /* Constants.swift */,
-				227CB6EB2B0D19F600D2F594 /* Views */,
+				227CB6EB2B0D19F600D2F594 /* WindowViews */,
 				227CB6EC2B0D1A1500D2F594 /* Components */,
 				2251A1252B1144CB00513552 /* AppStorage.swift */,
 				227CB6D82AFE3B2800D2F594 /* AppState.swift */,
 				227CB6E32B037ECD00D2F594 /* PasteboardHandler.swift */,
-				227CB6DC2B02169500D2F594 /* WindowController.swift */,
 				226A6AA52AE685C100110798 /* API.swift */,
 				226E59F12AEE8700005FCD6D /* ButtonStyle.swift */,
 				226A6AA72AE8F22500110798 /* Utils.swift */,

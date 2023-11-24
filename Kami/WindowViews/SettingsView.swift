@@ -136,7 +136,7 @@ struct TabViewController: NSViewControllerRepresentable {
 //  │ Tabs         │
 //  └──────────────┘
 
-let SETTINGS_LABEL_WIDTH: CGFloat = 100
+let SETTINGS_LABEL_WIDTH: CGFloat = 132
 
 struct Divider: View {
     var body: some View {
