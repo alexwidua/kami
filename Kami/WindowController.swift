@@ -33,7 +33,7 @@ class AppWindow: NSWindow, NSWindowDelegate {
     
     init(contentRect: NSRect, backing: NSWindow.BackingStoreType, defer flag: Bool, url: URL) {
         super.init(contentRect: contentRect, styleMask: [.titled, .closable, .resizable, .fullSizeContentView], backing: backing, defer: flag)
-        self.isReleasedWhenClosed = true
+        self.isReleasedWhenClosed = false
         self.titlebarSeparatorStyle = .none
         self.titlebarAppearsTransparent = true
         self.isMovable = true
@@ -45,6 +45,9 @@ class AppWindow: NSWindow, NSWindowDelegate {
        
         self.delegate = self
         self.url = url
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleAppearanceChange), name: .appearanceChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleWindowStyleChange), name: .windowStyleChanged, object: nil)
     }
     
     func windowWillClose(_ notification: Notification) {
@@ -84,6 +87,7 @@ class AppWindow: NSWindow, NSWindowDelegate {
         self.standardWindowButton(.closeButton)?.isHidden = true
         self.standardWindowButton(.miniaturizeButton)?.isHidden = true
         self.standardWindowButton(.zoomButton)?.isHidden = true
+        
     }
     
     func applyWindowedWindowStyle() -> Void {
@@ -92,6 +96,24 @@ class AppWindow: NSWindow, NSWindowDelegate {
         self.standardWindowButton(.miniaturizeButton)?.isHidden = false
         self.standardWindowButton(.zoomButton)?.isHidden = false
     }
+    
+    /* Notification Handlers */
+    @objc func handleAppearanceChange() -> Void {
+        let appearance = getAppearanceFromAppStorage()
+        self.appearance = appearance
+    }
+    
+    @objc func handleWindowStyleChange() -> Void {
+        let windowStyle = getWindowStyleFromAppStorage()
+        switch windowStyle {
+        case .transient:
+            applyTransientWindowStyle()
+        case .windowed:
+            applyWindowedWindowStyle()
+        }
+    }
+    
+    
 }
 
 // ┌───────────────────────┐
@@ -174,7 +196,9 @@ func createSplashWindow() -> Void {
 
 func createAppWindow(url: URL) -> AppWindow {
     let window = AppWindow(contentRect: NSRect(x: 0, y: 0, width: 0, height: 0), backing: .buffered, defer: false, url: url)
-    let contentView = ContentView(window: window, url: url).frame(width: 600)
+    let contentView = ContentView(window: window, url: url)
+        .frame(minWidth: 500)
+        .frame(minHeight: 300, maxHeight: 2000)
     window.appearance = getAppearanceFromAppStorage()
     window.contentView = NSHostingView(rootView: contentView)
     setupWindow(window)
@@ -221,13 +245,13 @@ func createPatchErrorWindow(string: String, description: String) -> Void {
 
 /* Misc */
 func getAppearanceFromAppStorage() -> NSAppearance {
-    let rawValue = UserDefaults.standard.string(forKey: appearancePreferenceStorageKey) ?? AppearancePreference.system.rawValue
+    let rawValue = UserDefaults.standard.string(forKey: AppStorageKey.appearancePref) ?? AppearancePreference.system.rawValue
     let value = AppearancePreference(rawValue: rawValue)!
     return getPreferredAppearance(pref: value)
 }
 
 func getWindowStyleFromAppStorage() -> WindowStylePreference {
-    let rawValue = UserDefaults.standard.string(forKey: windowStylePreferenceStorageKey) ?? DEFAULT_WINDOW_STYLE_PREFERENCE.rawValue
+    let rawValue = UserDefaults.standard.string(forKey: AppStorageKey.windowStylePref) ?? DEFAULT_WINDOW_STYLE_PREFERENCE.rawValue
     let value = WindowStylePreference(rawValue: rawValue)!
     return value
 }

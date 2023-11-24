@@ -5,8 +5,8 @@ import SwiftUI
 import KeyboardShortcuts
 
 struct SplashView: View {
-    @AppStorage(apiKeyStorageKey) var appStorage_apiKey: String = ""
-    @AppStorage(finishedOnboardingStorageKey) var appStorage_finishedOnboarding: Bool = false
+    @AppStorage(AppStorageKey.apiKey) var appStorage_apiKey: String = ""
+    @AppStorage(AppStorageKey.finishedOnboarding) var appStorage_finishedOnboarding: Bool = false
 
     var shortcutName: String {
         var string = ""

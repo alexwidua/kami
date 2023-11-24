@@ -10,6 +10,8 @@ extension Notification.Name {
     static let toggleTrayIcon = Notification.Name("toggleTrayIconNotification")
     static let saveFileFromShortcut = Notification.Name("saveFileFromShortcut")
     static let windowDragged = Notification.Name("windowDragged")
+    static let windowStyleChanged = Notification.Name("windowStyleChanged")
+    static let appearanceChanged = Notification.Name("appearanceChanged")
 }
 
 @main
@@ -104,8 +106,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         }
         
         /* If the user didn't finish onboarding, we always show the splash screen. Otherwise, we only show it if the app was launched NOT bc a file wants to be opened */
-        var finishedOnboarding = UserDefaults.standard.bool(forKey: finishedOnboardingStorageKey)
-        if(UserDefaults.standard.object(forKey: finishedOnboardingStorageKey) == nil ) {
+        var finishedOnboarding = UserDefaults.standard.bool(forKey: AppStorageKey.finishedOnboarding)
+        if(UserDefaults.standard.object(forKey: AppStorageKey.finishedOnboarding) == nil ) {
             finishedOnboarding = false
         }
         if(!finishedOnboarding || !launchedBecauseOpenFile) {

@@ -3,6 +3,23 @@ import SwiftUI
 let APP_NAME = "Kami"
 let APP_VERSION = "1-DEV" // !!! changing this resets the user's @AppStorage
 
+/* UI */
+let SETTINGS_WINDOW_WIDTH = 500
+let SETTINGS_WINDOW_HEIGHT = 500
+
+let DEFAULT_SHOW_FILE_NAME = false
+let DEFAULT_SHOW_OPEN_WITH_BTN = true
+let DEFAULT_SHOW_TRAY_ICON = true
+
+let DEFAULT_APPEARANCE_PREFERENCE: AppearancePreference = .system
+let DEFAULT_WINDOW_STYLE_PREFERENCE: WindowStylePreference = .transient
+
+let ORIGAMI_TARGET_BUNDLE_ID =  "com.facebook.Origami-Studio"
+
+/* About */
+let URL_GITHUB = "https://github.com/alexwidua/Kami"
+let URL_ORIGAMI_COMMUNITY = "https://www.facebook.com/groups/origami.community"
+
 /* API */
 let DEFAULT_MODEL = "gpt-4-1106-preview"
 let DEFAULT_INSTRUCTION = """
@@ -243,19 +260,4 @@ Unsupported Origami Types
 Overall types that require a resource are not supported; Sound or Video for example.
 """
 
-/* UI */
-let SETTINGS_WINDOW_WIDTH = 500
-let SETTINGS_WINDOW_HEIGHT = 500
 
-let DEFAULT_SHOW_FILE_NAME = false
-let DEFAULT_SHOW_OPEN_WITH_BTN = true
-let DEFAULT_SHOW_TRAY_ICON = true
-
-let DEFAULT_APPEARANCE_PREFERENCE: AppearancePreference = .system
-let DEFAULT_WINDOW_STYLE_PREFERENCE: WindowStylePreference = .transient
-
-let ORIGAMI_TARGET_BUNDLE_ID =  "com.facebook.Origami-Studio"
-
-/* About */
-let URL_GITHUB = "https://github.com/alexwidua/Kami"
-let URL_ORIGAMI_COMMUNITY = "https://www.facebook.com/groups/origami.community"

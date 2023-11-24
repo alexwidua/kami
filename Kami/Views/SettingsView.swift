@@ -30,13 +30,20 @@ struct ApiModelPickerOption {
     var value: String
 }
 
+enum AppearancePreference: String, CaseIterable {
+    case light
+    case dark
+    case system
+}
+
 enum WindowStylePreference: String, CaseIterable {
     case transient
     case windowed
 }
 
+
 struct SettingsWindowView: View {
-    @AppStorage(appearancePreferenceStorageKey) var appStorage_appearance: AppearancePreference = DEFAULT_APPEARANCE_PREFERENCE
+    @AppStorage(AppStorageKey.appearancePref) var appStorage_appearance: AppearancePreference = DEFAULT_APPEARANCE_PREFERENCE
     let windowRef: SettingsWindow?
     
     @State private var selectedTab: SettingsTab = .general
@@ -124,9 +131,10 @@ struct TabViewController: NSViewControllerRepresentable {
     }
 }
 
-//
-// Tabs
-//
+//  ┌────┬────┬────┐
+//  ├────┴────┴────┤
+//  │ Tabs         │
+//  └──────────────┘
 
 let SETTINGS_LABEL_WIDTH: CGFloat = 100
 
@@ -139,9 +147,9 @@ struct Divider: View {
 }
 
 //
-//  ┌──────────────────┐
-//  │ General Tab      |
-//  └──────────────────┘
+//  ┌──────────────┐
+//  │ General Tab  |
+//  └──────────────┘
 //
 struct GeneralTabView: View {
     @Environment(\.colorScheme) var colorScheme
@@ -166,8 +174,8 @@ struct GeneralTabView: View {
         )
     }
     
-    @AppStorage(appearancePreferenceStorageKey) var appStorage_appearance: AppearancePreference = DEFAULT_APPEARANCE_PREFERENCE
-    @AppStorage(windowStylePreferenceStorageKey) var appStorage_windowStyle: WindowStylePreference = DEFAULT_WINDOW_STYLE_PREFERENCE
+    @AppStorage(AppStorageKey.appearancePref) var appStorage_appearance: AppearancePreference = DEFAULT_APPEARANCE_PREFERENCE
+    @AppStorage(AppStorageKey.windowStylePref) var appStorage_windowStyle: WindowStylePreference = DEFAULT_WINDOW_STYLE_PREFERENCE
     
     var isTransient: Bool {
         return appStorage_windowStyle == .transient
@@ -199,6 +207,10 @@ struct GeneralTabView: View {
                     .pickerStyle(.inline)
                 }
                 Spacer()
+            }
+            .onChange(of: appStorage_appearance) {
+                print("onChange settings")
+                NotificationCenter.default.post(name: .appearanceChanged, object: nil)
             }
             
             Divider()
@@ -236,6 +248,7 @@ struct GeneralTabView: View {
                             }
                             .onTapGesture {
                                 appStorage_windowStyle = .transient
+                                NotificationCenter.default.post(name: .windowStyleChanged, object: nil)
                             }
                             VStack {
                                 Image("SettingsWindowedIcon")
@@ -257,6 +270,7 @@ struct GeneralTabView: View {
                             }
                             .onTapGesture {
                                 appStorage_windowStyle = .windowed
+                                NotificationCenter.default.post(name: .windowStyleChanged, object: nil)
                             }
                         }
                         Spacer()
@@ -387,18 +401,18 @@ struct GeneralTabView: View {
 }
 
 //
-//  ┌──────────────────┐
-//  │ API Tab          |
-//  └──────────────────┘
+//  ┌──────────────┐
+//  │ API Tab      |
+//  └──────────────┘
 //
 struct ApiTabView: View {
     private let debouncer = Debouncer()
     
     /* @AppStorage */
-    @AppStorage(apiKeyStorageKey) var appStorage_apiKey: String = "..."
-    @AppStorage(modelPreferenceStorageKey) var appStorage_modelPreference: String = DEFAULT_MODEL
-    @AppStorage(customModelPreferenceStorageKey) var appStorage_customModelName: String = ""
-    @AppStorage(instructionStorageKey) var appStorage_instructionText: String = DEFAULT_INSTRUCTION
+    @AppStorage(AppStorageKey.apiKey) var appStorage_apiKey: String = "..."
+    @AppStorage(AppStorageKey.modelPreference) var appStorage_modelPreference: String = DEFAULT_MODEL
+    @AppStorage(AppStorageKey.customModelString) var appStorage_customModelName: String = ""
+    @AppStorage(AppStorageKey.instructionText) var appStorage_instructionText: String = DEFAULT_INSTRUCTION
     
     /* Local state */
     @State private var apiKeyValidationErrorMessage: String = ""
@@ -581,9 +595,9 @@ struct ApiTabView: View {
 }
 
 //
-//  ┌──────────────────┐
-//  │ About Tab        |
-//  └──────────────────┘
+//  ┌──────────────┐
+//  │ About Tab    |
+//  └──────────────┘
 //
 struct AboutTabView: View {
     var body: some View {
@@ -638,7 +652,7 @@ struct AboutTabView: View {
                 }
             }
         }
-        .offset(x: -16)
+        .offset(x: -16) // nudge view to the left for visual balance
     }
 }
 

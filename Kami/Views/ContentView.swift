@@ -21,15 +21,15 @@ struct ContentView: View {
     @StateObject var appState = AppState.shared
     
     /* AppStorage States */
-    @AppStorage(finishedOnboardingStorageKey) var appStorage_finishedOnboarding: Bool = false
-    @AppStorage(appearancePreferenceStorageKey) var appStorage_appearance: AppearancePreference = DEFAULT_APPEARANCE_PREFERENCE
-    @AppStorage(windowStylePreferenceStorageKey) var appStorage_windowStyle: WindowStylePreference = DEFAULT_WINDOW_STYLE_PREFERENCE
-    @AppStorage(apiKeyStorageKey) var appStorage_apiKey: String = ""
-    @AppStorage(instructionStorageKey) var appStorage_instructionText: String = DEFAULT_INSTRUCTION
-    @AppStorage(modelPreferenceStorageKey) var appStorage_modelPreference: String = DEFAULT_MODEL
-    @AppStorage(customModelPreferenceStorageKey) var appStorage_customModelName: String = ""
-    @AppStorage(showOpenWithPreferenceStorageKey) var appStorage_showOpenWithBtn: Bool = DEFAULT_SHOW_OPEN_WITH_BTN
-    @AppStorage(showFileNamePreferenceStorageKey) var appStorage_showFileName: Bool = DEFAULT_SHOW_FILE_NAME
+    @AppStorage(AppStorageKey.finishedOnboarding) var appStorage_finishedOnboarding: Bool = false
+    @AppStorage(AppStorageKey.appearancePref) var appStorage_appearance: AppearancePreference = DEFAULT_APPEARANCE_PREFERENCE
+    @AppStorage(AppStorageKey.windowStylePref) var appStorage_windowStyle: WindowStylePreference = DEFAULT_WINDOW_STYLE_PREFERENCE
+    @AppStorage(AppStorageKey.apiKey) var appStorage_apiKey: String = ""
+    @AppStorage(AppStorageKey.instructionText) var appStorage_instructionText: String = DEFAULT_INSTRUCTION
+    @AppStorage(AppStorageKey.modelPreference) var appStorage_modelPreference: String = DEFAULT_MODEL
+    @AppStorage(AppStorageKey.customModelString) var appStorage_customModelName: String = ""
+    @AppStorage(AppStorageKey.showOpenWithBtnPref) var appStorage_showOpenWithBtn: Bool = DEFAULT_SHOW_OPEN_WITH_BTN
+    @AppStorage(AppStorageKey.showFileNamePref) var appStorage_showFileName: Bool = DEFAULT_SHOW_FILE_NAME
     
     /* Props */
     let window: AppWindow?
@@ -76,7 +76,7 @@ struct ContentView: View {
     var promptInputEdgeInset: EdgeInsets {
         switch appStorage_windowStyle {
         case .transient:
-            return EdgeInsets(top: 12, leading: 4, bottom: 0, trailing: 4)
+            return EdgeInsets(top: 14, leading: 4, bottom: 0, trailing: 4)
         case .windowed:
             return EdgeInsets(top: 10, leading: 4, bottom: 0, trailing: 4)
         }
@@ -85,7 +85,7 @@ struct ContentView: View {
     var promptSubmitBtnYPadding: CGFloat {
         switch appStorage_windowStyle {
         case .transient:
-            return 10.0
+            return 12.0
         case .windowed:
             return 8.0
         }
@@ -166,6 +166,7 @@ struct ContentView: View {
                                     .modifier(MouseEvt(
                                         onMouseDown: {
                                             titlebarButtonPressed = true
+                                         
                                         },
                                         onMouseUp: {
                                             titlebarButtonPressed = false
@@ -405,23 +406,6 @@ struct ContentView: View {
             .frame(height: 36)
             .background(.windowBackground)
             
-        }
-        // Respond to Appearance Preference changes made in the app's settings window
-        .onChange(of: appStorage_appearance) {
-            if let window = window {
-                window.appearance = getPreferredAppearance(pref: appStorage_appearance)
-            }
-        }
-        // Respond to Window Style changes made in the app's settings window
-        .onChange(of: appStorage_windowStyle) {
-            if let window = window {
-                switch appStorage_windowStyle {
-                case .transient:
-                    window.applyTransientWindowStyle()
-                case .windowed:
-                    window.applyWindowedWindowStyle()
-                }
-            }
         }
         .onAppear {
             readFileContent()
