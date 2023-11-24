@@ -130,11 +130,10 @@ struct ValidateApiKeyView: View {
             ZStack {
                 TextField("", text: .constant(placeholder))
                     .textFieldStyle(PlainTextFieldStyle())
-                
                     .allowsHitTesting(false)
                     .padding(EdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8))
                     .font(.system(size: fontSize, design: .monospaced))
-                    .opacity(tempApiKey.isEmpty ? 1 : 0)
+                    .opacity(tempApiKey.isEmpty ? 0.5 : 0)
                     .frame(height: inputHeight)
                 TextField("", text: $tempApiKey)
                     .textFieldStyle(PlainTextFieldStyle())

@@ -8,6 +8,8 @@ class SplashWindow: NSWindow, NSWindowDelegate {
     init(contentRect: NSRect, backing: NSWindow.BackingStoreType, defer flag: Bool) {
         super.init(contentRect: contentRect, styleMask: [ .titled, .closable, .fullSizeContentView], backing: backing, defer: flag)
         self.isReleasedWhenClosed = false
+        self.titlebarSeparatorStyle = .none
+        self.titlebarAppearsTransparent = true
         self.delegate = self
     }
     

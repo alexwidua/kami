@@ -1,7 +1,7 @@
 import SwiftUI
 
 let APP_NAME = "Kami"
-let APP_VERSION = "0-DEV" // !!! changing this resets the user's @AppStorage
+let APP_VERSION = "1-DEV" // !!! changing this resets the user's @AppStorage
 
 /* API */
 let DEFAULT_MODEL = "gpt-4-1106-preview"

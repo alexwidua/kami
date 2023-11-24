@@ -97,14 +97,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         }
         
         /* If the user didn't finish onboarding, we always show the splash screen. Otherwise, we only show it if the app was launched NOT bc a file wants to be opened */
-//        var finishedOnboarding = UserDefaults.standard.bool(forKey: finishedOnboardingStorageKey)
-//                    if(UserDefaults.standard.object(forKey: finishedOnboardingStorageKey) == nil ) {
-//                        finishedOnboarding = false
-//                    }
-//        if(!finishedOnboarding || !launchedBecauseOpenFile) {
-//            createSplashWindow()
-//        }
-        if(!launchedBecauseOpenFile) {
+        var finishedOnboarding = UserDefaults.standard.bool(forKey: finishedOnboardingStorageKey)
+                    if(UserDefaults.standard.object(forKey: finishedOnboardingStorageKey) == nil ) {
+                        finishedOnboarding = false
+                    }
+        if(!finishedOnboarding || !launchedBecauseOpenFile) {
             createSplashWindow()
         }
     }

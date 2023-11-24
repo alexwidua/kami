@@ -10,8 +10,8 @@ import KeyboardShortcuts
 
 struct SplashView: View {
     @AppStorage(apiKeyStorageKey) var appStorage_apiKey: String = ""
-    @State var appStorage_finishedOnboarding: Bool = true
-    
+    @AppStorage(finishedOnboardingStorageKey) var appStorage_finishedOnboarding: Bool = false
+
     var shortcutName: String {
         var string = ""
         if let shortcut = KeyboardShortcuts.getShortcut(for: .toggleAppWindow) {

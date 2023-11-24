@@ -2,8 +2,6 @@
 //  The app's main content window
 //
 //  ┌──────────────────────────────┐
-//  │ Onboarding                   •─── Set API key. Displayed until API key is set for the first time
-//  ├──────────────────────────────┤
 //  │ Prompt Input                 •─── Resizeable prompt Input with [Enter] button
 //  ├──────────────────────────────┤
 //  │ Code Editor                  •─── (Rudimentary) Code editor with syntax highlighting
@@ -24,6 +22,7 @@ struct ContentView: View {
     @StateObject var appState = AppState.shared
     
     /* AppStorage States */
+    @AppStorage(finishedOnboardingStorageKey) var appStorage_finishedOnboarding: Bool = false
     @AppStorage(appearancePreferenceStorageKey) var appStorage_appearance: AppearancePreference = .system
     @AppStorage(apiKeyStorageKey) var appStorage_apiKey: String = ""
     @AppStorage(instructionStorageKey) var appStorage_instructionText: String = DEFAULT_INSTRUCTION
@@ -77,11 +76,6 @@ struct ContentView: View {
     var submitPromptButtonDisabled: Bool { return !appStorage_finishedOnboarding || promptInputText.isEmpty }
     var toolbarButtonDisabled: Bool { return (!appStorage_finishedOnboarding || hasSavedFile || isSavingFile) }
     
-    /* Onboarding specific stuff */
-    //        @AppStorage(finishedOnboardingStorageKey) var appStorage_finishedOnboarding: Bool = false
-    // TODO:
-    @State var appStorage_finishedOnboarding: Bool = true
-    
     var body: some View {
         VStack(spacing:0) {
             //
@@ -94,7 +88,22 @@ struct ContentView: View {
             //  which can be invoked via the toolbar icon or the tray icon at the top.
             //
             if(!appStorage_finishedOnboarding) {
-                OnboardingView(apiKey: $appStorage_apiKey, finishedOnboarding: $appStorage_finishedOnboarding)
+                HStack {
+               
+                    Text("Please enter a valid API key.")
+                        .font(.subheadline)
+                    if splashWindow == nil {
+                        
+                    }
+                    Button("Enter API Key") {
+                       createSplashWindow()
+                    }
+                    .font(.subheadline)
+                    Spacer()
+                }
+                .padding(.horizontal, 12.0)
+                .padding(.vertical, 8.0)
+                .background(.blue)
             }
             //
             //  ┌──────────────────┐
