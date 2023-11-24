@@ -78,7 +78,7 @@ struct ContentView: View {
     var toolbarButtonDisabled: Bool { return (!appStorage_finishedOnboarding || hasSavedFile || isSavingFile) }
     
     /* Onboarding specific stuff */
-    //        @AppStorage(hasCompletedOnboardingStorageKey) var appStorage_finishedOnboarding: Bool = false
+    //        @AppStorage(finishedOnboardingStorageKey) var appStorage_finishedOnboarding: Bool = false
     // TODO:
     @State var appStorage_finishedOnboarding: Bool = true
     

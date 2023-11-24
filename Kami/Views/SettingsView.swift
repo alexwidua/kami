@@ -150,20 +150,6 @@ struct GeneralTabView: View {
         )
     }
     
-    /* Show Tray icon */
-    @AppStorage(showTrayIconWithPreferenceStorageKey) var appStorage_showTrayIcon: Bool = DEFAULT_SHOW_TRAY_ICON
-    @State private var showTrayIconState = DEFAULT_SHOW_TRAY_ICON
-    
-    private var showTrayIconBinding: Binding<Bool> {
-        Binding(
-            get: { showTrayIconState },
-            set: { newValue in
-                showTrayIconState = newValue
-                NotificationCenter.default.post(name: .toggleTrayIcon, object: nil, userInfo: ["visibility": newValue])
-            }
-        )
-    }
-    
     @AppStorage(appearancePreferenceStorageKey) var appStorage_appearance: AppearancePreference = .system
     
     @State private var userHasGrantedAccessibilityPermission = false
@@ -207,24 +193,7 @@ struct GeneralTabView: View {
                 }
                 Spacer()
             }
-            
-            /* Tray Icon Preference */
-            HStack(alignment: .top) {
-                HStack {
-                    Spacer()
-                    Text("Tray icon")
-                        .font(.headline)
-                    
-                }
-                .frame(width: SETTINGS_LABEL_WIDTH)
-                VStack(alignment: .leading) {
-                    Toggle(isOn: showTrayIconBinding) {
-                        Text("Show app icon in Tray (Menu bar)")
-                    }
-                }
-                Spacer()
-            }
-            
+        
             /* Divider */
             ZStack {
                 Rectangle().fill(.separator).frame(height: 1)
@@ -560,7 +529,6 @@ struct AboutTabView: View {
 //
 // Misc
 //
-
 struct SettingsInputBackground: ViewModifier {
     func body(content: Content) -> some View {
         content

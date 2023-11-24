@@ -11,8 +11,7 @@ enum AppearancePreference: String, CaseIterable {
 }
 
 /* @AppStoprage Keys */
-let hasCompletedOnboardingStorageKey = "completed-onboarding-\(APP_VERSION)"
-let showTrayIconWithPreferenceStorageKey = "show-tray-icon-\(APP_VERSION)"
+let finishedOnboardingStorageKey = "completed-onboarding-\(APP_VERSION)"
 let appearancePreferenceStorageKey = "appearance-\(APP_VERSION)"
 let apiKeyStorageKey = "api-secret-key-\(APP_VERSION)"
 let modelPreferenceStorageKey = "model-preference-\(APP_VERSION)"

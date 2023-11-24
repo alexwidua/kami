@@ -25,9 +25,10 @@ struct JavascriptEditorApp: App {
 
 class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     @ObservedObject var appState = AppState.shared
-    
     var statusBarItem: NSStatusItem!
     var keyUpEventMonitor: Any?
+    
+    var launchedBecauseOpenFile: Bool = false
     
     override init() {
         super.init()
@@ -85,7 +86,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         keyUpEventMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { [self] event in
             if event.keyCode == 53 { // 53 === escape key
 //                self.closeAppWindow(nil) TODO: ?
-                return nil
+//                return nil
             }
             
             if event.modifierFlags.contains(.command) && event.keyCode == 1 { // command + s
@@ -94,10 +95,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             }
             return event
         }
+        
+        /* If the user didn't finish onboarding, we always show the splash screen. Otherwise, we only show it if the app was launched NOT bc a file wants to be opened */
+//        var finishedOnboarding = UserDefaults.standard.bool(forKey: finishedOnboardingStorageKey)
+//                    if(UserDefaults.standard.object(forKey: finishedOnboardingStorageKey) == nil ) {
+//                        finishedOnboarding = false
+//                    }
+//        if(!finishedOnboarding || !launchedBecauseOpenFile) {
+//            createSplashWindow()
+//        }
+        if(!launchedBecauseOpenFile) {
+            createSplashWindow()
+        }
     }
     
     /* Handle files opened from Origami via the 'Open with...' ctx menu */
     func application(_ application: NSApplication, open urls: [URL]) {
+        launchedBecauseOpenFile = true
         if let firstURL = urls.first {
             openAppWindow(with: firstURL)
         }
@@ -111,13 +125,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             button.action = #selector(handleStatusBarItemAction(_:))
             button.sendAction(on: [.leftMouseUp, .rightMouseUp])
         }
-        
-        var showTrayIcon = UserDefaults.standard.bool(forKey: showTrayIconWithPreferenceStorageKey)
-        // If user hasn't made any preference change, show icon by default
-        if(UserDefaults.standard.object(forKey: showTrayIconWithPreferenceStorageKey) == nil ) {
-            showTrayIcon = true
-        }
-        statusBarItem.isVisible = showTrayIcon
+   
+        statusBarItem.isVisible = true
     }
     
     @objc func handleStatusBarItemAction(_ sender: AnyObject?) {
@@ -152,10 +161,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     }
     
     @objc func openSettingsWindow(_ sender: AnyObject?) {
-        let window = createSettingsWindow()
-        setWindowFrameOriginToCurrentScreen(window: window)
-        window.makeKeyAndOrderFront(sender)
-        NSApp.activate(ignoringOtherApps: true)
+        createSettingsWindow()
+        if let settingsWindow = settingsWindow {
+            settingsWindow.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
+        }
     }
     
     @objc func toggleTrayIconVisibility(_ notification: NSNotification) {
@@ -165,8 +175,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             }
         }
     }
-    
-
     
     /* Disable global keyboard shortcuts if Origami isn't key */
     @objc func handleKeyAppChanged(notification: NSNotification) {

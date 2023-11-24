@@ -1,6 +1,27 @@
 import SwiftUI
 
 // ┌───────────────────────┐
+// │ Splash Window         │
+// └───────────────────────┘
+var splashWindow: SplashWindow?
+class SplashWindow: NSWindow, NSWindowDelegate {
+    init(contentRect: NSRect, backing: NSWindow.BackingStoreType, defer flag: Bool) {
+        super.init(contentRect: contentRect, styleMask: [ .titled, .closable, .fullSizeContentView], backing: backing, defer: flag)
+        self.isReleasedWhenClosed = false
+        self.delegate = self
+    }
+    
+    func windowWillClose(_ notification: Notification) {
+        splashWindow = nil
+    }
+    
+    func windowShouldClose(_ sender: NSWindow) -> Bool {
+        NSApp.removeWindowsItem(sender)
+        return true
+    }
+}
+
+// ┌───────────────────────┐
 // │ Main App Window       │
 // └───────────────────────┘
 class AppWindow: NSWindow, NSWindowDelegate {
@@ -39,7 +60,7 @@ class SettingsWindow: NSWindow, NSWindowDelegate {
     
     init(contentRect: NSRect, backing: NSWindow.BackingStoreType, defer flag: Bool) {
         super.init(contentRect: contentRect, styleMask: [.titled, .closable, .fullSizeContentView], backing: backing, defer: flag)
-        self.isReleasedWhenClosed = true
+        self.isReleasedWhenClosed = false
         self.delegate = self
     }
     
@@ -92,6 +113,20 @@ func setupWindow(_ window: NSWindow) -> Void {
     setWindowFrameOriginToCurrentScreen(window: window)
 }
 
+func createSplashWindow() -> Void {
+    if(splashWindow == nil) {
+        let window = SplashWindow(contentRect: NSRect(x: 0, y: 0, width: 0, height: 0), backing: .buffered, defer: false)
+        let contentView = SplashView().frame(width: 600)
+        window.appearance = getAppearanceFromAppStorage()
+        window.contentView = NSHostingView(rootView: contentView)
+        setupWindow(window)
+        splashWindow = window
+    }
+    else {
+        splashWindow!.makeKeyAndOrderFront(nil)
+    }
+}
+
 func createAppWindow(url: URL) -> AppWindow {
     let window = AppWindow(contentRect: NSRect(x: 0, y: 0, width: 0, height: 0), backing: .buffered, defer: false, url: url)
     let contentView = ContentView(window: window, url: url).frame(width: 600)
@@ -101,20 +136,24 @@ func createAppWindow(url: URL) -> AppWindow {
     return window
 }
 
-func createSettingsWindow() -> SettingsWindow {
-    let window = SettingsWindow(contentRect: NSRect(x: 0, y: 0, width: 0, height: 0), backing: .buffered, defer: false)
-    let contentView = SettingsWindowView(windowRef: window).frame(width: 600)
-    window.appearance = getAppearanceFromAppStorage()
-    window.contentView = NSHostingView(rootView: contentView)
-    setupWindow(window)
-    return window
+func createSettingsWindow() -> Void {
+    if(settingsWindow == nil) {
+        let window = SettingsWindow(contentRect: NSRect(x: 0, y: 0, width: 0, height: 0), backing: .buffered, defer: false)
+        let contentView = SettingsWindowView(windowRef: window).frame(width: 600)
+        window.appearance = getAppearanceFromAppStorage()
+        window.contentView = NSHostingView(rootView: contentView)
+        setupWindow(window)
+        settingsWindow = window
+    }
+    else {
+        settingsWindow!.makeKeyAndOrderFront(nil)
+    }
 }
 
 
 func createLoadingWindow() -> LoadingWindow {
     let window = LoadingWindow(contentRect: NSRect(x: 0, y: 0, width: 0, height: 0), backing: .buffered, defer: false)
-    let contentView = LoadingView()
-        .frame(width: 200, height: 200)
+    let contentView = LoadingView().frame(width: 200, height: 200)
     window.appearance = getAppearanceFromAppStorage()
     window.contentView = NSHostingView(rootView: contentView)
     setupWindow(window)
