@@ -94,7 +94,6 @@
 		227CB6EB2B0D19F600D2F594 /* WindowViews */ = {
 			isa = PBXGroup;
 			children = (
-				227CB6DC2B02169500D2F594 /* WindowController.swift */,
 				2251A11F2B10B79600513552 /* SplashView.swift */,
 				22A7D5F32ADFCA6500878F0B /* ContentView.swift */,
 				226CBCC72AE2752100FEB3E5 /* SettingsView.swift */,
@@ -139,6 +138,7 @@
 		22A7D5EE2ADFCA6500878F0B /* Kami */ = {
 			isa = PBXGroup;
 			children = (
+				227CB6DC2B02169500D2F594 /* WindowController.swift */,
 				227CB6EB2B0D19F600D2F594 /* WindowViews */,
 				227CB6EC2B0D1A1500D2F594 /* Components */,
 				22A7D5EF2ADFCA6500878F0B /* KamiApp.swift */,

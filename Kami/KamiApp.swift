@@ -5,14 +5,7 @@ extension KeyboardShortcuts.Name {
     static let toggleAppWindow = Self("toggleAppWindow", default: .init(.j, modifiers: [.command]))
 }
 
-extension Notification.Name {
-    static let openAppWindow = Notification.Name("openMainWindowNotification")
-    static let toggleTrayIcon = Notification.Name("toggleTrayIconNotification")
-    static let saveFileFromShortcut = Notification.Name("saveFileFromShortcut")
-    static let windowDragged = Notification.Name("windowDragged")
-    static let windowStyleChanged = Notification.Name("windowStyleChanged")
-    static let appearanceChanged = Notification.Name("appearanceChanged")
-}
+
 
 @main
 struct KamiApp: App {
@@ -35,8 +28,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     
     override init() {
         super.init()
-        /* Used by Settings Window to hide/show tray icon on preference change */
-        NotificationCenter.default.addObserver(self, selector: #selector(toggleTrayIconVisibility), name: .toggleTrayIcon, object: nil)
         /* Observe app focus changes. We do this to check if Origami is the active app and either enable/disable the app's shortcuts. If we don't do this, the shortcuts are blocked across other apps. */
         NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(handleKeyAppChanged), name: NSWorkspace.didActivateApplicationNotification, object: nil)
     }
@@ -94,8 +85,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         // Keyboard events that only trigger if the app window is key
         keyUpEventMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { [self] event in
             if event.keyCode == 53 { // 53 === escape key
-//                self.closeAppWindow(nil) TODO: ?
-//                return nil
+                let windowStyle = getWindowStyleFromAppStorage()
+                if(windowStyle == .pinnable) {
+                    NotificationCenter.default.post(name: .closeAppWindowFromShortcut, object: nil)
+                    return nil
+                }
+
             }
             
             if event.modifierFlags.contains(.command) && event.keyCode == 1 { // command + s
@@ -173,14 +168,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             NSApp.activate(ignoringOtherApps: true)
         }
     }
-    
-    @objc func toggleTrayIconVisibility(_ notification: NSNotification) {
-        if let visibility = notification.userInfo?["visibility"] as? Bool {
-            if let item = statusBarItem {
-                item.isVisible = visibility
-            }
-        }
-    }
+
     
     /* Disable global keyboard shortcuts if Origami isn't key */
     @objc func handleKeyAppChanged(notification: NSNotification) {

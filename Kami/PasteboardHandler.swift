@@ -20,38 +20,53 @@ enum OrigamiJavaScriptPatchHandlerError: Error {
 }
 
 class OrigamiJavaScriptPatchHandler {
-    var startTime: Date?
+    private var startTime: Date?
     private let timeoutInterval: TimeInterval = 1.5
     private let pollInterval: CGFloat = 0.05
     
     func tryToCopyOrigamiJavaScriptPatchAndReadFilePathFromPasteboard() async -> Result<String, OrigamiJavaScriptPatchHandlerError> {
-        // 0. Clear Pasteboard
-        NSPasteboard.general.clearContents()
+        let pasteboard = NSPasteboard.general
+        var tempPasteboard: [NSPasteboardItem] = []
         
-        // 1. Trigger copy action by emulating ⌘ + C.
+        // 1. Store current clipboard and clear it
+        if let items = pasteboard.pasteboardItems {
+                for item in items {
+                    let copiedItem = NSPasteboardItem()
+                    for type in item.types {
+                        if let data = item.data(forType: type) {
+                            copiedItem.setData(data, forType: type)
+                        }
+                    }
+                    tempPasteboard.append(copiedItem)
+                }
+            }
+        pasteboard.clearContents()
+        
+        // 2. Trigger copy action by emulating ⌘ + C.
         guard postCommandCopyDownEvent() else {
             return .failure(.couldNotPostCommandCopyDownEvent)
         }
         
-        // 2. Start continuation that...
-        return await withCheckedContinuation { continuation in
+        // 3. Do the thing
+        let result = await withCheckedContinuation { continuation in
             //
             // I. Poll Pasteboard for pasteboard data that matches the pastboard type "com.facebook.diamond.resourceInfo.v1"
             //
             // The copied data is not immediately available in the Pasteboard hence we poll for it (and exit if polling takes too long).
+            //
             DispatchQueue.main.async {
                 self.startTime = Date.now
                 
                 Timer.scheduledTimer(withTimeInterval: self.pollInterval, repeats: true) { timer in
-                    
                     if Date().timeIntervalSince(self.startTime!) >= self.timeoutInterval {
                         timer.invalidate()
-                        continuation.resume(returning: .failure(.timeout))
+                        continuation.resume(returning: Result<String, OrigamiJavaScriptPatchHandlerError>.failure(.timeout))
                     }
                     
                     if let origamiBinaryData = self.readOrigamiBinaryDataFromPasteboard() {
-                        
+                        //
                         // II. Convert binary hex data to a Binary Property List
+                        //
                         if let propertyList = self.convertBinaryDataToPropertyList(origamiBinaryData) {
                             
                             if let patchTypePropertyString = self.accessProperty(propertyList, key: "type-name") {
@@ -60,10 +75,11 @@ class OrigamiJavaScriptPatchHandler {
                                     continuation.resume(returning: .failure(.invalidPatchType))
                                 }
                             }
-                            
+                            //
                             // III. Read file path property from list
+                            //
                             if let filePathPropertyString = self.accessProperty(propertyList, key: "file-path") {
-                                
+                                //
                                 // IV. Traverse file path directory and find respective js file
                                 //
                                 // We have to traverse the directory because the filePathProperty doesn't equal the true file path.
@@ -73,7 +89,7 @@ class OrigamiJavaScriptPatchHandler {
                                 //
                                 // The actual file path contains a UUID of the current open file, which we cannot read from the clipboard data.
                                 // Because we know the parent directory name 'abcdefgh' and the file name '1234567890.js' we can traverse & search for it.
-                                
+                                //
                                 let nsString = NSString(string: filePathPropertyString)
                                 let directoryPath = nsString.deletingLastPathComponent
                                 let fileName = nsString.lastPathComponent
@@ -100,6 +116,13 @@ class OrigamiJavaScriptPatchHandler {
                 }
             }
         }
+        
+        // 4. Restore previous pasteboard
+        pasteboard.clearContents()
+        for item in tempPasteboard {
+            pasteboard.writeObjects([item])
+        }
+        return result
     }
     
     /* Emulate Command + C keyboard to copy current selected patch inside Origami */

@@ -26,3 +26,12 @@ extension View {
         }
     }
 }
+
+extension Notification.Name {
+    static let openAppWindow = Notification.Name("openMainWindow")
+    static let closeAppWindowFromShortcut = Notification.Name("closeWindow")
+    static let saveFileFromShortcut = Notification.Name("saveFileFromShortcut")
+    static let windowDragged = Notification.Name("windowDragged")
+    static let windowStyleChangedFromSettings = Notification.Name("windowStyleChanged")
+    static let appearanceChangedFromSettings = Notification.Name("appearanceChanged")
+}

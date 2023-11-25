@@ -27,7 +27,6 @@ struct StreamError {
 func streamCompletion(task: Binding<Task<Void, Never>?>, apiKey: String?, instructionText: String?, inputText: String?, model: String?) -> AsyncStream<StreamResult> {
     
     return AsyncStream<StreamResult> { continuation in
-        
         guard let apiKey = apiKey, !apiKey.isEmpty else {
             let apiKeyError = "No or incorrect API key provided: \(apiKey ?? "(empty)"). You can find your API key at https://platform.openai.com/account/api-keys."
             print("*** [StreamCompletion] \(apiKeyError)")

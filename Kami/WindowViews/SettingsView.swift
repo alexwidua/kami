@@ -210,7 +210,7 @@ struct GeneralTabView: View {
             }
             .onChange(of: appStorage_appearance) {
                 print("onChange settings")
-                NotificationCenter.default.post(name: .appearanceChanged, object: nil)
+                NotificationCenter.default.post(name: .appearanceChangedFromSettings, object: nil)
             }
             
             Divider()
@@ -248,7 +248,7 @@ struct GeneralTabView: View {
                             }
                             .onTapGesture {
                                 appStorage_windowStyle = .pinnable
-                                NotificationCenter.default.post(name: .windowStyleChanged, object: nil)
+                                NotificationCenter.default.post(name: .windowStyleChangedFromSettings, object: nil)
                             }
                             VStack {
                                 Image("SettingsWindowedIcon")
@@ -270,7 +270,7 @@ struct GeneralTabView: View {
                             }
                             .onTapGesture {
                                 appStorage_windowStyle = .windowed
-                                NotificationCenter.default.post(name: .windowStyleChanged, object: nil)
+                                NotificationCenter.default.post(name: .windowStyleChangedFromSettings, object: nil)
                             }
                         }
                         Spacer()

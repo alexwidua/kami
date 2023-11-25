@@ -39,16 +39,17 @@ class AppWindow: NSWindow, NSWindowDelegate {
         self.titlebarAppearsTransparent = true
         self.isMovable = true
         self.isMovableByWindowBackground = true
-
+        
         if (getWindowStyleFromAppStorage() == .pinnable) {
             applyPinnableWindowStyle()
         }
-       
+        
         self.delegate = self
         self.url = url
         
-        NotificationCenter.default.addObserver(self, selector: #selector(handleAppearanceChange), name: .appearanceChanged, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleWindowStyleChange), name: .windowStyleChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleWindowClose), name: .closeAppWindowFromShortcut, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleAppearanceChange), name: .appearanceChangedFromSettings, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleWindowStyleChange), name: .windowStyleChangedFromSettings, object: nil)
     }
     
     func windowWillClose(_ notification: Notification) {
@@ -71,13 +72,13 @@ class AppWindow: NSWindow, NSWindowDelegate {
     
     /* Pin window when dragged */
     override func mouseDragged(with event: NSEvent) {
-           super.mouseDragged(with: event)
+        super.mouseDragged(with: event)
         if(!isPinned) {
             NotificationCenter.default.post(name: .windowDragged, object: nil)
             self.pinWindow()
             self.isPinned = true
         }
-       }
+    }
     
     func pinWindow() -> Void {
         self.isPinned = true
@@ -99,6 +100,12 @@ class AppWindow: NSWindow, NSWindowDelegate {
     }
     
     /* Notification Handlers */
+    @objc func handleWindowClose() -> Void {
+        if(self.isKeyWindow) {
+            self.close()
+        }
+    }
+    
     @objc func handleAppearanceChange() -> Void {
         let appearance = getAppearanceFromAppStorage()
         self.appearance = appearance
