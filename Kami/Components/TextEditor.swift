@@ -19,6 +19,8 @@ struct CustomTextEditor: NSViewRepresentable {
     var textStyle: TextStyle = .sansLarge
     var textColor: Color = .white
     
+    let sansLargeLineHeight: CGFloat = 6
+    
     func makeNSView(context: Context) -> NSScrollView {
         let textView = NSTextView()
         
@@ -72,6 +74,8 @@ struct CustomTextEditor: NSViewRepresentable {
         scrollView.automaticallyAdjustsContentInsets = false
         
         textView.delegate = context.coordinator
+        
+        applyLineHeight(to: textView, lineHeight: sansLargeLineHeight, for: .sansLarge)
         return scrollView
     }
     
@@ -85,11 +89,35 @@ struct CustomTextEditor: NSViewRepresentable {
         
         textView.isEditable = !disabled
         
+        applyLineHeight(to: textView, lineHeight: sansLargeLineHeight, for: .sansLarge)
+        
         if disabled {
             textView.textColor = NSColor(textColor).withAlphaComponent(0.5)
         }
         else {
             textView.textColor = NSColor(textColor)
+        }
+    }
+    
+    func applyLineHeight(to textView: NSTextView, lineHeight: CGFloat, for textStyle: TextStyle) {
+        // Apply font based on text style
+        switch textStyle {
+        case .sansLarge:
+            textView.font = NSFont.systemFont(ofSize: 18, weight: .light)
+        case .sansBody:
+            textView.font = NSFont.systemFont(ofSize: NSFont.systemFontSize, weight: .light)
+        case .monoBody:
+            textView.font = NSFont.monospacedSystemFont(ofSize: NSFont.systemFontSize, weight: .regular)
+        }
+
+        // Set paragraph style
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = lineHeight
+
+        // Apply paragraph style
+        if let textStorage = textView.textStorage {
+            let range = NSRange(location: 0, length: textStorage.length)
+            textStorage.addAttribute(.paragraphStyle, value: paragraphStyle, range: range)
         }
     }
     

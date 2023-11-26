@@ -17,6 +17,7 @@ import OpenAI
 }
 
 struct ContentView: View {
+    @Environment(\.controlActiveState) var controlActiveState
     @Environment(\.colorScheme) var colorScheme
     @StateObject var appState = AppState.shared
     
@@ -166,7 +167,6 @@ struct ContentView: View {
                                     .modifier(MouseEvt(
                                         onMouseDown: {
                                             titlebarButtonPressed = true
-                                         
                                         },
                                         onMouseUp: {
                                             titlebarButtonPressed = false
@@ -188,7 +188,7 @@ struct ContentView: View {
                                     .frame(width: 24, height: 24)
                                 Spacer()
                             }
-                            .opacity(windowHovered ? 1 : 0)
+                            .opacity(windowHovered && controlActiveState != .inactive ? 1 : 0)
                             .animation(.spring(duration: 0.2), value: windowHovered)
                             /* If window is dragged, automatically pin window */
                             .onAppear {
@@ -364,7 +364,6 @@ struct ContentView: View {
                 .menuIndicator(.hidden)
                 // it doesn't seem possible to adjust the Button/Label size of menu buttons on macOS – hacky workaround using scaleEffect and manual offsetting
                 .scaleEffect(1.5)
-                .offset(x: -2 ,y: 0)
                 if(appStorage_showFileName) {
                     Spacer().frame(width: 8.0)
                     Text(currentFileName)
@@ -488,10 +487,10 @@ struct ContentView: View {
     /* Assemble file head with the original prompt and script id */
     func fileDocumentHead(fileContent: String) -> String {
         let prompt = promptInputText
-        let firstLine = "// Prompt: \(prompt) \n"
+        let firstLine = "// \(prompt)\n"
         var secondLine = ""
         if let scriptId = extractScriptID(from: fileContent) {
-            secondLine = "//\n// Script ID: \(scriptId) \n"
+            secondLine = "// Script ID: \(scriptId) \n"
         }
         return "\(firstLine)\(secondLine)"
     }
