@@ -19,7 +19,6 @@ struct CustomTextEditor: NSViewRepresentable {
     var textStyle: TextStyle = .sansLarge
     var textColor: Color = .white
     
-    
     var textViewAttributes: [NSAttributedString.Key:Any] {
         var font: NSFont = NSFont.systemFont(ofSize: NSFont.systemFontSize, weight: .regular)
         var lineSpacing: CGFloat = 0
@@ -137,7 +136,7 @@ struct CustomTextEditor: NSViewRepresentable {
     }
 }
 
-// add .modifiers to textview
+// add .modifiers 
 extension CustomTextEditor {
     func disabled(_ bool: Bool) -> CustomTextEditor {
         var view = self

@@ -68,6 +68,7 @@ class AppWindow: NSWindow, NSWindowDelegate {
     func windowDidResignKey(_ notification: Notification) {
         if(isPinned) { return }
         if(getWindowStyleFromAppStorage() == .windowed) {return}
+        print("Window resigned key")
         self.close()
     }
     
@@ -121,8 +122,6 @@ class AppWindow: NSWindow, NSWindowDelegate {
             applyWindowedWindowStyle()
         }
     }
-    
-    
 }
 
 // ┌───────────────────────┐

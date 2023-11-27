@@ -61,20 +61,12 @@ class OrigamiJavaScriptPatchHandler {
                     if Date().timeIntervalSince(self.startTime!) >= self.timeoutInterval {
                         timer.invalidate()
                         continuation.resume(returning: Result<String, OrigamiJavaScriptPatchHandlerError>.failure(.timeout))
-                    }
-                    
+                    }  
                     if let origamiBinaryData = self.readOrigamiBinaryDataFromPasteboard() {
                         //
                         // II. Convert binary hex data to a Binary Property List
                         //
                         if let propertyList = self.convertBinaryDataToPropertyList(origamiBinaryData) {
-                            
-                            if let patchTypePropertyString = self.accessProperty(propertyList, key: "type-name") {
-                                if patchTypePropertyString != "Patch Script" {
-                                    timer.invalidate()
-                                    continuation.resume(returning: .failure(.invalidPatchType))
-                                }
-                            }
                             //
                             // III. Read file path property from list
                             //
@@ -90,10 +82,11 @@ class OrigamiJavaScriptPatchHandler {
                                 // The actual file path contains a UUID of the current open file, which we cannot read from the clipboard data.
                                 // Because we know the parent directory name 'abcdefgh' and the file name '1234567890.js' we can traverse & search for it.
                                 //
+                                
                                 let nsString = NSString(string: filePathPropertyString)
                                 let directoryPath = nsString.deletingLastPathComponent
                                 let fileName = nsString.lastPathComponent
-                                
+
                                 if let filePathString = self.traverseDirectory(directoryPath: directoryPath, fileName: fileName) {
                                     timer.invalidate()
                                     continuation.resume(returning: .success(filePathString))
@@ -188,10 +181,19 @@ class OrigamiJavaScriptPatchHandler {
         }
     }
     
-    /* Access property in BPList. Given Origami's BPlist format, we assume the property (we need) to be always a single string */
+    /* Access property in BPList. Iterate through array of dictionaries to find the first .js file with type-name "Patch Script" */
     private func accessProperty(_ plist: Any, key: String) -> String? {
         guard let array = plist as? [[String: Any]] else { return nil }
-        return array.compactMap { $0[key] as? String }.first
+
+        for item in array {
+            if let typeName = item["type-name"] as? String, typeName == "Patch Script",
+               let filePath = item[key] as? String, filePath.hasSuffix(".js") {
+                return filePath
+            }
+        }
+        return nil
     }
+
+
 }
 

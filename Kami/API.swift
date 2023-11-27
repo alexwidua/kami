@@ -72,6 +72,7 @@ func streamCompletion(task: Binding<Task<Void, Never>?>, apiKey: String?, instru
             var tokenIndex = 0
             do {
                 for try await result in openAI.chatsStream(query: query) {
+                    print(result)
                     if let firstChoice = result.choices.first, let token = firstChoice.delta.content {
 
                         let filteredToken = filterJsMarkdownFromToken(currentToken: token, previousToken: previousToken)

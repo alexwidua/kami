@@ -1,7 +1,8 @@
 import SwiftUI
 
 let APP_NAME = "Kami"
-let APP_VERSION = "1-DEV" // !!! changing this resets the user's @AppStorage
+let APP_VERSION = "1.0"
+let STORAGE_KEY_SUFFIX = "1" // !!! changing this resets the user's @AppStorage
 
 /* UI */
 let SETTINGS_WINDOW_WIDTH = 500
@@ -12,7 +13,7 @@ let DEFAULT_SHOW_OPEN_WITH_BTN = true
 let DEFAULT_SHOW_TRAY_ICON = true
 
 let DEFAULT_APPEARANCE_PREFERENCE: AppearancePreference = .system
-let DEFAULT_WINDOW_STYLE_PREFERENCE: WindowStylePreference = .pinnable
+let DEFAULT_WINDOW_STYLE_PREFERENCE: WindowStylePreference = .windowed
 
 let ORIGAMI_TARGET_BUNDLE_ID =  "com.facebook.Origami-Studio"
 

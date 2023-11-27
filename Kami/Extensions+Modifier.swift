@@ -1,4 +1,9 @@
 import SwiftUI
+import KeyboardShortcuts
+
+extension KeyboardShortcuts.Name {
+    static let toggleAppWindow = Self("toggleAppWindow", default: .init(.j, modifiers: [.command]))
+}
 
 struct MouseEvt: ViewModifier {
     var onMouseDown: () -> Void
@@ -35,3 +40,5 @@ extension Notification.Name {
     static let windowStyleChangedFromSettings = Notification.Name("windowStyleChanged")
     static let appearanceChangedFromSettings = Notification.Name("appearanceChanged")
 }
+
+

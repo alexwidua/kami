@@ -45,7 +45,7 @@ struct ContentView: View {
     /* Prompt Input Things */
     let promptInputMinHeight: CGFloat = 100
     let promptInputMaxHeight: CGFloat = 200
-    @State private var promptInputHeight: CGFloat = 200
+    @State private var promptInputHeight: CGFloat = 150
     @State private var promptInputText: String = ""
     
     /* Misc UI*/
@@ -118,6 +118,7 @@ struct ContentView: View {
                         createSplashWindow()
                     }
                     .font(.subheadline)
+                    .buttonStyle(CustomButtonStyle(buttonType: .primary, py: 2.0, px: 8.0))
                     Spacer()
                 }
                 .padding(.horizontal, 12.0)
@@ -201,56 +202,63 @@ struct ContentView: View {
                                 }
                             }
                         }
-                        /* Prompt Editor */
-                        HStack(alignment: .top) {
-                            ZStack {
-                                if promptInputText.isEmpty {
-                                    CustomTextEditor(text:.constant("Prompt..."))
-                                        .disabled(true)
+                        ZStack {
+                            /* Prompt Editor */
+                            HStack(alignment: .top) {
+                                ZStack {
+                                    if promptInputText.isEmpty {
+                                        CustomTextEditor(text:.constant("Prompt..."))
+                                            .disabled(true)
+                                            .textStyle(.sansLarge)
+                                            .textColor(promptInputFgColor)
+                                            .padding(promptInputEdgeInset)
+                                    }
+                                    CustomTextEditor(text: isLoadingResponse ? .constant(promptInputText) : $promptInputText)
+                                        .disabled(inputDisabled)
                                         .textStyle(.sansLarge)
                                         .textColor(promptInputFgColor)
                                         .padding(promptInputEdgeInset)
+                                        .onChange(of: promptInputText) { oldValue, newValue in
+                                            // intercept enter/line break and use as shortcut, bc regular shortuts do not work while text editor is focussed
+                                            if let lastChar = newValue.last, lastChar == "\n", oldValue != newValue {
+                                                promptInputText.removeLast()
+                                                handleCompletion()
+                                            }
+                                        }
                                 }
-                                CustomTextEditor(text: isLoadingResponse ? .constant(promptInputText) : $promptInputText)
-                                    .disabled(inputDisabled)
-                                    .textStyle(.sansLarge)
-                                    .textColor(promptInputFgColor)
-                                    .padding(promptInputEdgeInset)
-                                    .onChange(of: promptInputText) { oldValue, newValue in
-                                        // intercept enter/line break and use as shortcut, bc regular shortuts do not work while text editor is focussed
-                                        if let lastChar = newValue.last, lastChar == "\n", oldValue != newValue {
-                                            promptInputText.removeLast()
-                                            handleCompletion()
+                                .padding(.horizontal, 0.0)
+                                .opacity(isLoadingResponse ? 0.25 : 1.0)
+                                
+                                /* Submit Prompt Button */
+                                ZStack {
+                                    Button(action: {
+                                        if(isLoadingResponse) {  handleCancelCurrentCompletionTask() }
+                                        else { handleCompletion() }
+                                    }) {
+                                        HStack {
+                                            if isLoadingResponse {
+                                                // ProgressView()
+                                                // .controlSize(.small)
+                                                // Spacer().frame(width:8)
+                                                Text("Cancel")
+                                            }
+                                            else {
+                                                Image(systemName: "return")
+                                            }
                                         }
                                     }
-                            }
-                            .padding(.horizontal, 0.0)
-                            
-                            /* Submit Prompt Button */
-                            ZStack {
-                                Button(action: {
-                                    if(isLoadingResponse) {  handleCancelCurrentCompletionTask() }
-                                    else { handleCompletion() }
-                                }) {
-                                    HStack {
-                                        if isLoadingResponse {
-                                            // ProgressView()
-                                            // .controlSize(.small)
-                                            // Spacer().frame(width:8)
-                                            Text("Cancel")
-                                        }
-                                        else {
-                                            Image(systemName: "return")
-                                        }
-                                    }
+                                    .disabled(submitPromptButtonDisabled)
+                                    .buttonStyle(CustomButtonStyle(buttonType: isLoadingResponse ? .regular : .primary))
                                 }
-                                .disabled(submitPromptButtonDisabled)
-                                .buttonStyle(CustomButtonStyle(buttonType: isLoadingResponse ? .regular : .primary))
+                                .padding(.horizontal, 8.0)
+                                .padding(.vertical, promptSubmitBtnYPadding)
                             }
-                            .padding(.horizontal, 8.0)
-                            .padding(.vertical, promptSubmitBtnYPadding)
+                            Spacer()
+                            if(isLoadingResponse) {
+                                ProgressView()
+                                    .controlSize(.small)
+                            }
                         }
-                        Spacer()
                     }
                     
                     /* Resize Handle */
@@ -315,8 +323,8 @@ struct ContentView: View {
                 //
                 ZStack {
                     CustomJavascriptEditor(text: $fileContent)
+                        .isEditable(!isLoadingResponse)
                         .frame(minHeight: 32)
-                        .disabled(inputDisabled)
                         .onChange(of: fileContent) { oldValue, newValue in
                             if(oldValue != newValue) {
                                 hasSavedFile = false
@@ -324,17 +332,17 @@ struct ContentView: View {
                         }
                         .blur(radius: animateCodeEditorLoadingState ? 16 : 0)
                         .opacity(animateCodeEditorLoadingState ? 0 : 1)
-                        .opacity(inputDisabled ? 0.125 : 1)
+//                        .opacity(inputDisabled ? 0.125 : 1)
                     VStack {
                         Spacer()
                         NotificationBannerView(isShowing: $showNotificationBanner, message: notificationBannerMsg, notifStyle: .warning)
                     }
-                    if(isLoadingResponse) {
-                        ZStack {
-                            ProgressView()
-                                .controlSize(.small)
-                        }
-                    }
+//                    if(isLoadingResponse) {
+//                        ZStack {
+//                            ProgressView()
+//                                .controlSize(.small)
+//                        }
+//                    }
                 }
                 .background(.windowBackground)
             }
@@ -469,10 +477,13 @@ struct ContentView: View {
                 }
             }
             isLoadingResponse = false
-            if(hasApiError) {
-                fileContent = ogFileContent
-            }
-            else {
+//            if(hasApiError) {
+//                fileContent = ogFileContent
+//            }
+//            else {
+//                handleSaveFile()
+//            }
+            if(!hasApiError) {
                 handleSaveFile()
             }
         }
@@ -483,6 +494,14 @@ struct ContentView: View {
         streamResponseTask?.cancel()
         isLoadingResponse = false
         hasCancelledTask = true
+        
+        // cancel out the running blur animation by overriding it (the only way lol)
+        withAnimation(.linear(duration: 0.0)) {
+            animateCodeEditorLoadingState = true
+        }
+        withAnimation(.linear(duration: 0.0)) {
+            animateCodeEditorLoadingState = false
+        }
     }
     
     /* Assemble file head with the original prompt and script id */

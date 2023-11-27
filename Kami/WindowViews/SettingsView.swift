@@ -646,6 +646,7 @@ struct AboutTabView: View {
                     }
                     .buttonStyle(CustomButtonStyle(buttonType: .regular, py: 2.0, px: 8.0))
                 }
+                .padding(.top, 8)
             }
         }
         .offset(x: -16) // nudge view to the left for visual balance

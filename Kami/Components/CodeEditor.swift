@@ -45,6 +45,7 @@ let smartPairCharacters: [String: String] = [
 
 struct CustomJavascriptEditor: NSViewRepresentable {
     @Binding var text: String
+    var isEditable: Bool = true
     
     var textViewAttributes: [NSAttributedString.Key:Any] {
         return [
@@ -67,6 +68,8 @@ struct CustomJavascriptEditor: NSViewRepresentable {
         textView.backgroundColor = .clear
         
         textView.allowsUndo = true
+        
+        textView.isEditable = self.isEditable
         
         // padding
         textView.textContainerInset = NSSize(width: 0, height: 8)
@@ -96,31 +99,33 @@ struct CustomJavascriptEditor: NSViewRepresentable {
     }
     
     func updateNSView(_ scrollView: NSScrollView, context: Context) {
-        guard let nsView = scrollView.documentView as? NSTextView else { return }
-        if nsView.string != text {
-            nsView.string = text
+        guard let textView = scrollView.documentView as? NSTextView else { return }
+        if textView.string != text {
+            textView.string = text
             
-            nsView.enclosingScrollView?.verticalRulerView?.needsDisplay = true
+            textView.enclosingScrollView?.verticalRulerView?.needsDisplay = true
             
             // Update cursor position as text streams in
-            let newPosition = nsView.string.utf16.count
-            nsView.setSelectedRange(NSRange(location: newPosition, length: 0))
+            let newPosition = textView.string.utf16.count
+            textView.setSelectedRange(NSRange(location: newPosition, length: 0))
         }
         
-        let selectedRanges = nsView.selectedRanges
-        nsView.typingAttributes = textViewAttributes
+        textView.isEditable = self.isEditable
+        
+        let selectedRanges = textView.selectedRanges
+        textView.typingAttributes = textViewAttributes
 
         // handle default color and syntax highlighting
-        nsView.textStorage?.addAttribute(.foregroundColor, value: NSColor(named: "CodeDefaultColor")!, range: NSRange(location: 0, length: nsView.string.utf16.count))
+        textView.textStorage?.addAttribute(.foregroundColor, value: NSColor(named: "CodeDefaultColor")!, range: NSRange(location: 0, length: textView.string.utf16.count))
         
-        highlightSyntax(withPattern: keywordPattern, color: NSColor(named: "CodeKeywordColor")!, inTextView: nsView)
-        highlightSyntax(withPattern: valuePattern, color: NSColor(named: "CodeValueColor")!, inTextView: nsView)
-        highlightSyntax(withPattern: functionNamePattern, color: NSColor(named: "CodeFnColor")!, inTextView: nsView)
-        highlightSyntax(withPattern: typesPattern, color: NSColor(named: "CodeTypesColor")!, inTextView: nsView)
-        highlightSyntax(withPattern: jsCommentPattern, color: NSColor(named: "CodeCommentColor")!, inTextView: nsView)
+        highlightSyntax(withPattern: keywordPattern, color: NSColor(named: "CodeKeywordColor")!, inTextView: textView)
+        highlightSyntax(withPattern: valuePattern, color: NSColor(named: "CodeValueColor")!, inTextView: textView)
+        highlightSyntax(withPattern: functionNamePattern, color: NSColor(named: "CodeFnColor")!, inTextView: textView)
+        highlightSyntax(withPattern: typesPattern, color: NSColor(named: "CodeTypesColor")!, inTextView: textView)
+        highlightSyntax(withPattern: jsCommentPattern, color: NSColor(named: "CodeCommentColor")!, inTextView: textView)
        
         // restore the cursor position after changes to text have been made
-        nsView.setSelectedRanges(selectedRanges, affinity: .downstream, stillSelecting: false)
+        textView.setSelectedRanges(selectedRanges, affinity: .downstream, stillSelecting: false)
     }
     
     func highlightSyntax(withPattern pattern: String, color: NSColor, inTextView nsView: NSTextView, captureGroup: Int? = nil) {
@@ -220,6 +225,15 @@ struct CustomJavascriptEditor: NSViewRepresentable {
                 textView.insertText("\n", replacementRange: textView.selectedRange())
             }
         }
+    }
+}
+
+// add .modifiers
+extension CustomJavascriptEditor {
+    func isEditable(_ bool: Bool) -> CustomJavascriptEditor {
+        var view = self
+        view.isEditable = bool
+        return view
     }
 }
 

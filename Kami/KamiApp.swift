@@ -1,10 +1,6 @@
 import SwiftUI
 import KeyboardShortcuts
 
-extension KeyboardShortcuts.Name {
-    static let toggleAppWindow = Self("toggleAppWindow", default: .init(.j, modifiers: [.command]))
-}
-
 
 
 @main
@@ -25,6 +21,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     var keyUpEventMonitor: Any?
     
     var launchedBecauseOpenFile: Bool = false
+    var isParsingPasteboardFile: Bool = false
     
     override init() {
         super.init()
@@ -37,6 +34,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         
         // GLOBAL keyboard events. We make sure to only capture them when Origami Studio is in the foreground
         KeyboardShortcuts.onKeyUp(for: .toggleAppWindow) { [self] in
+            print("*** Pasteboard keyboard shortcut fired")
+            if(isParsingPasteboardFile) {
+                print("Already parsing pasteboard, exiting...")
+                return
+            }
+            isParsingPasteboardFile = true
+            
             let hasRequiredPermission = checkIfUserHasGrantedAccessibilityPermission()
             if(!hasRequiredPermission) {
                 createAccessibilityRequestWindow()
@@ -54,6 +58,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                     if let url = URL(string: filePathString) {
                         openAppWindow(with: url)
                         loadingWindow.close()
+                        isParsingPasteboardFile = false
                     }
                 
                 case .failure(let error):
@@ -78,12 +83,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                     createPatchErrorWindow(string: errorString, description: errorDescription)
                     NSApp.activate(ignoringOtherApps: true)
                     loadingWindow.close()
+                    isParsingPasteboardFile = false
                 }
             }
         }
         
         // Keyboard events that only trigger if the app window is key
         keyUpEventMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { [self] event in
+           
             if event.keyCode == 53 { // 53 === escape key
                 let windowStyle = getWindowStyleFromAppStorage()
                 if(windowStyle == .pinnable) {

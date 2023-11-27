@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		221750E72B14FD8900693B0E /* CustomTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221750E62B14FD8900693B0E /* CustomTextView.swift */; };
+		2246230C2B150CEF007C1F9C /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 2246230B2B150CEF007C1F9C /* OpenAI */; };
 		2251A1142B100AA100513552 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251A1132B100AA100513552 /* LoadingView.swift */; };
 		2251A1162B10834600513552 /* AccessibilityRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251A1152B10834600513552 /* AccessibilityRequestView.swift */; };
 		2251A1182B109F7000513552 /* PatchErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251A1172B109F7000513552 /* PatchErrorView.swift */; };
@@ -78,6 +79,7 @@
 			files = (
 				226CBCC62AE2684400FEB3E5 /* OpenAI in Frameworks */,
 				227CB6EE2B0E1A4300D2F594 /* Metal.framework in Frameworks */,
+				2246230C2B150CEF007C1F9C /* OpenAI in Frameworks */,
 				227CB6E22B0226C400D2F594 /* KeyboardShortcuts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -188,6 +190,7 @@
 			packageProductDependencies = (
 				226CBCC52AE2684400FEB3E5 /* OpenAI */,
 				227CB6E12B0226C400D2F594 /* KeyboardShortcuts */,
+				2246230B2B150CEF007C1F9C /* OpenAI */,
 			);
 			productName = JavascriptEditor;
 			productReference = 22A7D5EC2ADFCA6500878F0B /* Kami.app */;
@@ -504,6 +507,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		2246230B2B150CEF007C1F9C /* OpenAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 226CBCC42AE2684400FEB3E5 /* XCRemoteSwiftPackageReference "OpenAI" */;
+			productName = OpenAI;
+		};
 		226CBCC52AE2684400FEB3E5 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 226CBCC42AE2684400FEB3E5 /* XCRemoteSwiftPackageReference "OpenAI" */;
