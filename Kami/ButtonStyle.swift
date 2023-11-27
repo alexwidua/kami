@@ -36,7 +36,7 @@ struct CustomButtonStyle: ButtonStyle {
         case .regular:
             return .primary
         case .primary, .success:
-            return isEnabled ? .white : .primary
+            return isEnabled && parentIsKey ? .white : .primary
         }
     }
     
