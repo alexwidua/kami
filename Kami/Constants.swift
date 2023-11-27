@@ -23,7 +23,7 @@ let URL_ORIGAMI_COMMUNITY = "https://www.facebook.com/groups/origami.community"
 /* API */
 let DEFAULT_MODEL = "gpt-4-1106-preview"
 let DEFAULT_INSTRUCTION = """
-Help the user with their request and create a valid JavaScript Patch. Assume the appropriate inputs from the request. Respond only with code and don't include the question or any explanation in your response.
+Help the user with their request and create a valid JavaScript Patch. Assume the appropriate inputs from the request. Respond only with code and don't include the question or any explanation in your response. Use console.watch instead of console.log
 
 ---
 

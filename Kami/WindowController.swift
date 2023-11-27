@@ -39,6 +39,7 @@ class AppWindow: NSWindow, NSWindowDelegate {
         self.titlebarAppearsTransparent = true
         self.isMovable = true
         self.isMovableByWindowBackground = true
+        self.backgroundColor = .clear
         
         if (getWindowStyleFromAppStorage() == .pinnable) {
             applyPinnableWindowStyle()

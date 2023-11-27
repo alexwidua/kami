@@ -30,6 +30,8 @@ let functionNamePattern = "\\b[a-zA-Z_][a-zA-Z0-9_]*(?=\\()"
 // capture strings, numbers and bools
 let valuePattern = "(\"[^\"]*\"|'[^']*'|\\b\\d*\\.?\\d+\\b|\\btrue\\b|\\bfalse\\b)"
 
+let typesPattern = "(?<=types\\.)(NUMBER|PROGRESS|POSITION|SIZE|ANCHOR|POINT3D|POINT4D|COLOR|BOOLEAN|PULSE|INTEGER|ENUM|STRING|JSON|IMAGE)"
+
 // used for 'smart' auto-matching of parentheses, curly brackets etc.
 let smartIndentPattern = "^(\\t|\\s)+"
 let smartPairCharacters: [String: String] = [
@@ -106,6 +108,7 @@ struct CustomJavascriptEditor: NSViewRepresentable {
         highlightSyntax(withPattern: keywordPattern, color: NSColor(named: "CodeKeywordColor")!, inTextView: nsView)
         highlightSyntax(withPattern: valuePattern, color: NSColor(named: "CodeValueColor")!, inTextView: nsView)
         highlightSyntax(withPattern: functionNamePattern, color: NSColor(named: "CodeFnColor")!, inTextView: nsView)
+        highlightSyntax(withPattern: typesPattern, color: NSColor(named: "CodeTypesColor")!, inTextView: nsView)
         highlightSyntax(withPattern: jsCommentPattern, color: NSColor(named: "CodeCommentColor")!, inTextView: nsView)
        
         // restore the cursor position after changes to text have been made

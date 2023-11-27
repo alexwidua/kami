@@ -19,7 +19,30 @@ struct CustomTextEditor: NSViewRepresentable {
     var textStyle: TextStyle = .sansLarge
     var textColor: Color = .white
     
-    let sansLargeLineHeight: CGFloat = 6
+    
+    var textViewAttributes: [NSAttributedString.Key:Any] {
+        var font: NSFont = NSFont.systemFont(ofSize: NSFont.systemFontSize, weight: .regular)
+        var lineSpacing: CGFloat = 0
+        
+        switch textStyle {
+        case .sansLarge:
+            font = NSFont.systemFont(ofSize: 16, weight: .light)
+            lineSpacing = 4
+        case .sansBody:
+            font = NSFont.systemFont(ofSize: NSFont.systemFontSize, weight: .light)
+        case .monoBody:
+            font = NSFont.monospacedSystemFont(ofSize: NSFont.systemFontSize, weight: .regular)
+        }
+        
+        return [
+            .font: font,
+            .paragraphStyle: {
+                let paragraph = NSMutableParagraphStyle()
+                paragraph.lineSpacing = lineSpacing
+                return paragraph
+            }()
+        ]
+    }
     
     func makeNSView(context: Context) -> NSScrollView {
         let textView = NSTextView()
@@ -38,15 +61,7 @@ struct CustomTextEditor: NSViewRepresentable {
         textView.textContainer?.lineFragmentPadding = 8
         
         textView.backgroundColor = .clear
-        
-        switch textStyle {
-        case .sansLarge:
-            textView.font = NSFont.systemFont(ofSize: 18, weight: .light)
-        case .sansBody:
-            textView.font = NSFont.systemFont(ofSize: NSFont.systemFontSize, weight: .light)
-        case .monoBody:
-            textView.font = NSFont.monospacedSystemFont(ofSize: NSFont.systemFontSize, weight: .regular)
-        }
+        textView.typingAttributes = textViewAttributes
         
         if disabled {
             textView.textColor = NSColor(textColor).withAlphaComponent(0.5)
@@ -54,7 +69,7 @@ struct CustomTextEditor: NSViewRepresentable {
         else {
             textView.textColor = NSColor(textColor)
         }
-        
+  
         // disable rich text formatting
         textView.isAutomaticDataDetectionEnabled = false
         textView.isAutomaticLinkDetectionEnabled = false
@@ -75,7 +90,6 @@ struct CustomTextEditor: NSViewRepresentable {
         
         textView.delegate = context.coordinator
         
-        applyLineHeight(to: textView, lineHeight: sansLargeLineHeight, for: .sansLarge)
         return scrollView
     }
     
@@ -88,36 +102,13 @@ struct CustomTextEditor: NSViewRepresentable {
         }
         
         textView.isEditable = !disabled
-        
-        applyLineHeight(to: textView, lineHeight: sansLargeLineHeight, for: .sansLarge)
+        textView.typingAttributes = textViewAttributes
         
         if disabled {
             textView.textColor = NSColor(textColor).withAlphaComponent(0.5)
         }
         else {
             textView.textColor = NSColor(textColor)
-        }
-    }
-    
-    func applyLineHeight(to textView: NSTextView, lineHeight: CGFloat, for textStyle: TextStyle) {
-        // Apply font based on text style
-        switch textStyle {
-        case .sansLarge:
-            textView.font = NSFont.systemFont(ofSize: 18, weight: .light)
-        case .sansBody:
-            textView.font = NSFont.systemFont(ofSize: NSFont.systemFontSize, weight: .light)
-        case .monoBody:
-            textView.font = NSFont.monospacedSystemFont(ofSize: NSFont.systemFontSize, weight: .regular)
-        }
-
-        // Set paragraph style
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = lineHeight
-
-        // Apply paragraph style
-        if let textStorage = textView.textStorage {
-            let range = NSRange(location: 0, length: textStorage.length)
-            textStorage.addAttribute(.paragraphStyle, value: paragraphStyle, range: range)
         }
     }
     
@@ -142,6 +133,7 @@ struct CustomTextEditor: NSViewRepresentable {
                 }
             }
         }
+        
     }
 }
 

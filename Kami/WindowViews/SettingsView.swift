@@ -461,7 +461,7 @@ struct ApiTabView: View {
     var instructionSubtitleText: AttributedString {
         let url = "https://origami.design/documentation/concepts/scriptingapi"
         let urlText = "Origami JavaScript Patch API documentation"
-        var result = AttributedString("System instruction sent along with the prompt. The default instruction is a truncated version of the \(urlText).")
+        var result = AttributedString("System instruction sent along with the prompt. The default instruction is a truncated version of the \(urlText).\n\nAny Markdown syntax (Backticks) is automatically stripped from the response.")
         let linkRange = result.range(of: urlText)!
         result[linkRange].link = URL(string: url)
         result[linkRange].underlineStyle = Text.LineStyle(pattern: .solid)

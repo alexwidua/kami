@@ -303,7 +303,7 @@ struct ContentView: View {
                         })
                     }
                 }
-                .background(.ultraThickMaterial)
+//                .background(.ultraThickMaterial)
                 .frame(height: promptInputHeight)
                 //
                 //  ┌──────────────────┐
@@ -406,6 +406,7 @@ struct ContentView: View {
             .background(.windowBackground)
             
         }
+        .background(.ultraThickMaterial)
         .onAppear {
             readFileContent()
         }
