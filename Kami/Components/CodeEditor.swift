@@ -46,8 +46,19 @@ let smartPairCharacters: [String: String] = [
 struct CustomJavascriptEditor: NSViewRepresentable {
     @Binding var text: String
     
+    var textViewAttributes: [NSAttributedString.Key:Any] {
+        return [
+            .font: NSFont.monospacedSystemFont(ofSize: 12, weight: .regular),
+            .paragraphStyle: {
+                let paragraph = NSMutableParagraphStyle()
+                paragraph.lineSpacing = 3
+                return paragraph
+            }()
+        ]
+    }
+    
     func makeNSView(context: Context) -> NSScrollView {
-        let textView = NSTextView()
+        let textView = CustomTextView()
         textView.isVerticallyResizable = true
         textView.autoresizingMask = [.width]
         textView.textContainer?.containerSize = NSSize(width: textView.bounds.width, height: CGFloat.infinity)
@@ -77,7 +88,9 @@ struct CustomJavascriptEditor: NSViewRepresentable {
         scrollView.drawsBackground = false
         textView.delegate = context.coordinator
         
+        textView.typingAttributes = textViewAttributes
         textView.setUpLineNumberView(gutterWidth: 40)
+        
         
         return scrollView
     }
@@ -95,13 +108,8 @@ struct CustomJavascriptEditor: NSViewRepresentable {
         }
         
         let selectedRanges = nsView.selectedRanges
-        
-        let monospacedFont = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
-        nsView.font = monospacedFont
-        if let sfMonoFont = NSFont(name: "SFMono-Regular", size: 12) {
-            nsView.font = sfMonoFont
-        }
-        
+        nsView.typingAttributes = textViewAttributes
+
         // handle default color and syntax highlighting
         nsView.textStorage?.addAttribute(.foregroundColor, value: NSColor(named: "CodeDefaultColor")!, range: NSRange(location: 0, length: nsView.string.utf16.count))
         

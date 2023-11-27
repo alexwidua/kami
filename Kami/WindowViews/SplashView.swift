@@ -4,6 +4,10 @@
 import SwiftUI
 import KeyboardShortcuts
 
+#Preview {
+    SplashView()
+}
+
 struct SplashView: View {
     @AppStorage(AppStorageKey.apiKey) var appStorage_apiKey: String = ""
     @AppStorage(AppStorageKey.finishedOnboarding) var appStorage_finishedOnboarding: Bool = false
@@ -36,14 +40,32 @@ struct SplashView: View {
                 }
                 .padding(.bottom, 24.0)
                 .background(.thinMaterial)
-                Spacer()
-                VStack(alignment: .leading) {
-                    Text("Open a JavaScript patch via the Right Click > Open with... context menu or the \(shortcutName) shortcut after selecting it.")
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Open a JavaScript Patch:")
                         .bold()
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Image(systemName: "a.circle.fill")
+                                .resizable()
+                                .foregroundStyle(.primary, .primary.opacity(0.2))
+                                .frame(width: 16, height: 16)
+                            Text("Select a JavaScript Patch and use the shortcut **\(shortcutName)**")
+                                .foregroundColor(.secondary)
+                        }
+                        HStack {
+                            Image(systemName: "b.circle.fill")
+                                .resizable()
+                                .foregroundStyle(.primary, .primary.opacity(0.2))
+                                .frame(width: 16, height: 16)
+                            Text("Right-click a JavaScript Patch and choose **Open with...**")
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .padding(.leading, 8.0)
                     HStack(spacing: 4.0) {
                         Text("You can configure the shortcut in the settings.")
                             .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.secondary.opacity(0.8))
                         Button("Open Settings") {
                             let _ = createSettingsWindow()
                         }
@@ -61,8 +83,4 @@ struct SplashView: View {
         }
        
     }
-}
-
-#Preview {
-    SplashView()
 }

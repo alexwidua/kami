@@ -209,7 +209,6 @@ struct GeneralTabView: View {
                 Spacer()
             }
             .onChange(of: appStorage_appearance) {
-                print("onChange settings")
                 NotificationCenter.default.post(name: .appearanceChangedFromSettings, object: nil)
             }
             
@@ -221,7 +220,6 @@ struct GeneralTabView: View {
                     Spacer()
                     Text("Window Style")
                         .font(.headline)
-                    
                 }
                 .frame(width: SETTINGS_LABEL_WIDTH)
                 VStack(spacing: 6.0) {
@@ -236,10 +234,9 @@ struct GeneralTabView: View {
                                         RoundedRectangle(cornerRadius: 8)
                                     }
                                     .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
-                                
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 8)
-                                            .stroke(isPinnable ? .blue : .white.opacity(0.15), lineWidth: isPinnable ? 4.0 : 0.5)
+                                            .stroke(isPinnable ? .blue : .white.opacity(0.15), lineWidth: isPinnable ? 2.0 : 0.5)
                                     )
                                 Text("Pinnable")
                                     .font(.system(size: 11, weight: isPinnable ? .bold : .regular))
@@ -258,10 +255,9 @@ struct GeneralTabView: View {
                                         RoundedRectangle(cornerRadius: 8)
                                     }
                                     .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2)
-                                
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 8)
-                                            .stroke(isWindowed ? .blue : .white.opacity(0.15), lineWidth: isWindowed ? 4.0 : 0.5)
+                                            .stroke(isWindowed ? .blue : .white.opacity(0.15), lineWidth: isWindowed ? 2.0 : 0.5)
                                     )
                                 Text("Traditional")
                                     .font(.system(size: 11, weight: appStorage_windowStyle == .windowed ? .bold : .regular))

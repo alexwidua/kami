@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		221750E72B14FD8900693B0E /* CustomTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221750E62B14FD8900693B0E /* CustomTextView.swift */; };
 		2251A1142B100AA100513552 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251A1132B100AA100513552 /* LoadingView.swift */; };
 		2251A1162B10834600513552 /* AccessibilityRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251A1152B10834600513552 /* AccessibilityRequestView.swift */; };
 		2251A1182B109F7000513552 /* PatchErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251A1172B109F7000513552 /* PatchErrorView.swift */; };
@@ -38,6 +39,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		221750E62B14FD8900693B0E /* CustomTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextView.swift; sourceTree = "<group>"; };
 		2251A1132B100AA100513552 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		2251A1152B10834600513552 /* AccessibilityRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityRequestView.swift; sourceTree = "<group>"; };
 		2251A1172B109F7000513552 /* PatchErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatchErrorView.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				226E59ED2AED0F82005FCD6D /* CodeEditor.swift */,
 				227CB6E72B0CAE6C00D2F594 /* LineNumberView.swift */,
 				226A6AAF2AEBA65100110798 /* TextEditor.swift */,
+				221750E62B14FD8900693B0E /* CustomTextView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -246,6 +249,7 @@
 			files = (
 				227CB6DD2B02169500D2F594 /* WindowController.swift in Sources */,
 				227CB6E82B0CAE6C00D2F594 /* LineNumberView.swift in Sources */,
+				221750E72B14FD8900693B0E /* CustomTextView.swift in Sources */,
 				226A6AAC2AE927DB00110798 /* OpenWithMenuView.swift in Sources */,
 				226E59F22AEE8700005FCD6D /* ButtonStyle.swift in Sources */,
 				2251A1142B100AA100513552 /* LoadingView.swift in Sources */,

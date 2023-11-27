@@ -45,7 +45,7 @@ struct CustomTextEditor: NSViewRepresentable {
     }
     
     func makeNSView(context: Context) -> NSScrollView {
-        let textView = NSTextView()
+        let textView = CustomTextView()
         
         textView.isHorizontallyResizable = false
         textView.isVerticallyResizable = true
