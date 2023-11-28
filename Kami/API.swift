@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-import OpenAI
+//import OpenAI
 
 enum StreamResult {
     case completion(StreamCompletion)
@@ -59,29 +59,61 @@ func streamCompletion(task: Binding<Task<Void, Never>?>, apiKey: String?, instru
             return
         }
         
-        let openAI = OpenAI(apiToken: apiKey)
-        let query = ChatQuery(model: model, messages: [
+        //        let openAI = OpenAI(apiToken: apiKey)
+        //        let query = ChatQuery(model: model, messages: [
+        //            .init(role: .system, content: instructionText),
+        //            .init(role: .user, content: inputText)
+        //        ])
+        let messages: [OpenAI.Message] = [
             .init(role: .system, content: instructionText),
             .init(role: .user, content: inputText)
-        ])
+        ]
+        let api = OpenAI(apiKey: apiKey)
         
         print("*** [StreamCompletion] Initiated completion stream with prompt: \(inputText), using model: \(model).")
         
         task.wrappedValue = Task {
+            //            var previousToken = ""
+            //            var tokenIndex = 0
+            //            do {
+            //                for try await result in openAI.chatsStream(query: query) {
+            //                    print(result)
+            //                    if let firstChoice = result.choices.first, let token = firstChoice.delta.content {
+            //
+            //                        let filteredToken = filterJsMarkdownFromToken(currentToken: token, previousToken: previousToken)
+            //                        let completion = StreamCompletion(tokenIndex: tokenIndex, token: filteredToken)
+            //                        continuation.yield(StreamResult.completion(completion))
+            //
+            //                        previousToken = token
+            //                        tokenIndex += 1
+            //                    }
+            //                }
+            //            } catch {
+            //                let queryError = error.localizedDescription
+            //                print("Query Error: \(queryError)")
+            //                continuation.yield(StreamResult.error(StreamError(message: "\(queryError)")))
+            //            }
+            //            continuation.finish()
+            //            print("*** [StreamCompletion] Finished streaming completion.")
+            
             var previousToken = ""
             var tokenIndex = 0
             do {
-                for try await result in openAI.chatsStream(query: query) {
-                    print(result)
-                    if let firstChoice = result.choices.first, let token = firstChoice.delta.content {
-
-                        let filteredToken = filterJsMarkdownFromToken(currentToken: token, previousToken: previousToken)
-                        let completion = StreamCompletion(tokenIndex: tokenIndex, token: filteredToken)
-                        continuation.yield(StreamResult.completion(completion))
-                        
-                        previousToken = token
-                        tokenIndex += 1
-                    }
+                let stream =  try api.completeChatStreaming(.init( messages:  messages, model: model))
+                for await result in stream {
+                    
+                    //                    if let firstChoice = result.choices.first, let token = firstChoice.delta.content {
+                    //
+                    //                    }
+                    print(result.content)
+                    let token = result.content
+                    let filteredToken = filterJsMarkdownFromToken(currentToken: token, previousToken: previousToken)
+                    let completion = StreamCompletion(tokenIndex: tokenIndex, token: filteredToken)
+                    continuation.yield(StreamResult.completion(completion))
+                    
+                    previousToken = token
+                    tokenIndex += 1
+                    
                 }
             } catch {
                 let queryError = error.localizedDescription
@@ -90,6 +122,8 @@ func streamCompletion(task: Binding<Task<Void, Never>?>, apiKey: String?, instru
             }
             continuation.finish()
             print("*** [StreamCompletion] Finished streaming completion.")
+            
+            
         }
     }
 }

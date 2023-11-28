@@ -10,7 +10,6 @@
 //
 
 import SwiftUI
-import OpenAI
 
 #Preview {
     ContentView(window: nil, url: URL(string: "/")!)

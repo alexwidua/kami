@@ -1,10 +1,7 @@
 //
-// API Key Validation Component that is shown during the onboarding flow and in the settings window.
-// The validation works by sending a test API request to the OpenAI endpoint using the cheapest model (as of Nov 2023).
-//
+// API Key Validation Component that is shown during the onboarding flow and in the settings window. 
 
 import SwiftUI
-import OpenAI
 
 #Preview {
     ValidateApiKeyView(apiKey: .constant("abc-123"), validationState: .constant(.pending), errorMessage: .constant(""), canDismiss: false, hasDismissed: .constant(false))
@@ -62,14 +59,15 @@ struct ValidateApiKeyView: View {
     /* Functions */
     func validateApiKey(key: String) {
         validationState = .validating
-        let openAI = OpenAI(apiToken: key)
-        let query = ChatQuery(model: .gpt3_5Turbo, messages: [
-            .init(role: .system, content: "Test."),
-        ])
-        openAI.chats(query: query) { result in
-            switch result {
-            case .success:
-                print("Success")
+        let api = OpenAI(apiKey: key)
+        let messages: [OpenAI.Message] = [
+            .init(role: .system, content: "Test"),
+        ]
+        
+        Task {
+            do {
+                let _ = try await api.completeChat(.init(messages: messages))
+                print("Valid API Key")
                 validationState = .valid
                 apiKey = tempApiKey
                 tempApiKey = ""
@@ -77,9 +75,18 @@ struct ValidateApiKeyView: View {
                 DispatchQueue.main.async {
                     NSApp.keyWindow?.makeFirstResponder(nil)
                 }
-                
-            case .failure(let error):
-                print("Error: \(error)")
+            } catch let error as OpenAI.ChatCompletionError {
+                switch error {
+                case .invalidResponse(let apiResponse as OpenAI.ChatCompletionInvalidResponse):
+                    print("Error: \(apiResponse)")
+                    errorMessage = apiResponse.error.message
+                default:
+                    print("Error: \(error.localizedDescription)")
+                    errorMessage = error.localizedDescription
+                }
+                validationState = .invalid
+            } catch {
+                print("Error: \(error.localizedDescription)")
                 errorMessage = error.localizedDescription
                 validationState = .invalid
             }
@@ -106,7 +113,7 @@ struct ValidateApiKeyView: View {
             return 14.0
         }
     }
-
+    
     var buttonPaddingY: CGFloat {
         switch validationInputStyle {
         case .compact:
@@ -142,8 +149,8 @@ struct ValidateApiKeyView: View {
                     .frame(height: inputHeight)
                     .onSubmit {
                         validateApiKey(key: tempApiKey)
-                              }
-
+                    }
+                
             }
             
             /* Validate Button */
