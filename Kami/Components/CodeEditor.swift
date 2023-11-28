@@ -1,5 +1,7 @@
 //
-// Rudimentary code editor with JavaScript syntax highlighting, line numbers and auto-indent/auto-brackets.
+// CodeEditor.swift
+//
+//Rudimentary code editor with JavaScript syntax highlighting, line numbers and auto-indent/auto-brackets.
 //
 // The reason we're trying to implement our own code editoris that other Swift packages
 // use Highlightr.js and WebViews for code syntax highlighting:

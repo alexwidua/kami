@@ -2,15 +2,14 @@ import SwiftUI
 
 let APP_NAME = "Kami"
 let APP_VERSION = "1.0"
-let STORAGE_KEY_SUFFIX = "1-DEV-3" // !!! changing this resets the user's @AppStorage
+let STORAGE_KEY_SUFFIX = "1" // !!! changing this resets the user's @AppStorage
 
 /* UI */
 let SETTINGS_WINDOW_WIDTH = 500
 let SETTINGS_WINDOW_HEIGHT = 500
 
 let DEFAULT_SHOW_FILE_NAME = false
-let DEFAULT_SHOW_OPEN_WITH_BTN = true
-let DEFAULT_SHOW_TRAY_ICON = true
+let DEFAULT_SHOW_OPEN_WITH_BTN = false
 
 let DEFAULT_APPEARANCE_PREFERENCE: AppearancePreference = .system
 let DEFAULT_WINDOW_STYLE_PREFERENCE: WindowStylePreference = .windowed

@@ -1,3 +1,6 @@
+// 
+// AccessibilityRequestView.swift
+//
 // Custom Request Accessibility Permission dialog to show additional information why the permission is being requested (there is no native way to display a custom message)
 
 import SwiftUI

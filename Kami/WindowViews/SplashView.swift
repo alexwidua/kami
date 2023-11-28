@@ -1,6 +1,6 @@
-// Splash screen that gets shown on initial startup
-// Shows either 'Enter API Key' prompt or a hint how to use the app...
-
+//
+// SplashView.swift
+//
 import SwiftUI
 import KeyboardShortcuts
 

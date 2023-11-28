@@ -1,14 +1,6 @@
 //
-//  The app's main content window
-//  ┌──────────────────────────────┐
-//  │ Prompt Input                 •─── Resizeable prompt Input with [Enter] button
-//  ├──────────────────────────────┤
-//  │ Code Editor                  •─── (Rudimentary) Code editor with syntax highlighting
-//  ├──────────────────────────────┤
-//  │ Toolbar                      •─── [Open settings], [Open with...] and [Save] and optional file information
-//  └──────────────────────────────┘
+// ContentView.swift
 //
-
 import SwiftUI
 
 #Preview {
@@ -25,6 +17,7 @@ struct ContentView: View {
     @AppStorage(AppStorageKey.appearancePref) var appStorage_appearance: AppearancePreference = DEFAULT_APPEARANCE_PREFERENCE
     @AppStorage(AppStorageKey.windowStylePref) var appStorage_windowStyle: WindowStylePreference = DEFAULT_WINDOW_STYLE_PREFERENCE
     @AppStorage(AppStorageKey.apiKey) var appStorage_apiKey: String = ""
+    @AppStorage(AppStorageKey.orgId) var appStorage_orgId: String = ""
     @AppStorage(AppStorageKey.instructionText) var appStorage_instructionText: String = DEFAULT_INSTRUCTION
     @AppStorage(AppStorageKey.modelPreference) var appStorage_modelPreference: String = DEFAULT_MODEL
     @AppStorage(AppStorageKey.customModelString) var appStorage_customModelName: String = ""
@@ -310,7 +303,6 @@ struct ContentView: View {
                         })
                     }
                 }
-//                .background(.ultraThickMaterial)
                 .frame(height: promptInputHeight)
                 //
                 //  ┌──────────────────┐
@@ -330,18 +322,11 @@ struct ContentView: View {
                             }
                         }
                         .blur(radius: animateCodeEditorLoadingState ? 16 : 0)
-                        .opacity(animateCodeEditorLoadingState ? 0 : 1)
-//                        .opacity(inputDisabled ? 0.125 : 1)
+                        .opacity(animateCodeEditorLoadingState ? 0.0 : 1)
                     VStack {
                         Spacer()
                         NotificationBannerView(isShowing: $showNotificationBanner, message: notificationBannerMsg, notifStyle: .warning)
                     }
-//                    if(isLoadingResponse) {
-//                        ZStack {
-//                            ProgressView()
-//                                .controlSize(.small)
-//                        }
-//                    }
                 }
                 .background(.windowBackground)
             }
@@ -457,18 +442,17 @@ struct ContentView: View {
         Task {
             var hasApiError = false
             
-            for await streamResult in streamCompletion(task: $streamResponseTask, apiKey: appStorage_apiKey, instructionText: appStorage_instructionText, inputText: promptInputText, model: selectedModel) {
+            for await streamResult in streamCompletion(task: $streamResponseTask, apiKey: appStorage_apiKey, orgId: appStorage_orgId, instructionText: appStorage_instructionText, inputText: promptInputText, model: selectedModel) {
                 
                 switch streamResult {
                 case .completion(let completion):
                     
                     if(completion.tokenIndex == 0) {
-                        withAnimation(.linear(duration: 1.5)) {
+                        withAnimation(.linear(duration: 1.0)) {
                             animateCodeEditorLoadingState = false
                         }
                     }
                     fileContent += completion.token
-                    
                 case .error(let error):
                     showNotificationBanner = true
                     notificationBannerMsg = error.message
@@ -476,12 +460,6 @@ struct ContentView: View {
                 }
             }
             isLoadingResponse = false
-//            if(hasApiError) {
-//                fileContent = ogFileContent
-//            }
-//            else {
-//                handleSaveFile()
-//            }
             if(!hasApiError) {
                 handleSaveFile()
             }
@@ -507,11 +485,12 @@ struct ContentView: View {
     func fileDocumentHead(fileContent: String) -> String {
         let prompt = promptInputText
         let firstLine = "// \(prompt)\n"
-        var secondLine = ""
-        if let scriptId = extractScriptID(from: fileContent) {
-            secondLine = "// Script ID: \(scriptId) \n"
-        }
-        return "\(firstLine)\(secondLine)"
+//        var secondLine = ""
+//        if let scriptId = extractScriptID(from: fileContent) {
+//            secondLine = "// Script ID: \(scriptId) \n"
+//        }
+//        return "\(firstLine)\(secondLine)"
+        return "\(firstLine)"
     }
     
     func handleSaveFile() {

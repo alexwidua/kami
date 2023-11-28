@@ -1,5 +1,6 @@
-// Misc functions/utilities/helpers
-
+//
+// Utils.swift
+//
 import SwiftUI
 
 class Debouncer {

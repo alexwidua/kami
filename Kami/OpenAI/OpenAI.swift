@@ -16,24 +16,5 @@ public struct OpenAI {
     }
 }
 
-extension OpenAI {
-    enum ChatCompletionError: Error {
-        case noChoices
-        case invalidResponse(ChatCompletionInvalidResponse)
-        case noApiKey
-    }
-    
-    struct ChatCompletionInvalidResponse: Codable {
-        let error: ChatCompletionInvalidResponseDetail
-    }
-
-    struct ChatCompletionInvalidResponseDetail: Codable {
-        let message: String
-        let type: String
-        let code: String
-
-    }
-}
-
 
 

@@ -1,10 +1,6 @@
 //
-//  OnboardingView.swift
-//  Kami
+// OnboardingView.swift
 //
-//  Created by Alex Widua on 24.11.23.
-//
-
 import SwiftUI
 
 struct OnboardingView: View {
@@ -41,7 +37,7 @@ struct OnboardingView: View {
     var body: some View {
         VStack(spacing:0) {
             ZStack {
-                ValidateApiKeyView(apiKey: $apiKey, validationState:  $onboardingValidationState, errorMessage: $onboardingErrorMessage, canDismiss: true, hasDismissed: $onboardingHasInteractedWithDismissButton, validationInputStyle: .onboarding)
+                ValidateApiKeyView(apiKey: $apiKey, validationState:  $onboardingValidationState, errorMessage: $onboardingErrorMessage, canDismiss: true, hasDismissed: $onboardingHasInteractedWithDismissButton)
                     .onChange(of: onboardingHasInteractedWithDismissButton) { _, hasDismissed in
                         if(hasDismissed) {
                             finishedOnboarding = true

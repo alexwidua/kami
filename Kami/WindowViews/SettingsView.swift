@@ -1,17 +1,6 @@
 //
-// The app's tabbed settings window
+// SettingsView.swift
 //
-//  ┌─────────────┬────────────┬────────────┐
-//  │ General     │ API        │ About      │
-//  └─•───────────┴─•──────────┴────────────┘
-//    │             │
-//    │            Change API Secret key, choose a different model (or enter custom model name)
-//    │            or tweak the model's instruction text,
-//    │
-//   General settings, such as appearance or granting the required Accessibility Permission
-//   (see PasteboardHandler for more information)
-//
-
 import SwiftUI
 import ServiceManagement
 import KeyboardShortcuts
@@ -60,7 +49,6 @@ struct SettingsWindowView: View {
                 }
             }
         // Keep track of selected tab and resize window accordingly
-        //
         // This seems like a terrible approach, but I couldn't figure out another way to
         // auto-resize the tab view to the children content height.
         // https://gist.github.com/mminer/caec00d2165362ff65e9f1f728cecae2 indicates that setting
@@ -406,6 +394,7 @@ struct ApiTabView: View {
     
     /* @AppStorage */
     @AppStorage(AppStorageKey.apiKey) var appStorage_apiKey: String = "..."
+    @AppStorage(AppStorageKey.orgId) var appStorage_orgId: String = ""
     @AppStorage(AppStorageKey.modelPreference) var appStorage_modelPreference: String = DEFAULT_MODEL
     @AppStorage(AppStorageKey.customModelString) var appStorage_customModelName: String = ""
     @AppStorage(AppStorageKey.instructionText) var appStorage_instructionText: String = DEFAULT_INSTRUCTION
@@ -502,6 +491,24 @@ struct ApiTabView: View {
                             }
                         }
                     }
+                }
+            }
+        
+            
+            HStack(alignment: .top) {
+                HStack {
+                    Spacer()
+                    Text("Organization ID")
+                        .font(.headline)
+                }
+                .frame(width: SETTINGS_LABEL_WIDTH)
+                VStack {
+                    TextField("Optional", text: $appStorage_orgId)
+                        .textFieldStyle(PlainTextFieldStyle())
+                        .padding(EdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8))
+                        .font(.system(size: 12, design: .monospaced))
+                        .frame(height: 34)
+                        .settingsInputBackground()
                 }
             }
             

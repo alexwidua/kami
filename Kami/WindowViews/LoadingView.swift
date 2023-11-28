@@ -1,4 +1,6 @@
-// Little loading spinner that is shown while the pasteboard is being parsed...
+//
+// LoadingView.swift
+//
 import SwiftUI
 
 struct LoadingView: View {
@@ -12,7 +14,7 @@ struct LoadingView: View {
                     }
                 }
         }
-        .background(.regularMaterial)
+        .background(.ultraThinMaterial)
         .ignoresSafeArea()
     }
 }

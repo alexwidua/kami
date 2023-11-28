@@ -1,3 +1,6 @@
+//
+// CustomTextView.swift
+//
 import SwiftUI
 
 /* Subclassed TextView to override right-click ctx menu of the default NSTextView */

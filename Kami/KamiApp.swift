@@ -1,7 +1,8 @@
+//
+// KamiApp.swift
+//
 import SwiftUI
 import KeyboardShortcuts
-
-
 
 @main
 struct KamiApp: App {

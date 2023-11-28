@@ -1,9 +1,9 @@
 //
-// LineNumber component for the code editor,
-// Code by Yichi Zhang, https://github.com/yichizhang/NSTextView-LineNumberView/tree/master (2016)
-// (Code comments by original author)
+// LineNumberView.swift
 //
-
+// Author: Yichi Zhang
+// Url: https://github.com/yichizhang/NSTextView-LineNumberView/tree/master (2016)
+//
 import SwiftUI
 
 

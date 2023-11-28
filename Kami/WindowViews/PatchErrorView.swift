@@ -1,4 +1,6 @@
-// Custom Error dialog shown when a patch couldn't be parsed from the pasteboard.
+//
+// PatchErrorView.swift
+//
 import SwiftUI
 
 struct PatchErrorView: View {

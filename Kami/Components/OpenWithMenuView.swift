@@ -1,8 +1,6 @@
 //
-// [Open with...] component that shows a dropdown menu with all installed applications
-// that announce themselves as JavaScript editor.
+// OpenWithMenuView.swift
 //
-
 import SwiftUI
 import CoreServices
 

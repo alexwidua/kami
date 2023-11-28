@@ -1,3 +1,6 @@
+//
+// WindowController.swift
+//
 import SwiftUI
 
 // ┌───────────────────────┐
@@ -160,6 +163,7 @@ class LoadingWindow: NSWindow, NSWindowDelegate {
         self.backgroundColor = .clear
         self.isReleasedWhenClosed = false
         self.titleVisibility = .hidden
+        self.hasShadow = false
         self.titlebarAppearsTransparent = true
         self.standardWindowButton(.closeButton)?.isHidden = true
         self.standardWindowButton(.miniaturizeButton)?.isHidden = true

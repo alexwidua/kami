@@ -1,6 +1,6 @@
 //
-// API Key Validation Component that is shown during the onboarding flow and in the settings window. 
-
+// ValidateKeyView.swift
+//
 import SwiftUI
 
 #Preview {
@@ -14,22 +14,16 @@ enum ValidationState {
     case valid
 }
 
-enum ValidationInputStyle {
-    case compact
-    case onboarding
-}
+let API_KEY_INPUT_HEIGHT: CGFloat = 34
+let API_KEY_FONT_SIZE: CGFloat = 12
 
 struct ValidateApiKeyView: View {
-    
-    /* Props */
     @Binding var apiKey: String
     @Binding var validationState: ValidationState
     @Binding var errorMessage: String
     var canDismiss: Bool
     @Binding var hasDismissed: Bool // user has interacted with 'Done' key after validation
-    var validationInputStyle: ValidationInputStyle = .compact
     
-    /* States */
     @State private var tempApiKey = ""
     
     /* Computed */
@@ -53,47 +47,6 @@ struct ValidateApiKeyView: View {
         return validationState == .validating
     }
     
-    /* Constants */
-    var inputHeight: CGFloat = 34
-    
-    /* Functions */
-    func validateApiKey(key: String) {
-        validationState = .validating
-        let api = OpenAI(apiKey: key)
-        let messages: [OpenAI.Message] = [
-            .init(role: .system, content: "Test"),
-        ]
-        
-        Task {
-            do {
-                let _ = try await api.completeChat(.init(messages: messages))
-                print("Valid API Key")
-                validationState = .valid
-                apiKey = tempApiKey
-                tempApiKey = ""
-                // remove focus from TextEditor
-                DispatchQueue.main.async {
-                    NSApp.keyWindow?.makeFirstResponder(nil)
-                }
-            } catch let error as OpenAI.ChatCompletionError {
-                switch error {
-                case .invalidResponse(let apiResponse as OpenAI.ChatCompletionInvalidResponse):
-                    print("Error: \(apiResponse)")
-                    errorMessage = apiResponse.error.message
-                default:
-                    print("Error: \(error.localizedDescription)")
-                    errorMessage = error.localizedDescription
-                }
-                validationState = .invalid
-            } catch {
-                print("Error: \(error.localizedDescription)")
-                errorMessage = error.localizedDescription
-                validationState = .invalid
-            }
-        }
-    }
-    
-    /* Computed props */
     var validationButtonType: ButtonType {
         switch validationState {
         case .pending,  .invalid:
@@ -105,58 +58,21 @@ struct ValidateApiKeyView: View {
         }
     }
     
-    var fontSize: CGFloat {
-        switch validationInputStyle {
-        case .compact:
-            return 12.0
-        case .onboarding:
-            return 14.0
-        }
-    }
-    
-    var buttonPaddingY: CGFloat {
-        switch validationInputStyle {
-        case .compact:
-            return 2.0
-        case .onboarding:
-            return 4.0
-        }
-    }
-    
-    var buttonPaddingX: CGFloat {
-        switch validationInputStyle {
-        case .compact:
-            return 4.0
-        case .onboarding:
-            return 8.0
-        }
-    }
-    
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
-            ZStack {
-                TextField("", text: .constant(placeholder))
-                    .textFieldStyle(PlainTextFieldStyle())
-                    .allowsHitTesting(false)
-                    .padding(EdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8))
-                    .font(.system(size: fontSize, design: .monospaced))
-                    .opacity(tempApiKey.isEmpty ? 0.5 : 0)
-                    .frame(height: inputHeight)
-                TextField("", text: $tempApiKey)
-                    .textFieldStyle(PlainTextFieldStyle())
-                    .padding(EdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8))
-                    .font(.system(size: fontSize, design: .monospaced))
-                    .frame(height: inputHeight)
-                    .onSubmit {
-                        validateApiKey(key: tempApiKey)
-                    }
-                
-            }
+            TextField(placeholder, text: $tempApiKey)
+                .textFieldStyle(PlainTextFieldStyle())
+                .padding(EdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8))
+                .font(.system(size: API_KEY_FONT_SIZE, design: .monospaced))
+                .frame(height: API_KEY_INPUT_HEIGHT)
+                .onSubmit {
+                    validateApiKey(key: tempApiKey)
+                }
             
             /* Validate Button */
-            // Display invisible rect with same height as button to avoid layout shifts
             if(tempApiKey.isEmpty && validationState != .valid) {
-                Spacer().frame(width: 1, height: inputHeight)
+                Spacer().frame(width: 1, height: API_KEY_INPUT_HEIGHT)
+                // display invisible rect with same height as button to avoid layout shifts
             }
             else {
                 ZStack {
@@ -197,12 +113,47 @@ struct ValidateApiKeyView: View {
                         }
                     }
                     .disabled(validateButtonDisabled)
-                    .buttonStyle(CustomButtonStyle(buttonType: validationButtonType, py: buttonPaddingY, px: buttonPaddingX))
+                    .buttonStyle(CustomButtonStyle(buttonType: validationButtonType))
                 }
                 .padding(.horizontal, 8.0)
             }
         }
         .padding(0.0)
     }
+    
+    func validateApiKey(key: String) {
+        validationState = .validating
+        let api = OpenAI(apiKey: key)
+        let messages: [OpenAI.Message] = [
+            .init(role: .system, content: "Test"),
+        ]
+        
+        Task {
+            do {
+                let _ = try await api.completeChat(.init(messages: messages))
+                print("Valid API Key")
+                validationState = .valid
+                apiKey = tempApiKey
+                tempApiKey = ""
+                // remove focus from TextEditor
+                DispatchQueue.main.async {
+                    NSApp.keyWindow?.makeFirstResponder(nil)
+                }
+            } catch let error as OpenAI.ChatCompletionError {
+                switch error {
+                case .invalidResponse(let apiResponse as OpenAI.ChatCompletionInvalidResponse):
+                    print("Error: \(apiResponse)")
+                    errorMessage = apiResponse.error.message
+                default:
+                    print("Error: \(error.localizedDescription)")
+                    errorMessage = error.localizedDescription
+                }
+                validationState = .invalid
+            } catch {
+                print("Error: \(error.localizedDescription)")
+                errorMessage = error.localizedDescription
+                validationState = .invalid
+            }
+        }
+    }
 }
-

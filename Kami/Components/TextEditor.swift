@@ -1,9 +1,6 @@
 //
-// Custom Text Editor
-// We use our own AppKit implementation (over SwiftUI's TextEditor)
-// to get more control about the text behaviour, paddings etc.
+// TextEditor.swift
 //
-
 import SwiftUI
 
 enum TextStyle {
