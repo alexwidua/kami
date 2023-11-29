@@ -39,9 +39,9 @@ With every request to GPT-4, the app prepends (a truncated version of) the [Orig
 
 ### Permissions
 
-One neat thing about the app is the ability to open JavaScript Patches using the keyboard shortcut. It's quick and simple. For this to work, the app requires system-level Accessibility Permissions because it emulates a ⌘+C keystroke to copy the JavaScript patch to the clipboard (and read the Patch data from the clipboard). This is pretty invasive permission to ask for. For what it's worth, the permission is only eber used for that specific purpose. See the `PasteboardHandler` file for more.
+One neat thing is the ability to open JavaScript Patches using the keyboard shortcut. It's quick and simple. For this to work though, the app requires system-level Accessibility Permissions because it emulates a ⌘+C keystroke to copy the JavaScript patch to the clipboard (and then read the Patch data from the clipboard). This is pretty invasive permission to ask for. For what it's worth, the permission is only eber used for that specific purpose. See the `PasteboardHandler` file for more.
 
-If you don't or can't give this permission, JavaScript Patches can also be opened via the ‘Open with…’ right-click menu (no permissions are required for that).
+If you don't want to (or can't) give this permission, JavaScript Patches can also be opened via the ‘Open with…’ right-click menu (no permissions are required for that).
 
 ## Acknowledgements
 
