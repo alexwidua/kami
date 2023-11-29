@@ -86,7 +86,7 @@ struct ContentView: View {
     
     var inputDisabled: Bool { return (!appStorage_finishedOnboarding || isLoadingResponse) }
     var submitPromptButtonDisabled: Bool { return !appStorage_finishedOnboarding || promptInputText.isEmpty }
-    var toolbarButtonDisabled: Bool { return (!appStorage_finishedOnboarding || hasSavedFile || isSavingFile) }
+    var toolbarButtonDisabled: Bool { return (!appStorage_finishedOnboarding || isLoadingResponse || hasSavedFile || isSavingFile) }
     
     /* Pinnable Window Titlebar Stuff */
     @State private var windowHovered: Bool = false
@@ -485,12 +485,11 @@ struct ContentView: View {
     func fileDocumentHead(fileContent: String) -> String {
         let prompt = promptInputText
         let firstLine = "// \(prompt)\n"
-//        var secondLine = ""
-//        if let scriptId = extractScriptID(from: fileContent) {
-//            secondLine = "// Script ID: \(scriptId) \n"
-//        }
-//        return "\(firstLine)\(secondLine)"
-        return "\(firstLine)"
+        var secondLine = ""
+        if let scriptId = extractScriptID(from: fileContent) {
+            secondLine = "// Script ID: \(scriptId) \n"
+        }
+        return "\(firstLine)\(secondLine)"
     }
     
     func handleSaveFile() {
