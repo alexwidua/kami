@@ -1,6 +1,6 @@
 <img src="media/hero.png" width="100%" max-width="600px"/>
 
-Kami is a tiny copilot for [Origami Studio](https://origami.design/) that helps create [JavaScript Patches](https://origami.design/documentation/concepts/scriptingapi) using [GPT-4](https://openai.com/gpt-4).  
+Kami is a tiny copilot for [Origami Studio](https://origami.design/) that helps to create [JavaScript Patches](https://origami.design/documentation/concepts/scriptingapi) using [GPT-4](https://openai.com/gpt-4).  
 Select a JavaScript Patch, invoke the app's overlay using the shortcut and describe the logic of your patch.
 
 _Kami is a native macOS menu bar app. You have to provide your [own OpenAI API Key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-api-key) to use the app. Your API key is stored locally on your machine._
