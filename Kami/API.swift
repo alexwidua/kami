@@ -67,7 +67,7 @@ func streamCompletion(task: Binding<Task<Void, Never>?>, apiKey: String?, orgId:
             var previousToken = ""
             var tokenIndex = 0
             do {
-                let stream =  try api.completeChatStreaming(.init( messages:  messages, model: model))
+                let stream = try api.completeChatStreaming(.init(messages: messages, model: model))
                 for await result in stream {
                     
                     switch result {

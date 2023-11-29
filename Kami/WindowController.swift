@@ -13,7 +13,7 @@ class SplashWindow: NSWindow, NSWindowDelegate {
         self.isReleasedWhenClosed = false
         self.titlebarSeparatorStyle = .none
         self.titlebarAppearsTransparent = true
-//        self.backgroundColor = .clear
+        //        self.backgroundColor = .clear
         self.delegate = self
     }
     
@@ -46,6 +46,11 @@ class AppWindow: NSWindow, NSWindowDelegate {
         
         if (getWindowStyleFromAppStorage() == .pinnable) {
             applyPinnableWindowStyle()
+        }
+        
+        if let windowSizeString = UserDefaults.standard.string(forKey: AppStorageKey.windowSizePref) {
+            let windowSize = NSSizeFromString(windowSizeString)
+            self.setContentSize(windowSize)
         }
         
         self.delegate = self
@@ -83,6 +88,18 @@ class AppWindow: NSWindow, NSWindowDelegate {
             self.pinWindow()
             self.isPinned = true
         }
+    }
+    
+    /* Remember window size for next window */
+    func windowDidResize(_ notification: Notification) {
+        if let window = notification.object as? NSWindow {
+            saveWindowSize(window.frame.size)
+        }
+    }
+    
+    func saveWindowSize(_ size: CGSize) {
+        let sizeString = NSStringFromSize(size)
+        UserDefaults.standard.set(sizeString, forKey: AppStorageKey.windowSizePref)
     }
     
     func pinWindow() -> Void {

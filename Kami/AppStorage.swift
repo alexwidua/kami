@@ -11,6 +11,7 @@ struct AppStorageKey {
     static let windowStylePref = "window-preference-\(STORAGE_KEY_SUFFIX)"
     static let showOpenWithBtnPref = "show-open-with-button-\(STORAGE_KEY_SUFFIX)"
     static let showFileNamePref = "show-file-name-\(STORAGE_KEY_SUFFIX)"
+    static let windowSizePref = "window-size-\(STORAGE_KEY_SUFFIX)"
 }
 
 

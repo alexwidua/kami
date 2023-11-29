@@ -318,7 +318,7 @@ struct ContentView: View {
                         .frame(minHeight: 32)
                         .onChange(of: fileContent) { oldValue, newValue in
                             if(oldValue != newValue && !oldValue.isEmpty) {
-//                                hasSavedFile = false
+                                hasSavedFile = false
                             }
                         }
                         .blur(radius: animateCodeEditorLoadingState ? 16 : 0)

@@ -23,7 +23,7 @@ let URL_ORIGAMI_COMMUNITY = "https://www.facebook.com/groups/origami.community"
 /* API */
 let DEFAULT_MODEL = "gpt-4-1106-preview"
 let DEFAULT_INSTRUCTION = """
-Help the user with their request and create a valid JavaScript Patch. Assume the appropriate inputs from the request. Respond only with code and don't include the question or any explanation in your response. Use console.watch instead of console.log
+Help the user with their request and create a valid JavaScript Patch. Assume the appropriate inputs from the request. Respond only with code and don't include the question or any explanation in your response.
 
 ---
 
@@ -99,7 +99,7 @@ If this ouput’s type is PULSE, you may call this function to send a pulse on t
 
 Image
 new Image(arrayBuffer, width, height) constructor
-Use this constructor to create an Image from an ArrayBuffer in RGBA format (0-255 values). Provide the image's width and height, matching the ArrayBuffer size.
+Use this constructor to create an Image from an ArrayBuffer in RGBA format (0-255 values). Provide the image's width and height, matching the ArrayBuffer size. When working with input images, create a new Image() using the old image as its only argument, Example: var outputImage = new Image(inputImage).
 
 new Image(image, size) constructor
 Constructor to create a new Image from an existing one. Second parameter should be a SIZE object for resizing the original image.
