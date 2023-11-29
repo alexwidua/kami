@@ -74,3 +74,13 @@ func getPreferredAppearance(pref: AppearancePreference) -> NSAppearance {
     }
 }
 
+func compareStringsExcludingScriptID(str1: String, str2: String) -> Bool {
+    let linesStr1 = str1.components(separatedBy: "\n")
+    let linesStr2 = str2.components(separatedBy: "\n")
+
+    // Filtering out the lines with "Script ID"
+    let filteredStr1 = linesStr1.filter { !$0.contains("Script ID:") }.joined(separator: "\n")
+    let filteredStr2 = linesStr2.filter { !$0.contains("Script ID:") }.joined(separator: "\n")
+
+    return filteredStr1 == filteredStr2
+}

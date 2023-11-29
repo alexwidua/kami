@@ -510,15 +510,23 @@ struct ContentView: View {
         let _ = createSettingsWindow()
     }
     
-    // refactor
     private func readFileContent() {
         guard url.isFileURL else { return }
+        
+        var content = ""
         do {
-            fileContent = try String(contentsOf: url, encoding: .utf8)
+            content = try String(contentsOf: url, encoding: .utf8)
         } catch {
             print("Error reading file: \(error)")
-            fileContent = "Failed to read file"
+            content = "Failed to read file..."
         }
+        let isFreshFile = compareStringsExcludingScriptID(str1: content, str2: DEFAULT_JS_FILE_CONTENT)
+        if(isFreshFile) {
+            let scriptID = extractScriptID(from: content)
+            
+            content = "// Script ID: \(scriptID ?? "")\n\(FRESH_JS_FILE_CONTENT_OVERRIDE)"
+        }
+        fileContent = content
     }
     
     private func saveFileContent() {

@@ -11,25 +11,25 @@ _Kami is a native macOS menu bar app. You have to provide your [own OpenAI API K
 - OpenAI's GPT-4 is very capable of writing JavaScript code
 - I experimented with ways to combine these two tools into a single surface and primitive
 
-The result is a single-purpose app that sits ‘on top' of Origami Studio. Think of it as a tiny, rudimentary code editor that lets you open, generate and save JavaScript files without leaving Origami Studio.
+The result is a tiny app that sits ‘on top' of Origami Studio. Think of it as a tiny, rudimentary code editor that lets you open, generate and save JavaScript files without leaving the Origami Studio surface.
 
 ## Installation
 
-Download the app from the release page (TODO), unzip the archive and drag the app into your Application folder.
+[Download the App](https://github.com/alexwidua/Kami/releases/download/Latest/Kami-1.0.zip) from the release page, unzip the archive and drag the app into your `Application` folder.
 
 ## Usage
 
-1. Launch the app, provide a [OpenAI API Key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-api-key)
-2. Open a JavaScript patch...
+1. Launch the app, provide your [OpenAI API Key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-api-key)
+2. To pen a JavaScript patch...
 
-- **Using the Shortcut**: Select the JavaScript Patch and hit the shortcut (Default: Cmd+J)
-- or: **Using the Context Menu**: Right-click the JavaScript Patch > Open with ... > Kami
+- ⚡ **Using the Shortcut**: Select the JavaScript Patch and hit the shortcut (Default: Cmd+J)
+- 🗄️ **Using the Context Menu**: Right-click the JavaScript Patch > Open with ... > Kami
 
 ## Caveats
 
 ### Experimental
 
-Consider this experimental beta software. While there might be some bugs and crushes in the UI, one main thing to figure out is how to improve the prompt and resulting code/patch quality. If you run into any issues, open an Issue or reach out via Mail/Twitter.
+Consider this experimental software. While A main thing to figure out is how to improve the instruction prompt and resulting code/patch quality. If you run into any issues, open an Issue or reach out via [Mail](mailto:alex@alexwidua.com)/[Twitter](https://twitter.com/alexwidua).
 
 ### Cost
 

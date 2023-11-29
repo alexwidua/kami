@@ -260,4 +260,59 @@ Unsupported Origami Types
 Overall types that require a resource are not supported; Sound or Video for example.
 """
 
+/* Used to evaluate if starting from a fresh file */
+let DEFAULT_JS_FILE_CONTENT = """
+//==============================================================================
+// Welcome to scripting in Origami! Helpful links:
+//
+// Scripting Basics - https://origami.design/documentation/concepts/scriptingbasics
+// Scripting API - https://origami.design/documentation/concepts/scriptingapi
+//
+// Script ID:
+//==============================================================================
 
+
+// Define your patch
+
+var patch = new Patch();
+
+// Patches are always being evaluated when inputs change of values. If you need your patch to run every frame set this to true
+// Setting this to true makes scripts very inefficient and should be avoided at all cost.
+patch.alwaysNeedsToEvaluate = false;
+
+// Set Inputs and Outputs.
+patch.inputs = [
+  new PatchInput("Input", types.NUMBER, 0),
+];
+
+patch.outputs = [
+  new PatchOutput("Output", types.NUMBER),
+];
+
+// Add your logic in this function.
+patch.evaluate = function() {
+  patch.outputs[0].value = patch.inputs[0].value;
+}
+
+return patch;
+"""
+
+let FRESH_JS_FILE_CONTENT_OVERRIDE = """
+var patch = new Patch();
+
+patch.alwaysNeedsToEvaluate = false;
+
+patch.inputs = [
+  new PatchInput("Input", types.NUMBER, 0),
+];
+
+patch.outputs = [
+  new PatchOutput("Output", types.NUMBER),
+];
+
+patch.evaluate = function() {
+  patch.outputs[0].value = patch.inputs[0].value;
+}
+
+return patch;
+"""

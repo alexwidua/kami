@@ -40,6 +40,7 @@
 		22A7D5F42ADFCA6500878F0B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A7D5F32ADFCA6500878F0B /* ContentView.swift */; };
 		22A7D5F62ADFCA6600878F0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22A7D5F52ADFCA6600878F0B /* Assets.xcassets */; };
 		22A7D5F92ADFCA6600878F0B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22A7D5F82ADFCA6600878F0B /* Preview Assets.xcassets */; };
+		22F573C12B177C3800EF8305 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 22F573C02B177C3800EF8305 /* KeyboardShortcuts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -87,6 +88,7 @@
 			files = (
 				227CB6EE2B0E1A4300D2F594 /* Metal.framework in Frameworks */,
 				227CB6E22B0226C400D2F594 /* KeyboardShortcuts in Frameworks */,
+				22F573C12B177C3800EF8305 /* KeyboardShortcuts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,6 +218,7 @@
 			name = Kami;
 			packageProductDependencies = (
 				227CB6E12B0226C400D2F594 /* KeyboardShortcuts */,
+				22F573C02B177C3800EF8305 /* KeyboardShortcuts */,
 			);
 			productName = JavascriptEditor;
 			productReference = 22A7D5EC2ADFCA6500878F0B /* Kami.app */;
@@ -531,6 +534,10 @@
 		227CB6E12B0226C400D2F594 /* KeyboardShortcuts */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 227CB6E02B0226C400D2F594 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
+			productName = KeyboardShortcuts;
+		};
+		22F573C02B177C3800EF8305 /* KeyboardShortcuts */ = {
+			isa = XCSwiftPackageProductDependency;
 			productName = KeyboardShortcuts;
 		};
 /* End XCSwiftPackageProductDependency section */
