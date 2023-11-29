@@ -5,6 +5,8 @@ Select a JavaScript Patch, invoke the app's overlay usig the shortcut and descri
 
 _Kami is a native macOS menu bar app. You have to provide your [own OpenAI API Key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-api-key) to use the app. Your API key is stored locally on your machine._
 
+<img src="media/demo.gif" width="100%" max-width="600px"/>
+
 ## Background
 
 - [JavaScript Patches](https://origami.design/documentation/concepts/scriptingapi) are a fantastic way to prototype more complex logic inside Origami Studio
@@ -33,7 +35,7 @@ Consider this experimental software. While A main thing to figure out is how to 
 
 ### Cost
 
-With every request to the GPT-4 API, the app prepends (a truncated version of) the [Origami Studio JavaScript Patch API documentation](https://origami.design/documentation/concepts/scriptingapi) to the prompt. This is needed to generate the Origami-flavoured JavaScript that drives the patch. This adds an overhead of around 2000 input tokens to every request. In the future, API requests might become cheaper that this becomes negligible, or new APIs such as the [Assistant API](https://platform.openai.com/docs/assistants/overview) might make prepending the documentation not necessary anymore.
+With every request to GPT-4, the app prepends (a truncated version of) the [Origami Studio JavaScript Patch API documentation](https://origami.design/documentation/concepts/scriptingapi) to the prompt. This is needed to generate the Origami-flavoured JavaScript that drives the patch. This adds an overhead of around 2000 input tokens to every request. In the future, API requests might become cheaper that this becomes negligible, or new APIs such as the [Assistant API](https://platform.openai.com/docs/assistants/overview) might make prepending the documentation not necessary anymore.
 
 ### Permissions
 
