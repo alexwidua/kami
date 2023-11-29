@@ -49,6 +49,8 @@ struct CustomJavascriptEditor: NSViewRepresentable {
     @Binding var text: String
     var isEditable: Bool = true
     
+    @State private var firstViewUpdate: Bool = true
+    
     var textViewAttributes: [NSAttributedString.Key:Any] {
         return [
             .font: NSFont.monospacedSystemFont(ofSize: 12, weight: .regular),
@@ -102,6 +104,8 @@ struct CustomJavascriptEditor: NSViewRepresentable {
     
     func updateNSView(_ scrollView: NSScrollView, context: Context) {
         guard let textView = scrollView.documentView as? NSTextView else { return }
+        let isScrolledToBottom = scrollView.verticalScroller?.floatValue == 1.0
+        
         if textView.string != text {
             textView.string = text
             
@@ -110,13 +114,24 @@ struct CustomJavascriptEditor: NSViewRepresentable {
             // Update cursor position as text streams in
             let newPosition = textView.string.utf16.count
             textView.setSelectedRange(NSRange(location: newPosition, length: 0))
+            
+            if !isScrolledToBottom && !firstViewUpdate {
+                let range = NSRange(location: textView.string.utf16.count, length: 0)
+                textView.scrollRangeToVisible(range)
+            }
+            
+            if(firstViewUpdate) {
+                DispatchQueue.main.async {
+                    firstViewUpdate = false
+                }
+            }
         }
         
         textView.isEditable = self.isEditable
         
         let selectedRanges = textView.selectedRanges
         textView.typingAttributes = textViewAttributes
-
+        
         // handle default color and syntax highlighting
         textView.textStorage?.addAttribute(.foregroundColor, value: NSColor(named: "CodeDefaultColor")!, range: NSRange(location: 0, length: textView.string.utf16.count))
         
@@ -125,9 +140,11 @@ struct CustomJavascriptEditor: NSViewRepresentable {
         highlightSyntax(withPattern: functionNamePattern, color: NSColor(named: "CodeFnColor")!, inTextView: textView)
         highlightSyntax(withPattern: typesPattern, color: NSColor(named: "CodeTypesColor")!, inTextView: textView)
         highlightSyntax(withPattern: jsCommentPattern, color: NSColor(named: "CodeCommentColor")!, inTextView: textView)
-       
+        
         // restore the cursor position after changes to text have been made
         textView.setSelectedRanges(selectedRanges, affinity: .downstream, stillSelecting: false)
+        
+        
     }
     
     func highlightSyntax(withPattern pattern: String, color: NSColor, inTextView nsView: NSTextView, captureGroup: Int? = nil) {
@@ -148,7 +165,7 @@ struct CustomJavascriptEditor: NSViewRepresentable {
         }
     }
     
-
+    
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
@@ -168,7 +185,7 @@ struct CustomJavascriptEditor: NSViewRepresentable {
         }
         
         /* Smart Indent and Auto-Pairing of "'({[, courtesy of https://github.com/naoty/NTYSmartTextView/tree/master and GPT-4 */
-    
+        
         // Preserve indentation on new line
         func textView(_ textView: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
             if commandSelector == #selector(NSTextView.insertNewline(_:)) {
