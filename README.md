@@ -1,7 +1,7 @@
 <img src="media/hero.png" width="100%" max-width="600px"/>
 
 Kami is a tiny copilot for [Origami Studio](https://origami.design/) that helps create [JavaScript Patches](https://origami.design/documentation/concepts/scriptingapi) using [GPT-4](https://openai.com/gpt-4).  
-Select a JavaScript Patch, invoke the app's overlay usig the shortcut and describe the logic of your patch.
+Select a JavaScript Patch, invoke the app's overlay using the shortcut and describe the logic of your patch.
 
 _Kami is a native macOS menu bar app. You have to provide your [own OpenAI API Key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-api-key) to use the app. Your API key is stored locally on your machine._
 
@@ -31,7 +31,7 @@ The result is a tiny app that sits ‘on top' of Origami Studio. Think of it as 
 
 ### Experimental
 
-Consider this experimental software. While A main thing to figure out is how to improve the instruction prompt and resulting code/patch quality. If you run into any issues, open an Issue or reach out via [Mail](mailto:alex@alexwidua.com)/[Twitter](https://twitter.com/alexwidua).
+Consider this experimental software. One thing to figure out is how to further improve the app's prompt and improve the resulting code/patch quality. If you run into any issues, open an Issue or reach out via [Mail](mailto:alex@alexwidua.com)/[Twitter](https://twitter.com/alexwidua).
 
 ### Cost
 
