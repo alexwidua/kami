@@ -37,7 +37,7 @@ struct SettingsWindowView: View {
     
     @State private var selectedTab: SettingsTab = .general
     let generalTabSize: CGFloat = 624
-    let apiTabSize: CGFloat = 556
+    let apiTabSize: CGFloat = 656
     let aboutTabSize: CGFloat = 364
     
     var body: some View {

@@ -52,6 +52,7 @@ class AppWindow: NSWindow, NSWindowDelegate {
             let windowSize = NSSizeFromString(windowSizeString)
             self.setContentSize(windowSize)
         }
+      
         
         self.delegate = self
         self.url = url
@@ -203,6 +204,15 @@ class NotificationWindow: NSWindow, NSWindowDelegate {
 }
 
 /* Create Windows */
+func setupAppWindow(_ window: NSWindow) -> Void {
+    // prevent conflic with the app window's resize event which would prevent the window from becoming key
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.0) {
+        window.center()
+        window.makeKeyAndOrderFront(nil)
+        setWindowFrameOriginToCurrentScreen(window: window)
+    }
+}
+
 func setupWindow(_ window: NSWindow) -> Void {
     window.center()
     window.makeKeyAndOrderFront(nil)
@@ -230,7 +240,7 @@ func createAppWindow(url: URL) -> AppWindow {
         .frame(minHeight: 300, maxHeight: 2000)
     window.appearance = getAppearanceFromAppStorage()
     window.contentView = NSHostingView(rootView: contentView)
-    setupWindow(window)
+    setupAppWindow(window)
     return window
 }
 
