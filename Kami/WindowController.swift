@@ -206,7 +206,7 @@ class NotificationWindow: NSWindow, NSWindowDelegate {
 /* Create Windows */
 func setupAppWindow(_ window: NSWindow) -> Void {
     // prevent conflic with the app window's resize event which would prevent the window from becoming key
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.0) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
         window.center()
         window.makeKeyAndOrderFront(nil)
         setWindowFrameOriginToCurrentScreen(window: window)
