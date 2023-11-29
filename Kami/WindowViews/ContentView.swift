@@ -44,7 +44,7 @@ struct ContentView: View {
     @State private var showNotificationBanner: Bool = false
     @State private var notificationBannerMsg: String = ""
     @State private var isSavingFile = false
-    @State private var hasSavedFile = false
+    @State private var hasSavedFile = true
     @State private var animateCodeEditorLoadingState: Bool = false
     
     /* Computed */
@@ -317,8 +317,8 @@ struct ContentView: View {
                         .isEditable(!isLoadingResponse)
                         .frame(minHeight: 32)
                         .onChange(of: fileContent) { oldValue, newValue in
-                            if(oldValue != newValue) {
-                                hasSavedFile = false
+                            if(oldValue != newValue && !oldValue.isEmpty) {
+//                                hasSavedFile = false
                             }
                         }
                         .blur(radius: animateCodeEditorLoadingState ? 16 : 0)
