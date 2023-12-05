@@ -28,7 +28,7 @@ extension OpenAI {
         var errorMessage: String {
             switch self {
             case .invalidAuth:
-                return "Couldn't authenticte API Key or Organization ID. Did you set the correct Organization ID?" // Because we validate the API key in other places, we can assume that the user has set a wrong organization ID or that the problem is adjacent to that –– TODO: Validate Org ID in Settings
+                return "Couldn't authenticate API Key or Organization ID. Did you set the correct Organization ID?" // Because we validate the API key in other places, we can assume that the user has set a wrong organization ID or that the problem is adjacent to that –– TODO: Validate Org ID in Settings
             case .exceededQuota:
                 return "You exceeded your current OpenAI quota, please check your OpenAI plan and billing details."
             case .serverError:
@@ -120,7 +120,7 @@ extension OpenAI {
                 if let statusCode = statusCode, statusCode != 200 {
                     var errorMessage = "Unknown Error occurred."
                     if let errorCode = ChatCompletionErrorCode(rawValue: statusCode) {
-                        errorMessage = errorCode.errorMessage
+                        errorMessage = "(Error: \(statusCode)) \(errorCode.errorMessage)"
                         }
                     continuation.yield(.error(errorMessage))
                 }
