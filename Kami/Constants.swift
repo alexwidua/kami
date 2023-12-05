@@ -1,7 +1,7 @@
 import SwiftUI
 
 let APP_NAME = "Kami"
-let APP_VERSION = "1.0"
+let APP_VERSION = "1.0.1"
 let STORAGE_KEY_SUFFIX = "1" // !!! changing this resets the user's @AppStorage
 
 /* UI */
