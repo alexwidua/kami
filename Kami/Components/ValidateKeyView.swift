@@ -130,7 +130,7 @@ struct ValidateApiKeyView: View {
         
         Task {
             do {
-                let _ = try await api.completeChat(.init(messages: messages))
+                let _ = try await api.completeChat(.init(messages: messages, model: "gpt-3.5-turbo"))
                 print("Valid API Key")
                 validationState = .valid
                 apiKey = tempApiKey
