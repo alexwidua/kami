@@ -17,7 +17,7 @@ The result is a tiny app that sits ‘on top' of Origami Studio. Think of it as 
 
 ## Installation
 
-[Download the App](https://github.com/alexwidua/Kami/releases/download/Latest/Kami-1.0.zip) from the release page, unzip the archive and drag the app into your `Application` folder.
+[Download the App](https://github.com/alexwidua/Kami/releases/download/1.0.1/Kami-1.0.1.zip) from the release page, unzip the archive and drag the app into your `Application` folder.
 
 ## Usage
 
