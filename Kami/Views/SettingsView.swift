@@ -341,7 +341,6 @@ struct GeneralTabView: View {
                             maxHeight: .infinity
                         )
                         .background(colorScheme == .light ? .white.opacity(0.5) : .white.opacity(0.05))
-                        
                         ZStack{
                             if userHasGrantedAccessibilityPermission {
                                 VStack{
@@ -369,8 +368,12 @@ struct GeneralTabView: View {
                         )
                     }
                     .frame(height: 100)
-                    .background(colorScheme == .light ? .white.opacity(0.25) : .white.opacity(0.05))
-                    .cornerRadius(8.0)
+                    .clipShape(RoundedRectangle(cornerRadius: 8.0))
+                    .background {
+                        RoundedRectangle(cornerRadius: 8.0)
+                            .fill(colorScheme == .light ? .white.opacity(0.25) : .white.opacity(0.05))
+                            .stroke(.black.opacity(0.05), lineWidth: 1)
+                    }
                 }
             }
         }
