@@ -225,10 +225,9 @@ struct ContentView: View {
                                     }) {
                                         HStack {
                                             if isLoadingResponse {
-                                                // ProgressView()
-                                                // .controlSize(.small)
-                                                // Spacer().frame(width:8)
-                                                Text("Cancel")
+                                                Image(systemName: "stop.fill")
+                                                 Spacer().frame(width:4)
+                                                Text("Stop")
                                             }
                                             else {
                                                 Image(systemName: "return")
