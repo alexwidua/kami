@@ -36,7 +36,7 @@ struct SettingsWindowView: View {
     let windowRef: SettingsWindow?
     
     @State private var selectedTab: SettingsTab = .general
-    let generalTabSize: CGFloat = 624
+    let generalTabSize: CGFloat = 635
     let apiTabSize: CGFloat = 656
     let aboutTabSize: CGFloat = 364
     
@@ -324,6 +324,7 @@ struct GeneralTabView: View {
                             Text("\(APP_NAME) makes it possible to open a selected JavaScript Patch file via the keyboard shortcut. For this to work, the app requires the **Privacy & Security > Accessibility** permission in order to programmatically copy the JavaScript Patch to the clipboard.")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
                         Spacer()
                     }
