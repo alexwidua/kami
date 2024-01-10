@@ -171,11 +171,11 @@
 		22A7D5EE2ADFCA6500878F0B /* Kami */ = {
 			isa = PBXGroup;
 			children = (
+				22A7D5EF2ADFCA6500878F0B /* KamiApp.swift */,
 				224623102B15C7FC007C1F9C /* OpenAI */,
 				227CB6DC2B02169500D2F594 /* WindowController.swift */,
 				227CB6EB2B0D19F600D2F594 /* Views */,
 				227CB6EC2B0D1A1500D2F594 /* Components */,
-				22A7D5EF2ADFCA6500878F0B /* KamiApp.swift */,
 				227CB6E92B0CCAD100D2F594 /* Constants.swift */,
 				2251A1252B1144CB00513552 /* AppStorage.swift */,
 				227CB6D82AFE3B2800D2F594 /* AppState.swift */,
