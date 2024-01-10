@@ -209,14 +209,10 @@ struct ContentView: View {
                                         .disabled(inputDisabled)
                                         .textStyle(.sansLarge)
                                         .textColor(promptInputFgColor)
-                                        .padding(promptInputEdgeInset)
-                                        .onChange(of: promptInputText) { oldValue, newValue in
-                                            // intercept enter/line break and use as shortcut, bc regular shortuts do not work while text editor is focussed
-                                            if let lastChar = newValue.last, lastChar == "\n", oldValue != newValue {
-                                                promptInputText.removeLast()
-                                                handleCompletion()
-                                            }
+                                        .onEnterKeyPress {
+                                            handleCompletion()
                                         }
+                                        .padding(promptInputEdgeInset)
                                 }
                                 .padding(.horizontal, 0.0)
                                 .opacity(isLoadingResponse ? 0.25 : 1.0)

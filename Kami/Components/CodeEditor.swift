@@ -63,7 +63,7 @@ struct CustomJavascriptEditor: NSViewRepresentable {
     }
     
     func makeNSView(context: Context) -> NSScrollView {
-        let textView = CustomTextView()
+        let textView = TextViewWithCustomContextMenu()
         textView.isVerticallyResizable = true
         textView.autoresizingMask = [.width]
         textView.textContainer?.containerSize = NSSize(width: textView.bounds.width, height: CGFloat.infinity)
@@ -247,7 +247,7 @@ struct CustomJavascriptEditor: NSViewRepresentable {
     }
 }
 
-// add .modifiers
+// Add .modifiers
 extension CustomJavascriptEditor {
     func isEditable(_ bool: Bool) -> CustomJavascriptEditor {
         var view = self
@@ -256,6 +256,16 @@ extension CustomJavascriptEditor {
     }
 }
 
-
+// Custom TextView that...
+// • adds a custom context menu (to remove spellcheck etc.)
+class TextViewWithCustomContextMenu: NSTextView {
+    override func menu(for event: NSEvent) -> NSMenu? {
+        let menu = NSMenu()
+               menu.addItem(withTitle: "Cut", action: #selector(cut(_:)), keyEquivalent: "x")
+               menu.addItem(withTitle: "Copy", action: #selector(copy(_:)), keyEquivalent: "c")
+               menu.addItem(withTitle: "Paste", action: #selector(paste(_:)), keyEquivalent: "v")
+               return menu
+    }
+}
 
 

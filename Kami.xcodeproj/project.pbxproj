@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		221750E72B14FD8900693B0E /* CustomTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221750E62B14FD8900693B0E /* CustomTextView.swift */; };
 		224623122B15C85D007C1F9C /* OpenAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224623112B15C85D007C1F9C /* OpenAI.swift */; };
 		224623142B15C879007C1F9C /* OpenAI+StreamCompletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224623132B15C879007C1F9C /* OpenAI+StreamCompletion.swift */; };
 		224623172B15C89C007C1F9C /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224623162B15C89C007C1F9C /* Event.swift */; };
@@ -44,7 +43,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		221750E62B14FD8900693B0E /* CustomTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextView.swift; sourceTree = "<group>"; };
 		224623112B15C85D007C1F9C /* OpenAI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAI.swift; sourceTree = "<group>"; };
 		224623132B15C879007C1F9C /* OpenAI+StreamCompletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OpenAI+StreamCompletion.swift"; sourceTree = "<group>"; };
 		224623162B15C89C007C1F9C /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
@@ -143,10 +141,9 @@
 				2251A1192B10AD3300513552 /* NotificationBanner.swift */,
 				226E59E82AEBC40C005FCD6D /* ValidateKey.swift */,
 				226A6AAB2AE927DB00110798 /* OpenWithMenu.swift */,
+				226A6AAF2AEBA65100110798 /* TextEditor.swift */,
 				226E59ED2AED0F82005FCD6D /* CodeEditor.swift */,
 				227CB6E72B0CAE6C00D2F594 /* LineNumber.swift */,
-				226A6AAF2AEBA65100110798 /* TextEditor.swift */,
-				221750E62B14FD8900693B0E /* CustomTextView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -280,7 +277,6 @@
 				227CB6DD2B02169500D2F594 /* WindowController.swift in Sources */,
 				227CB6E82B0CAE6C00D2F594 /* LineNumber.swift in Sources */,
 				2246231B2B15C8C8007C1F9C /* EventStreamParser.swift in Sources */,
-				221750E72B14FD8900693B0E /* CustomTextView.swift in Sources */,
 				226A6AAC2AE927DB00110798 /* OpenWithMenu.swift in Sources */,
 				226E59F22AEE8700005FCD6D /* ButtonStyle.swift in Sources */,
 				2251A1142B100AA100513552 /* LoadingView.swift in Sources */,
