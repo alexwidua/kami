@@ -49,6 +49,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             if(!hasRequiredPermission) {
                 createAccessibilityRequestWindow()
                 NSApp.activate(ignoringOtherApps: true)
+                isParsingPasteboardFile = false
                 return
             }
             
