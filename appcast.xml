@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>Kami</title>
+        <item>
+            <title>1.1.0</title>
+            <pubDate>Thu, 11 Jan 2024 11:55:27 +0100</pubDate>
+            <sparkle:version>3</sparkle:version>
+            <sparkle:shortVersionString>1.1.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/alexwidua/Kami/releases/download/1.1.0/Kami.dmg" length="2457312" type="application/octet-stream" sparkle:edSignature="7ksVBOZ7YMC4snu5Ub+WzgQuKkK6n8hkKC8fGTkTzMCLzxu8hWjfD0N9sxqAM6e9SnVQsejo9W3/Swzb25vNCA=="/>
+        </item>
+    </channel>
+</rss>
