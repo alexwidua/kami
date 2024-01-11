@@ -507,7 +507,7 @@ struct ContentView: View {
     }
     
     func handleOpenSettingsWindow() {
-        let _ = createSettingsWindow()
+        createSettingsWindow()
     }
     
     private func readFileContent() {

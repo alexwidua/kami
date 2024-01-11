@@ -253,6 +253,7 @@ func createSettingsWindow() -> Void {
         window.contentView = NSHostingView(rootView: contentView)
         setupWindow(window)
         settingsWindow = window
+        window.center()
     }
     else {
         settingsWindow!.makeKeyAndOrderFront(nil)
