@@ -8,6 +8,8 @@ import SwiftUI
 }
 
 struct ContentView: View {
+    @StateObject private var updaterViewModel = UpdaterViewModel()
+    
     @Environment(\.controlActiveState) var controlActiveState
     @Environment(\.colorScheme) var colorScheme
     @StateObject var appState = AppState.shared
@@ -332,13 +334,17 @@ struct ContentView: View {
             //  └──────────────────┘
             //
             //  Bottom Toolbar with [􀍢 Settings], [Open with...] and [Save] button.
-            //  Right-clicking the toolbar invokes a context menu to show/hide certain information
+            //  Right-clicking the toolbar invokes a context menu
             //
             HStack(alignment: .center, spacing: 0.0) {
                 Menu {
+                    Button("Check for Updates...") {
+                        updaterViewModel.checkForUpdates()
+                    }
                     Button("Settings...") {
                         handleOpenSettingsWindow()
                     }
+                    Divider()
                     Button("Quit") {
                         handleQuitApp()
                     }

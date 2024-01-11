@@ -40,6 +40,7 @@
 		22A7D5F62ADFCA6600878F0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22A7D5F52ADFCA6600878F0B /* Assets.xcassets */; };
 		22A7D5F92ADFCA6600878F0B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22A7D5F82ADFCA6600878F0B /* Preview Assets.xcassets */; };
 		22ADB3CC2B4FE6660097C55C /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 22ADB3CB2B4FE6660097C55C /* Sparkle */; };
+		22ADB3D02B4FF1C00097C55C /* Updater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22ADB3CF2B4FF1C00097C55C /* Updater.swift */; };
 		22F573C12B177C3800EF8305 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 22F573C02B177C3800EF8305 /* KeyboardShortcuts */; };
 /* End PBXBuildFile section */
 
@@ -78,6 +79,7 @@
 		22A7D5F82ADFCA6600878F0B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		22A7D5FA2ADFCA6600878F0B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		22A7D5FB2ADFCA6600878F0B /* Kami.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Kami.entitlements; sourceTree = "<group>"; };
+		22ADB3CF2B4FF1C00097C55C /* Updater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Updater.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +178,7 @@
 				227CB6EB2B0D19F600D2F594 /* Views */,
 				227CB6EC2B0D1A1500D2F594 /* Components */,
 				227CB6E92B0CCAD100D2F594 /* Constants.swift */,
+				22ADB3CF2B4FF1C00097C55C /* Updater.swift */,
 				2251A1252B1144CB00513552 /* AppStorage.swift */,
 				227CB6D82AFE3B2800D2F594 /* AppState.swift */,
 				227CB6E32B037ECD00D2F594 /* PasteboardHandler.swift */,
@@ -283,6 +286,7 @@
 				2246231B2B15C8C8007C1F9C /* EventStreamParser.swift in Sources */,
 				226A6AAC2AE927DB00110798 /* OpenWithMenu.swift in Sources */,
 				226E59F22AEE8700005FCD6D /* ButtonStyle.swift in Sources */,
+				22ADB3D02B4FF1C00097C55C /* Updater.swift in Sources */,
 				2251A1142B100AA100513552 /* LoadingView.swift in Sources */,
 				2251A11A2B10AD3300513552 /* NotificationBanner.swift in Sources */,
 				224623192B15C8AF007C1F9C /* EventSource.swift in Sources */,

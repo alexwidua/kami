@@ -18,8 +18,9 @@ struct KamiApp: App {
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
-    private let updaterController: SPUStandardUpdaterController
+//    private let updaterController: SPUStandardUpdaterController
     @ObservedObject var appState = AppState.shared
+    private let updaterViewModel = UpdaterViewModel()
 
     var statusBarItem: NSStatusItem!
     var keyUpEventMonitor: Any?
@@ -27,9 +28,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     var isParsingPasteboardFile: Bool = false
     
     override init() {
-        /* Sparkle Updater */
-        updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
-        
         super.init()
         /* Observe app focus changes. We do this to check if Origami is the active app and either enable/disable the app's shortcuts. If we don't do this, the shortcuts are blocked across other apps. */
         NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(handleKeyAppChanged), name: NSWorkspace.didActivateApplicationNotification, object: nil)
@@ -170,7 +168,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     }
     
     @objc func checkForUpdates() -> Void {
-        updaterController.checkForUpdates(nil)
+//        updaterController.checkForUpdates(nil)
+        updaterViewModel.checkForUpdates()
     }
 
     func openAppWindow(with url: URL) -> Void {
