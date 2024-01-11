@@ -283,7 +283,6 @@ struct GeneralTabView: View {
                     Spacer()
                     Text("Auto-Launch")
                         .font(.headline)
-                    
                 }
                 .frame(width: SETTINGS_LABEL_WIDTH)
                 VStack(alignment: .leading) {
@@ -628,7 +627,7 @@ struct AboutTabView: View {
                     }
                     Spacer()
                     VStack(alignment: .leading, spacing: 2.0) {
-                        Text("\(APP_VERSION)")
+                        Text("\(Bundle.main.appVersion)")
                             .font(.system(size: 14, weight: .light))
                             .foregroundColor(.primary.opacity(0.5))
                         Spacer().frame(height: 8)
