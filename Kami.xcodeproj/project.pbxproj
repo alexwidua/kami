@@ -39,6 +39,7 @@
 		22A7D5F42ADFCA6500878F0B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A7D5F32ADFCA6500878F0B /* ContentView.swift */; };
 		22A7D5F62ADFCA6600878F0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22A7D5F52ADFCA6600878F0B /* Assets.xcassets */; };
 		22A7D5F92ADFCA6600878F0B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22A7D5F82ADFCA6600878F0B /* Preview Assets.xcassets */; };
+		22ADB3CC2B4FE6660097C55C /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 22ADB3CB2B4FE6660097C55C /* Sparkle */; };
 		22F573C12B177C3800EF8305 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 22F573C02B177C3800EF8305 /* KeyboardShortcuts */; };
 /* End PBXBuildFile section */
 
@@ -85,6 +86,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				227CB6EE2B0E1A4300D2F594 /* Metal.framework in Frameworks */,
+				22ADB3CC2B4FE6660097C55C /* Sparkle in Frameworks */,
 				227CB6E22B0226C400D2F594 /* KeyboardShortcuts in Frameworks */,
 				22F573C12B177C3800EF8305 /* KeyboardShortcuts in Frameworks */,
 			);
@@ -216,6 +218,7 @@
 			packageProductDependencies = (
 				227CB6E12B0226C400D2F594 /* KeyboardShortcuts */,
 				22F573C02B177C3800EF8305 /* KeyboardShortcuts */,
+				22ADB3CB2B4FE6660097C55C /* Sparkle */,
 			);
 			productName = JavascriptEditor;
 			productReference = 22A7D5EC2ADFCA6500878F0B /* Kami.app */;
@@ -247,6 +250,7 @@
 			mainGroup = 22A7D5E32ADFCA6500878F0B;
 			packageReferences = (
 				227CB6E02B0226C400D2F594 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
+				22ADB3CA2B4FE6660097C55C /* XCRemoteSwiftPackageReference "Sparkle" */,
 			);
 			productRefGroup = 22A7D5ED2ADFCA6500878F0B /* Products */;
 			projectDirPath = "";
@@ -524,6 +528,14 @@
 				minimumVersion = 1.15.0;
 			};
 		};
+		22ADB3CA2B4FE6660097C55C /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -531,6 +543,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 227CB6E02B0226C400D2F594 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
 			productName = KeyboardShortcuts;
+		};
+		22ADB3CB2B4FE6660097C55C /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 22ADB3CA2B4FE6660097C55C /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
 		};
 		22F573C02B177C3800EF8305 /* KeyboardShortcuts */ = {
 			isa = XCSwiftPackageProductDependency;
