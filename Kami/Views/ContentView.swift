@@ -8,6 +8,8 @@ import SwiftUI
 }
 
 struct ContentView: View {
+    @StateObject private var updaterViewModel = UpdaterViewModel()
+    
     @Environment(\.controlActiveState) var controlActiveState
     @Environment(\.colorScheme) var colorScheme
     @StateObject var appState = AppState.shared
@@ -209,14 +211,10 @@ struct ContentView: View {
                                         .disabled(inputDisabled)
                                         .textStyle(.sansLarge)
                                         .textColor(promptInputFgColor)
-                                        .padding(promptInputEdgeInset)
-                                        .onChange(of: promptInputText) { oldValue, newValue in
-                                            // intercept enter/line break and use as shortcut, bc regular shortuts do not work while text editor is focussed
-                                            if let lastChar = newValue.last, lastChar == "\n", oldValue != newValue {
-                                                promptInputText.removeLast()
-                                                handleCompletion()
-                                            }
+                                        .onEnterKeyPress {
+                                            handleCompletion()
                                         }
+                                        .padding(promptInputEdgeInset)
                                 }
                                 .padding(.horizontal, 0.0)
                                 .opacity(isLoadingResponse ? 0.25 : 1.0)
@@ -229,10 +227,9 @@ struct ContentView: View {
                                     }) {
                                         HStack {
                                             if isLoadingResponse {
-                                                // ProgressView()
-                                                // .controlSize(.small)
-                                                // Spacer().frame(width:8)
-                                                Text("Cancel")
+                                                Image(systemName: "stop.fill")
+                                                 Spacer().frame(width:4)
+                                                Text("Stop")
                                             }
                                             else {
                                                 Image(systemName: "return")
@@ -337,13 +334,17 @@ struct ContentView: View {
             //  └──────────────────┘
             //
             //  Bottom Toolbar with [􀍢 Settings], [Open with...] and [Save] button.
-            //  Right-clicking the toolbar invokes a context menu to show/hide certain information
+            //  Right-clicking the toolbar invokes a context menu
             //
             HStack(alignment: .center, spacing: 0.0) {
                 Menu {
+                    Button("Check for Updates...") {
+                        updaterViewModel.checkForUpdates()
+                    }
                     Button("Settings...") {
                         handleOpenSettingsWindow()
                     }
+                    Divider()
                     Button("Quit") {
                         handleQuitApp()
                     }
@@ -506,7 +507,7 @@ struct ContentView: View {
     }
     
     func handleOpenSettingsWindow() {
-        let _ = createSettingsWindow()
+        createSettingsWindow()
     }
     
     private func readFileContent() {

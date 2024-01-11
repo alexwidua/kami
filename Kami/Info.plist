@@ -21,6 +21,14 @@
 	</array>
 	<key>CFBundleGetInfoString</key>
 	<string></string>
+	<key>SUEnableDownloaderService</key>
+	<true/>
+	<key>SUEnableInstallerLauncherService</key>
+	<true/>
+	<key>SUFeedURL</key>
+	<string>https://alexwidua.github.io./Kami/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>muUypYXw8ylBVK0A32N7lX1N/z99PngZ3LKzQcDodAM=</string>
 	<key>UTImportedTypeDeclarations</key>
 	<array>
 		<dict>

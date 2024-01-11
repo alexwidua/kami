@@ -11,6 +11,7 @@ enum TextStyle {
 
 struct CustomTextEditor: NSViewRepresentable {
     @Binding var text: String
+    var onEnterKeyPressed: (() -> Void)?
     
     var disabled: Bool = false
     var textStyle: TextStyle = .sansLarge
@@ -41,7 +42,7 @@ struct CustomTextEditor: NSViewRepresentable {
     }
     
     func makeNSView(context: Context) -> NSScrollView {
-        let textView = CustomTextView()
+        let textView = TextViewWithCustomCtxMenuAndEnterKeyHandler()
         
         textView.isHorizontallyResizable = false
         textView.isVerticallyResizable = true
@@ -83,8 +84,12 @@ struct CustomTextEditor: NSViewRepresentable {
         scrollView.drawsBackground = false
         
         scrollView.automaticallyAdjustsContentInsets = false
-        
+
         textView.delegate = context.coordinator
+        
+        textView.onEnterKeyPress = {
+            self.onEnterKeyPressed?()
+           }
         
         return scrollView
     }
@@ -133,7 +138,7 @@ struct CustomTextEditor: NSViewRepresentable {
     }
 }
 
-// add .modifiers 
+// Add .modifiers 
 extension CustomTextEditor {
     func disabled(_ bool: Bool) -> CustomTextEditor {
         var view = self
@@ -150,5 +155,37 @@ extension CustomTextEditor {
         view.textColor = color
         return view
     }
+    func onEnterKeyPress(_ action: @escaping () -> Void) -> CustomTextEditor {
+          var newEditor = self
+          newEditor.onEnterKeyPressed = action
+          return newEditor
+      }
 }
 
+// Custom TextView that...
+// • adds a custom context menu (to remove spellcheck etc.)
+// • adds a enter key evt handler so e.g. send the prompt on enter
+class TextViewWithCustomCtxMenuAndEnterKeyHandler: NSTextView {
+    var onEnterKeyPress: (() -> Void)?
+    
+    override func menu(for event: NSEvent) -> NSMenu? {
+        let menu = NSMenu()
+               menu.addItem(withTitle: "Cut", action: #selector(cut(_:)), keyEquivalent: "x")
+               menu.addItem(withTitle: "Copy", action: #selector(copy(_:)), keyEquivalent: "c")
+               menu.addItem(withTitle: "Paste", action: #selector(paste(_:)), keyEquivalent: "v")
+               return menu
+    }
+
+    override func keyDown(with event: NSEvent) {
+        // insert line break if shift + enter is pressed
+        if event.keyCode == 36 {
+            if event.modifierFlags.contains(.shift) {
+                self.insertText("\n", replacementRange: self.selectedRange())
+            } else {
+                onEnterKeyPress?()
+            }
+        } else {
+            super.keyDown(with: event)
+        }
+    }
+}

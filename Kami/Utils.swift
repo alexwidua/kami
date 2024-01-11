@@ -44,6 +44,35 @@ func setWindowFrameOriginToCurrentScreen(window: NSWindow) -> Void {
     }
 }
 
+/* Set Window origin to cursor position to approx. spawn window at patch position */
+func setWindowFrameOriginToMousePosition(window: NSWindow) -> Void {
+    let mouseLocation = NSEvent.mouseLocation
+        if let screen = NSScreen.screens.first(where: { $0.frame.contains(mouseLocation) }) {
+            var newOriginX = mouseLocation.x
+            var newOriginY = mouseLocation.y
+
+            // Adjust X position to ensure the window is within the screen bounds
+            if newOriginX + window.frame.width > screen.frame.maxX {
+                newOriginX = screen.frame.maxX - window.frame.width
+            }
+            if newOriginX < screen.frame.minX {
+                newOriginX = screen.frame.minX
+            }
+
+            // move window center-center to cursor position (if possible)
+            newOriginY -= window.frame.height/2
+            newOriginX -= window.frame.width/2
+            if newOriginY + window.frame.height > screen.frame.maxY {
+                newOriginY = screen.frame.maxY - window.frame.height
+            }
+            if newOriginY < screen.frame.minY {
+                newOriginY = screen.frame.minY
+            }
+
+            window.setFrameOrigin(NSPoint(x: newOriginX, y: newOriginY))
+        }
+}
+
 /* Accessibility Permission Stuff */
 func checkIfUserHasGrantedAccessibilityPermission() -> Bool {
     let openSystemPrompt = kAXTrustedCheckOptionPrompt.takeUnretainedValue() as NSString

@@ -36,7 +36,7 @@ struct SettingsWindowView: View {
     let windowRef: SettingsWindow?
     
     @State private var selectedTab: SettingsTab = .general
-    let generalTabSize: CGFloat = 624
+    let generalTabSize: CGFloat = 635
     let apiTabSize: CGFloat = 656
     let aboutTabSize: CGFloat = 364
     
@@ -283,7 +283,6 @@ struct GeneralTabView: View {
                     Spacer()
                     Text("Auto-Launch")
                         .font(.headline)
-                    
                 }
                 .frame(width: SETTINGS_LABEL_WIDTH)
                 VStack(alignment: .leading) {
@@ -324,6 +323,7 @@ struct GeneralTabView: View {
                             Text("\(APP_NAME) makes it possible to open a selected JavaScript Patch file via the keyboard shortcut. For this to work, the app requires the **Privacy & Security > Accessibility** permission in order to programmatically copy the JavaScript Patch to the clipboard.")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
                         Spacer()
                     }
@@ -341,7 +341,6 @@ struct GeneralTabView: View {
                             maxHeight: .infinity
                         )
                         .background(colorScheme == .light ? .white.opacity(0.5) : .white.opacity(0.05))
-                        
                         ZStack{
                             if userHasGrantedAccessibilityPermission {
                                 VStack{
@@ -369,8 +368,12 @@ struct GeneralTabView: View {
                         )
                     }
                     .frame(height: 100)
-                    .background(colorScheme == .light ? .white.opacity(0.25) : .white.opacity(0.05))
-                    .cornerRadius(8.0)
+                    .clipShape(RoundedRectangle(cornerRadius: 8.0))
+                    .background {
+                        RoundedRectangle(cornerRadius: 8.0)
+                            .fill(colorScheme == .light ? .white.opacity(0.25) : .white.opacity(0.05))
+                            .stroke(.black.opacity(0.05), lineWidth: 1)
+                    }
                 }
             }
         }
@@ -624,7 +627,7 @@ struct AboutTabView: View {
                     }
                     Spacer()
                     VStack(alignment: .leading, spacing: 2.0) {
-                        Text("\(APP_VERSION)")
+                        Text("\(Bundle.main.appVersion)")
                             .font(.system(size: 14, weight: .light))
                             .foregroundColor(.primary.opacity(0.5))
                         Spacer().frame(height: 8)
@@ -639,14 +642,12 @@ struct AboutTabView: View {
                 .frame(maxWidth: 300)
                 HStack {
                     Button("View Project on GitHub") {
-                        // TODO: Insert URL
                         if let url = URL(string: URL_GITHUB) {
                             NSWorkspace.shared.open(url)
                         }
                     }
                     .buttonStyle(CustomButtonStyle(buttonType: .primary, py: 2.0, px: 8.0))
                     Button("Origami Community") {
-                        // TODO: Insert URL
                         if let url = URL(string: URL_ORIGAMI_COMMUNITY) {
                             NSWorkspace.shared.open(url)
                         }

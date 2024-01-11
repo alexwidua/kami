@@ -44,4 +44,9 @@ extension Notification.Name {
     static let appearanceChangedFromSettings = Notification.Name("appearanceChanged")
 }
 
-
+extension Bundle {
+    var appVersion: String {
+        return (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String)!
+    }
+    
+}

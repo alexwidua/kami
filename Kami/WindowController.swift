@@ -205,11 +205,12 @@ class NotificationWindow: NSWindow, NSWindowDelegate {
 
 /* Create Windows */
 func setupAppWindow(_ window: NSWindow) -> Void {
-    // prevent conflic with the app window's resize event which would prevent the window from becoming key
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+    // prevent conflict with the app window's resize event which would prevent the window from becoming key
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
         window.center()
         window.makeKeyAndOrderFront(nil)
-        setWindowFrameOriginToCurrentScreen(window: window)
+//        setWindowFrameOriginToCurrentScreen(window: window)
+        setWindowFrameOriginToMousePosition(window: window)
     }
 }
 
@@ -252,6 +253,7 @@ func createSettingsWindow() -> Void {
         window.contentView = NSHostingView(rootView: contentView)
         setupWindow(window)
         settingsWindow = window
+        window.center()
     }
     else {
         settingsWindow!.makeKeyAndOrderFront(nil)

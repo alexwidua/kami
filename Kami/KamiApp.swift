@@ -3,6 +3,7 @@
 //
 import SwiftUI
 import KeyboardShortcuts
+import Sparkle
 
 @main
 struct KamiApp: App {
@@ -17,10 +18,12 @@ struct KamiApp: App {
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
+//    private let updaterController: SPUStandardUpdaterController
     @ObservedObject var appState = AppState.shared
+    private let updaterViewModel = UpdaterViewModel()
+
     var statusBarItem: NSStatusItem!
     var keyUpEventMonitor: Any?
-    
     var launchedBecauseOpenFile: Bool = false
     var isParsingPasteboardFile: Bool = false
     
@@ -141,6 +144,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     @objc func handleStatusBarItemAction(_ sender: AnyObject?) {
         if let button = self.statusBarItem.button {
             
+            let updaterItem = NSMenuItem()
+            updaterItem.title = "Check for Updates..."
+            updaterItem.action = #selector(checkForUpdates)
+            
             let settingsItem = NSMenuItem()
             settingsItem.title = "Settings..."
             settingsItem.action = #selector(openSettingsWindow)
@@ -150,13 +157,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             quitItem.action = #selector(terminateApp)
             
             let menu = NSMenu()
+            menu.addItem(updaterItem)
             menu.addItem(settingsItem)
             menu.addItem(.separator())
             menu.addItem(quitItem)
             
             button.menu = menu
-            button.menu?.popUp(positioning: nil, at: CGPoint(x: 0, y: button.bounds.maxY + 8.0), in: button)
+            button.menu?.popUp(positioning: nil, at: CGPoint(x: 0, y: button.bounds.maxY + 10.0), in: button)
         }
+    }
+    
+    @objc func checkForUpdates() -> Void {
+//        updaterController.checkForUpdates(nil)
+        updaterViewModel.checkForUpdates()
     }
 
     func openAppWindow(with url: URL) -> Void {
@@ -176,7 +189,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             NSApp.activate(ignoringOtherApps: true)
         }
     }
-
     
     /* Disable global keyboard shortcuts if Origami isn't key */
     @objc func handleKeyAppChanged(notification: NSNotification) {
