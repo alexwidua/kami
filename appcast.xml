@@ -3,6 +3,14 @@
     <channel>
         <title>Kami</title>
         <item>
+            <title>1.1.1</title>
+            <pubDate>Thu, 11 Jan 2024 13:12:45 +0100</pubDate>
+            <sparkle:version>4</sparkle:version>
+            <sparkle:shortVersionString>1.1.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/alexwidua/Kami/releases/download/1.1.1/Kami.dmg" length="2457884" type="application/octet-stream" sparkle:edSignature="140nXrTF4/Zlixsbt7G54z/HY6QXlKHEzThtdHKKGEzFHyYovOd3AkTAl9HPgq9iEtBztA2lHgzfVP4IxejFBg=="/>
+        </item>
+        <item>
             <title>1.1.0</title>
             <pubDate>Thu, 11 Jan 2024 11:55:27 +0100</pubDate>
             <sparkle:version>3</sparkle:version>
