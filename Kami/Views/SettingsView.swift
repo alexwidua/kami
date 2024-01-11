@@ -36,7 +36,7 @@ struct SettingsWindowView: View {
     let windowRef: SettingsWindow?
     
     @State private var selectedTab: SettingsTab = .general
-    let generalTabSize: CGFloat = 635
+    let generalTabSize: CGFloat = 648
     let apiTabSize: CGFloat = 656
     let aboutTabSize: CGFloat = 364
     
@@ -264,11 +264,13 @@ struct GeneralTabView: View {
                             Text("Transient window disappears when clicked outside of it. Can be pinned by clicking the Pin icon or dragging the window.")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
                         else {
                             Text("Traditional window with traffic lights that has to be manually closed. \n")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
                         Spacer()
                     }

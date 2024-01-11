@@ -201,7 +201,7 @@ struct ContentView: View {
                             HStack(alignment: .top) {
                                 ZStack {
                                     if promptInputText.isEmpty {
-                                        CustomTextEditor(text:.constant("Prompt..."))
+                                        CustomTextEditor(text:.constant(""))
                                             .disabled(true)
                                             .textStyle(.sansLarge)
                                             .textColor(promptInputFgColor)
