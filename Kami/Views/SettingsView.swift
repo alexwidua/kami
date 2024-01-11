@@ -642,14 +642,12 @@ struct AboutTabView: View {
                 .frame(maxWidth: 300)
                 HStack {
                     Button("View Project on GitHub") {
-                        // TODO: Insert URL
                         if let url = URL(string: URL_GITHUB) {
                             NSWorkspace.shared.open(url)
                         }
                     }
                     .buttonStyle(CustomButtonStyle(buttonType: .primary, py: 2.0, px: 8.0))
                     Button("Origami Community") {
-                        // TODO: Insert URL
                         if let url = URL(string: URL_ORIGAMI_COMMUNITY) {
                             NSWorkspace.shared.open(url)
                         }
