@@ -219,8 +219,9 @@ struct ContentView: View {
                                 .padding(.horizontal, 0.0)
                                 .opacity(isLoadingResponse ? 0.25 : 1.0)
                                 
-                                /* Submit Prompt Button */
-                                ZStack {
+                                /* Send/Stop Button */
+                                HStack {
+                                    Spacer()
                                     Button(action: {
                                         if(isLoadingResponse) {  handleCancelCurrentCompletionTask() }
                                         else { handleCompletion() }
@@ -228,11 +229,13 @@ struct ContentView: View {
                                         HStack {
                                             if isLoadingResponse {
                                                 Image(systemName: "stop.fill")
-                                                 Spacer().frame(width:4)
+                                                    .frame(height: 16)
+                                                Spacer().frame(width:4)
                                                 Text("Stop")
                                             }
                                             else {
                                                 Image(systemName: "return")
+                                                    .frame(height: 16)
                                             }
                                         }
                                     }
@@ -241,6 +244,8 @@ struct ContentView: View {
                                 }
                                 .padding(.horizontal, 8.0)
                                 .padding(.vertical, promptSubmitBtnYPadding)
+                                .frame(width: 90)
+                                
                             }
                             Spacer()
                             if(isLoadingResponse) {
