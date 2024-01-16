@@ -156,7 +156,7 @@ struct GeneralTabView: View {
                         try SMAppService.mainApp.unregister()
                     }
                 } catch {
-                    print("Failed to \(newValue ? "enable" : "disable") launch at login: \(error.localizedDescription)")
+                    print("Failed to \(newValue ? "enable" : "disable") launch at system startup: \(error.localizedDescription)")
                 }
             }
         )
@@ -261,13 +261,13 @@ struct GeneralTabView: View {
                     }
                     HStack {
                         if(isPinnable) {
-                            Text("Transient window disappears when clicked outside of it. Can be pinned by clicking the Pin icon or dragging the window.")
+                            Text("Window that disappears when clicked outside of it. Can be pinned by clicking the Pin icon or dragging the window around.")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                         else {
-                            Text("Traditional window with traffic lights that has to be manually closed. \n")
+                            Text("Conventional window with traffic lights that stays open and has to be manually closed.")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                                 .fixedSize(horizontal: false, vertical: true)
@@ -289,7 +289,7 @@ struct GeneralTabView: View {
                 .frame(width: SETTINGS_LABEL_WIDTH)
                 VStack(alignment: .leading) {
                     Toggle(isOn: startupIsChecked) {
-                        Text("Launch app on startup")
+                        Text("Launch app on system startup")
                     }
                 }
                 Spacer()
@@ -322,7 +322,7 @@ struct GeneralTabView: View {
                         VStack(alignment: .leading, spacing: 12) {
                             Text("Open JavaScript Patch via Shortcut")
                                 .bold()
-                            Text("\(APP_NAME) makes it possible to open a selected JavaScript Patch file via the keyboard shortcut. For this to work, the app requires the **Privacy & Security > Accessibility** permission in order to programmatically copy the JavaScript Patch to the clipboard.")
+                            Text("\(APP_NAME) makes it possible to open a selected JavaScript Patch via a keyboard shortcut. For this to work, the app requires the **Privacy & Security > Accessibility** permission in order read the JavaScript Patch data from the clipboard.")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                                 .fixedSize(horizontal: false, vertical: true)
@@ -451,7 +451,7 @@ struct ApiTabView: View {
     var instructionSubtitleText: AttributedString {
         let url = "https://origami.design/documentation/concepts/scriptingapi"
         let urlText = "Origami JavaScript Patch API documentation"
-        var result = AttributedString("System instruction sent along with the prompt. The default instruction is a truncated version of the \(urlText).\n\nAny Markdown syntax (Backticks) is automatically stripped from the response.")
+        var result = AttributedString("System instruction sent along with the prompt. The default instruction is a truncated version of the \(urlText).\n\nAny Markdown syntax (Code Block Backticks) is automatically stripped from the response.")
         let linkRange = result.range(of: urlText)!
         result[linkRange].link = URL(string: url)
         result[linkRange].underlineStyle = Text.LineStyle(pattern: .solid)
