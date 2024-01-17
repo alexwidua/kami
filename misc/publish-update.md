@@ -14,5 +14,5 @@ Starting with `1.1.0`, the app uses [Sparkle](https://sparkle-project.org/) to r
 7. Inside the `/artifacts/sparkle/Sparkle/` folder, run the `generate_appcast` script: `./bin/generate_appcast /path/to/folder/created/in/step/5/`
 8. Open the newly created/updated `appcast.xml` file and update the `<enclosure url="https://alexwidua.github.io./Kami/Kami.dmg" .../>` and point it to `https://github.com/alexwidua/Kami/releases/latest/download/Kami.dmg`
 9. Commit the newly updated `appcast.xml` to the root of this repository (where the previous existing appcast file should be located)
-10. Create a new GitHub release with the `.dmg` file generated in Step 4 (Make sure that the file is called `Kami.dmg`)
+10. Create a new GitHub release with the **signed** `.dmg` located inside the folder from Step 5 (Make sure that the file in the release is called `Kami.dmg` so that the appcast file points to the right URL)
 11. The new update should show up in the Kami app. It might take a few minutes for GitHub pages to refresh the `appcast.xml` file (you can check that at `https://alexwidua.github.io./Kami/appcast.xml`)
