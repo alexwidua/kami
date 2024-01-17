@@ -8,7 +8,7 @@
             <sparkle:version>5</sparkle:version>
             <sparkle:shortVersionString>1.1.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-            <enclosure url="hhttps://github.com/alexwidua/Kami/releases/latest/download/Kami.dmg" length="2457202" type="application/octet-stream" sparkle:edSignature="45Lhdz7Way2JC4FtHFHBF6Z5zVU2dqUeqg5A5p7U3CSpDUmDCBUdihX7neq4JFeoUli4/lnv+wBv08x2t7XFCg=="/>
+            <enclosure url="https://github.com/alexwidua/Kami/releases/latest/download/Kami.dmg" length="2457202" type="application/octet-stream" sparkle:edSignature="45Lhdz7Way2JC4FtHFHBF6Z5zVU2dqUeqg5A5p7U3CSpDUmDCBUdihX7neq4JFeoUli4/lnv+wBv08x2t7XFCg=="/>
         </item>
         <item>
             <title>1.1.1</title>
