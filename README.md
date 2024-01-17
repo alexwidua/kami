@@ -5,7 +5,7 @@ Select a JavaScript Patch, invoke the app's overlay using the shortcut and descr
 
 _Kami is a native macOS menu bar app. You have to provide your [own OpenAI API Key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-api-key) to use the app. Your API key is stored locally on your machine._
 
-<img src="media/demo.gif" width="100%" max-width="600px"/>
+<video src='media/video.mp4' width='600'/>
 
 ## Background
 
@@ -17,7 +17,7 @@ The result is a tiny app that sits ‘on top' of Origami Studio. Think of it as 
 
 ## Installation
 
-[Download the App](https://github.com/alexwidua/Kami/releases/download/1.0.1/Kami-1.0.1.zip) from the release page, unzip the archive and drag the app into your `Application` folder.
+[Download the App](https://github.com/alexwidua/Kami/releases/latest/download/Kami.dmg) from the release page.
 
 ## Usage
 
