@@ -237,8 +237,8 @@ func createSplashWindow() -> Void {
 func createAppWindow(url: URL) -> AppWindow {
     let window = AppWindow(contentRect: NSRect(x: 0, y: 0, width: 0, height: 0), backing: .buffered, defer: false, url: url)
     let contentView = ContentView(window: window, url: url)
-        .frame(minWidth: 500)
-        .frame(minHeight: 300, maxHeight: 2000)
+        .frame(minWidth: 500, idealWidth: 500, maxWidth: 1000)
+        .frame(minHeight: 300, idealHeight: 300, maxHeight: 800)
     window.appearance = getAppearanceFromAppStorage()
     window.contentView = NSHostingView(rootView: contentView)
     setupAppWindow(window)

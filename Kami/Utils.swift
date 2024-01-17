@@ -51,17 +51,17 @@ func setWindowFrameOriginToMousePosition(window: NSWindow) -> Void {
             var newOriginX = mouseLocation.x
             var newOriginY = mouseLocation.y
 
-            // Adjust X position to ensure the window is within the screen bounds
+            // We want to spawn the window close to the JavaScript patch – using the cursor position is a good approximation for that
+            newOriginY -= window.frame.height/2 + 120 // using the absolute center of the window as anchor feels weird. add 120 y-offset for better balance...
+            newOriginX -= window.frame.width/2
+            
+            // Check if window origin is within screen bounds...
             if newOriginX + window.frame.width > screen.frame.maxX {
                 newOriginX = screen.frame.maxX - window.frame.width
             }
             if newOriginX < screen.frame.minX {
                 newOriginX = screen.frame.minX
             }
-
-            // move window center-center to cursor position (if possible)
-            newOriginY -= window.frame.height/2
-            newOriginX -= window.frame.width/2
             if newOriginY + window.frame.height > screen.frame.maxY {
                 newOriginY = screen.frame.maxY - window.frame.height
             }
