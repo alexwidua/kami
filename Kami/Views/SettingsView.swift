@@ -247,7 +247,7 @@ struct GeneralTabView: View {
                                         RoundedRectangle(cornerRadius: 8)
                                             .stroke(isWindowed ? .blue : .white.opacity(0.15), lineWidth: isWindowed ? 2.0 : 0.5)
                                     )
-                                Text("Traditional")
+                                Text("System")
                                     .font(.system(size: 11, weight: appStorage_windowStyle == .windowed ? .bold : .regular))
                                     .foregroundStyle(appStorage_windowStyle == .windowed ? .primary : .secondary)
                                 
