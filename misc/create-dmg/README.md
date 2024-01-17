@@ -21,8 +21,6 @@ create-dmg \
   --icon "Kami.app" 240 220 \
   --hide-extension "Kami.app" \
   --app-drop-link 460 220 \
-  --codesign "<DEVELOPER PROFILE>" \
-  --notarize "<NOTARY PROFILE>" \
   "<OUTPUT FOLDER>" \
   "<INPUT FOLDER>"
 ```
