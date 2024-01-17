@@ -5,7 +5,7 @@ Select a JavaScript Patch, invoke the app's overlay using the shortcut and descr
 
 _Kami is a native macOS menu bar app. You have to provide your [own OpenAI API Key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-api-key) to use the app. Your API key is stored locally on your machine._
 
-<video src='media/video.mp4' width='600'/>
+<video src='media/video.mp4' width=600/>
 
 ## Background
 
