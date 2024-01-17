@@ -4,27 +4,11 @@
         <title>Kami</title>
         <item>
             <title>1.1.2</title>
-            <pubDate>Wed, 17 Jan 2024 15:48:26 +0100</pubDate>
+            <pubDate>Wed, 17 Jan 2024 17:01:35 +0100</pubDate>
             <sparkle:version>5</sparkle:version>
             <sparkle:shortVersionString>1.1.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/alexwidua/Kami/releases/latest/download/Kami.dmg" length="2457202" type="application/octet-stream" sparkle:edSignature="45Lhdz7Way2JC4FtHFHBF6Z5zVU2dqUeqg5A5p7U3CSpDUmDCBUdihX7neq4JFeoUli4/lnv+wBv08x2t7XFCg=="/>
-        </item>
-        <item>
-            <title>1.1.1</title>
-            <pubDate>Thu, 11 Jan 2024 13:12:45 +0100</pubDate>
-            <sparkle:version>4</sparkle:version>
-            <sparkle:shortVersionString>1.1.1</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/alexwidua/Kami/releases/download/1.1.1/Kami.dmg" length="2457884" type="application/octet-stream" sparkle:edSignature="140nXrTF4/Zlixsbt7G54z/HY6QXlKHEzThtdHKKGEzFHyYovOd3AkTAl9HPgq9iEtBztA2lHgzfVP4IxejFBg=="/>
-        </item>
-        <item>
-            <title>1.1.0</title>
-            <pubDate>Thu, 11 Jan 2024 11:55:27 +0100</pubDate>
-            <sparkle:version>3</sparkle:version>
-            <sparkle:shortVersionString>1.1.0</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/alexwidua/Kami/releases/download/1.1.0/Kami.dmg" length="2457312" type="application/octet-stream" sparkle:edSignature="7ksVBOZ7YMC4snu5Ub+WzgQuKkK6n8hkKC8fGTkTzMCLzxu8hWjfD0N9sxqAM6e9SnVQsejo9W3/Swzb25vNCA=="/>
+            <enclosure url="https://github.com/alexwidua/Kami/releases/latest/download/Kami.dmg" length="2449981" type="application/octet-stream" sparkle:edSignature="1XslgYV4hOrOzjDjmavRSzGnLOISxmnB0qT51FCIi1WgllVk/uq0bDTzIf8MD7J4o0bxATcQK3BWqXSTTBiVDg=="/>
         </item>
     </channel>
 </rss>
