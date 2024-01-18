@@ -11,13 +11,13 @@ _Kami is a native macOS menu bar app. You have to provide your [own OpenAI API K
 
 - [JavaScript Patches](https://origami.design/documentation/concepts/scriptingapi) are a fantastic way to prototype more complex logic inside Origami Studio
 - OpenAI's GPT-4 is very capable of writing JavaScript code
-- I experimented with ways to combine these two tools into a single surface and primitive
+- I experimented with ways to combine these two tools into a single surface
 
 The result is a tiny app that sits ‘on top' of Origami Studio. Think of it as a tiny, rudimentary code editor that lets you open, generate and save JavaScript files without leaving the Origami Studio surface.
 
 ## Installation
 
-[Download the App](https://github.com/alexwidua/Kami/releases/latest/download/Kami.dmg) from the release page.
+[Download the App](https://github.com/alexwidua/Kami/releases/latest/download/Kami.dmg) from the release page and open the `Kami.dmg` file.
 
 ## Usage
 
