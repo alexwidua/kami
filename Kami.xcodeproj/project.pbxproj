@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		222AC3C82BCC9A7900E0EF94 /* NotificationBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222AC3C72BCC9A7900E0EF94 /* NotificationBanner.swift */; };
 		224623122B15C85D007C1F9C /* OpenAI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224623112B15C85D007C1F9C /* OpenAI.swift */; };
 		224623142B15C879007C1F9C /* OpenAI+StreamCompletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224623132B15C879007C1F9C /* OpenAI+StreamCompletion.swift */; };
 		224623172B15C89C007C1F9C /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224623162B15C89C007C1F9C /* Event.swift */; };
@@ -15,7 +16,6 @@
 		2251A1142B100AA100513552 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251A1132B100AA100513552 /* LoadingView.swift */; };
 		2251A1162B10834600513552 /* AccessibilityRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251A1152B10834600513552 /* AccessibilityRequestView.swift */; };
 		2251A1182B109F7000513552 /* PatchErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251A1172B109F7000513552 /* PatchErrorView.swift */; };
-		2251A11A2B10AD3300513552 /* NotificationBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251A1192B10AD3300513552 /* NotificationBanner.swift */; };
 		2251A11E2B10B64700513552 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251A11D2B10B64700513552 /* Onboarding.swift */; };
 		2251A1202B10B79600513552 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251A11F2B10B79600513552 /* SplashView.swift */; };
 		2251A1242B1107E200513552 /* Extensions+Modifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2251A1232B1107E200513552 /* Extensions+Modifier.swift */; };
@@ -45,6 +45,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		222AC3C72BCC9A7900E0EF94 /* NotificationBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationBanner.swift; sourceTree = "<group>"; };
 		224623112B15C85D007C1F9C /* OpenAI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAI.swift; sourceTree = "<group>"; };
 		224623132B15C879007C1F9C /* OpenAI+StreamCompletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OpenAI+StreamCompletion.swift"; sourceTree = "<group>"; };
 		224623162B15C89C007C1F9C /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
@@ -53,7 +54,6 @@
 		2251A1132B100AA100513552 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		2251A1152B10834600513552 /* AccessibilityRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityRequestView.swift; sourceTree = "<group>"; };
 		2251A1172B109F7000513552 /* PatchErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatchErrorView.swift; sourceTree = "<group>"; };
-		2251A1192B10AD3300513552 /* NotificationBanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationBanner.swift; path = ../../../../../.Trash/NotificationBanner.swift; sourceTree = "<group>"; };
 		2251A11D2B10B64700513552 /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
 		2251A11F2B10B79600513552 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		2251A1232B1107E200513552 /* Extensions+Modifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extensions+Modifier.swift"; sourceTree = "<group>"; };
@@ -142,7 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				2251A11D2B10B64700513552 /* Onboarding.swift */,
-				2251A1192B10AD3300513552 /* NotificationBanner.swift */,
+				222AC3C72BCC9A7900E0EF94 /* NotificationBanner.swift */,
 				226E59E82AEBC40C005FCD6D /* ValidateKey.swift */,
 				226A6AAB2AE927DB00110798 /* OpenWithMenu.swift */,
 				226A6AAF2AEBA65100110798 /* TextEditor.swift */,
@@ -288,7 +288,6 @@
 				226E59F22AEE8700005FCD6D /* ButtonStyle.swift in Sources */,
 				22ADB3D02B4FF1C00097C55C /* Updater.swift in Sources */,
 				2251A1142B100AA100513552 /* LoadingView.swift in Sources */,
-				2251A11A2B10AD3300513552 /* NotificationBanner.swift in Sources */,
 				224623192B15C8AF007C1F9C /* EventSource.swift in Sources */,
 				2251A1262B1144CB00513552 /* AppStorage.swift in Sources */,
 				2251A11E2B10B64700513552 /* Onboarding.swift in Sources */,
@@ -305,6 +304,7 @@
 				226E59E92AEBC40C005FCD6D /* ValidateKey.swift in Sources */,
 				2251A1182B109F7000513552 /* PatchErrorView.swift in Sources */,
 				224623122B15C85D007C1F9C /* OpenAI.swift in Sources */,
+				222AC3C82BCC9A7900E0EF94 /* NotificationBanner.swift in Sources */,
 				226A6AA62AE685C100110798 /* API.swift in Sources */,
 				2251A1162B10834600513552 /* AccessibilityRequestView.swift in Sources */,
 				224623142B15C879007C1F9C /* OpenAI+StreamCompletion.swift in Sources */,
